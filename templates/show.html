@@ -253,10 +253,10 @@
           <i class="fa fa-bar-chart-o"></i>
           <span>Analyze data</span>
         </a> -->
-        <a class="dashboard__button dashboard__button-download-data">
+        <!-- <a class="dashboard__button dashboard__button-download-data">
           <i class="fa fa-download"></i>
           <span>Download data</span>
-        </a>
+        </a> -->
 
         <div class="dashboard__download__drop hidden">
           <a href="{% url "onadata.apps.viewer.views.export_list" content_user.username xform.id_string 'xls' %}" class="download__drop-button">XLS</a>
@@ -282,10 +282,10 @@
           <i class="fa fa-eye"></i>
           <span>View gallery</span>
         </a>
-        <a href="{% url "onadata.apps.viewer.views.export_list" content_user.username xform.id_string 'zip' %}" class="dashboard__button dashboard__button-twoline dashboard__button-download-all-photos">
+       <!--  <a href="{% url "onadata.apps.viewer.views.export_list" content_user.username xform.id_string 'zip' %}" class="dashboard__button dashboard__button-twoline dashboard__button-download-all-photos">
           <i class="fa fa-download"></i>
           <span>Download all photos</span>
-        </a>
+        </a> -->
       </div>
       {# endif #}
 
@@ -365,7 +365,7 @@
 
       {% if can_edit %}
       <div class="dashboard__add-data">
-        <h2 class="dashboard__group-label">Add Data</h2>
+        <!-- <h2 class="dashboard__group-label">Add Data</h2>
 
         <a href="{% url "onadata.apps.logger.views.enter_data" content_user.username xform.id_string %}" class="dashboard__button dashboard__button-twoline dashboard__button-enter-data" target="_blank">
           <i class="fa fa-plus"></i>
@@ -374,7 +374,7 @@
         <a data-href="{% url "get_qrcode" xform.user.username xform.id_string %}" class="dashboard__button dashboard__button-twoline dashboard__button-how-to-collect js-showqr">
           <i class="fa fa-mobile"></i>
           <span>How to collect data on mobile device?</span>
-        </a>
+        </a> -->
 
         <div class="kc-hide">
           <div id="popupmodal">
