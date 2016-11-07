@@ -1,22 +1,67 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends "registration.html" %}
+{% load staticfiles i18n filters %}
 
 {% block content %}
 
-{% if koboform_autoredirect %}
-<script type="text/javascript">
-window.location = "{{koboform_url}}/accounts/login/?next=/kobocat";
-</script>
-{% endif %}
+<body class="login-body">
 
-<form method="post" action=".">
-  {% csrf_token %} 
-  {{ form.as_p }}
+    <div class="container">
 
-  <input type="submit" value="{% trans 'Log in' %}" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</form>
+      <form method="post" class="form-signin" action="{% url 'users:web_login' %}">
+        <div class="login-heading-with-image">
+          <img class="form-signin-heading-img" src="{{STATIC_URL}}images/logo1.png" / >
+          <!-- <h2 class="form-signin-heading">sign in now</h2> -->
+        </div>
+        <div class="login-wrap">
+            <div class="user-login-info">
+                {% csrf_token %}
+                {% if form_errors %}
+                <p class="alert-error"
+                   role='alert'>{% trans "Your email and password didn't match. Please try again." %}</p>
+                {% endif %}
+                {% if inactive %}
+                <p class="alert-error"
+                   role='alert'>{% trans "Your Account is Inactive Please Contact Administrator." %}</p>
+                {% endif %}
+                {{ form.non_field_errors }}
+                <p>{{ form.email.errors.as_text }}</p>
+                <input type="email" class="form-control" placeholder="User Email" name="email" value="{{ username }}" autofocus>
+                
+                <p>{{ form.password.errors.as_text }}</p>
 
-<p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
-<p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+                <input type="password" class="form-control" placeholder="Password" name="password" value="{{ password }}">
+                
+                
+            </div>
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Remember me
+                <span class="pull-right">
+                    <a href="{% url 'auth_password_reset' %}" class="registration__forgot">Forgot?</a>
+
+                </span>
+            </label>
+            <button class="btn btn-lg btn-login btn-block registration__action" type="submit" value="Login" >Sign in</button>
+             <input type="hidden" name="next" value="{{ next }}" />
+
+
+        </div>
+
+          
+      </form>
+
+    </div>
+
+
 {% endblock %}
+
+{% block footer %}
+ {{ block.super }}
+  <script>
+  $(function () {
+    $('form.registration input#id_username').attr('placeholder', 'Email');
+    $('form.registration input#id_password').attr('placeholder', 'Password');
+    $('form.registration > p > label').addClass('hidden');
+  });
+</script>
+{% endblock footer %}
+
