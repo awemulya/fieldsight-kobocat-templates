@@ -240,23 +240,18 @@
         <h2 class="dashboard__group-label">
           Submissions ({{ xform.submission_count|intcomma }})
         </h2>
-        <a title="{% trans "Assign This Form To ....." %}" href="{% url "onadata.apps.main.views.assign" content_user.username xform.id_string %}" class="dashboard__button dashboard__button-view">
-          <i class="fa fa-share-alt-square"></i>
-          <span>Assign This Form To ..</span>
-        </a>
-
-         <a title="{% trans "View Submitted Data" %}" href="{% url "formpack_html_export" content_user.username xform.id_string %}" class="dashboard__button dashboard__button-view">
+        <a title="{% trans "View Submitted Data" %}" href="{% url "formpack_html_export" content_user.username xform.id_string %}" class="dashboard__button dashboard__button-view">
           <i class="fa fa-table"></i>
           <span>View data in table</span>
         </a>
-        <!-- <a href="{% url "formpack_auto_report" xform.user.username xform.id_string %}" class="dashboard__button dashboard__button-analyze">
+        <a href="{% url "formpack_auto_report" xform.user.username xform.id_string %}" class="dashboard__button dashboard__button-analyze">
           <i class="fa fa-bar-chart-o"></i>
           <span>Analyze data</span>
-        </a> -->
-        <!-- <a class="dashboard__button dashboard__button-download-data">
+        </a>
+        <a class="dashboard__button dashboard__button-download-data">
           <i class="fa fa-download"></i>
           <span>Download data</span>
-        </a> -->
+        </a>
 
         <div class="dashboard__download__drop hidden">
           <a href="{% url "onadata.apps.viewer.views.export_list" content_user.username xform.id_string 'xls' %}" class="download__drop-button">XLS</a>
@@ -282,10 +277,10 @@
           <i class="fa fa-eye"></i>
           <span>View gallery</span>
         </a>
-       <!--  <a href="{% url "onadata.apps.viewer.views.export_list" content_user.username xform.id_string 'zip' %}" class="dashboard__button dashboard__button-twoline dashboard__button-download-all-photos">
+        <a href="{% url "onadata.apps.viewer.views.export_list" content_user.username xform.id_string 'zip' %}" class="dashboard__button dashboard__button-twoline dashboard__button-download-all-photos">
           <i class="fa fa-download"></i>
           <span>Download all photos</span>
-        </a> -->
+        </a>
       </div>
       {# endif #}
 
@@ -365,7 +360,7 @@
 
       {% if can_edit %}
       <div class="dashboard__add-data">
-        <!-- <h2 class="dashboard__group-label">Add Data</h2>
+        <h2 class="dashboard__group-label">Add Data</h2>
 
         <a href="{% url "onadata.apps.logger.views.enter_data" content_user.username xform.id_string %}" class="dashboard__button dashboard__button-twoline dashboard__button-enter-data" target="_blank">
           <i class="fa fa-plus"></i>
@@ -374,7 +369,7 @@
         <a data-href="{% url "get_qrcode" xform.user.username xform.id_string %}" class="dashboard__button dashboard__button-twoline dashboard__button-how-to-collect js-showqr">
           <i class="fa fa-mobile"></i>
           <span>How to collect data on mobile device?</span>
-        </a> -->
+        </a>
 
         <div class="kc-hide">
           <div id="popupmodal">
@@ -422,12 +417,12 @@
     <div class="page-header kc-hide">
       <!-- <img src='{{ content_user.profile.gravatar }}' alt='gravatar' width='40' height='40' style='float:left; padding-right:10px;' /> -->
       <div id="mfeedback">&nbsp;</div>
-    	<h3 class="kc-hide">
-    	  <div style='vertical-align: middle'>
-    	  <img src='{{ content_user.profile.gravatar }}' alt='gravatar' width='20' height='20' />
-    	  <a href="{% url "user_profile" content_user.username %}">{{ content_user.username }}</a> ({% trans "Owner" %}) /
-    	  </div>
-    	</h3>
+      <h3 class="kc-hide">
+        <div style='vertical-align: middle'>
+        <img src='{{ content_user.profile.gravatar }}' alt='gravatar' width='20' height='20' />
+        <a href="{% url "user_profile" content_user.username %}">{{ content_user.username }}</a> ({% trans "Owner" %}) /
+        </div>
+      </h3>
     </div>
     <div class="row">
       <div class="span8">
@@ -607,10 +602,10 @@
         </p>
         <p><a id="data-license_info" style="display:none" href="">{% trans "License information" %}</a></p>
         <div class="btn-group" style="margin-bottom: 9px">
-	   			{% if xform.has_instances_with_geopoints %}
-    		  	<a class="btn btn-info" rel="tooltip" title="{% trans 'View Map' %}" href="{% url "onadata.apps.viewer.views.map_view" content_user.username xform.id_string %}">
-    				<i class="icon-map-marker icon-white"></i> {% trans "Map" %}
-    			 </a>
+          {% if xform.has_instances_with_geopoints %}
+            <a class="btn btn-info" rel="tooltip" title="{% trans 'View Map' %}" href="{% url "onadata.apps.viewer.views.map_view" content_user.username xform.id_string %}">
+            <i class="icon-map-marker icon-white"></i> {% trans "Map" %}
+           </a>
           {% endif %}
             <a class="btn btn-info" btn-info  rel="tooltip" title="{% trans "View Photos" %}" href="{% url "onadata.apps.main.views.form_photos" content_user.username xform.id_string %}">
               <i class="icon-camera icon-white"></i> {% trans "Photos" %}
@@ -631,8 +626,8 @@
             {% else %}
                 <span class="label label-warning">{% trans "NO DATA" %}</span>
             {% endif %}
-		{% endif %}
-		{% endif %}
+    {% endif %}
+    {% endif %}
 
     </div>
       <br/>
@@ -730,46 +725,46 @@
                     </table>
                     <input type="submit" class="btn btn-primary" value="{% trans "Save Changes" %}" />
                 {% endif %}
-            	</form>
-            	{% autoescape off %}
-            	<div class="sms_autodoc">
-            	{% if xform.allows_sms %}
-            	<h4>{% trans "Expected Format:" %}</h4>
-            	<p class="sms_autodoc_line_names alert alert-info">{{ sms_support_doc.line_names }}</p>
-            	<ul class="sms_autodoc_helpers">
-            	{% for helper in sms_support_doc.helpers %}
-            		<li class="sms_autodoc_helper"><sup class="sms_autodoc_helper_indice">{{ forloop.counter0 }}</sup> <span class="sms_autodoc_helper_name">{{ helper.0 }}:</span> <span class="sms_autodoc_helper_text">{{helper.1}}</span></li>
-            	{% endfor %}
-            	</ul>
-            	<h4>{% trans "Example" %}</h4>
-        		<p class="sms_autodoc_line_example alert alert-success">{{ sms_support_doc.line_values }}</p>
-            	{% else %}
-            		<p class="alert {{ sms_compatible.type }}">{{ sms_compatible.text }}</p>
-            	{% endif %}
-            	<h4>{% trans "Usage" %}</h4>
-            	<p>Note that for each case, you can select either the simplest form of the URL (containing only your username) or the one including the <em>id_string</em> of the form.</p>
-            	<p>The latter works without specifyin the <em>SMS Keyword</em> in front of every message.</p>
-            	<p>You would use it when your SMS Setup/Provider is used for only one form.</p>
-            	<select id="sms_support_api"><option>{% trans "Select an SMS API" %}</option>{% for provider in sms_providers_doc %}<option value="{{ provider.id }}">{{ provider.name }}</option>{% endfor %}<option value="generic">{% trans "Generic SMS API" %}</option></select>
-            	<div style="display:none;" class="sms_support_api_doc" id="sms_support_api_doc_generic">
-            		<p>{% trans "Use the Generic SMS API to write your own wrapper around Formhub." %}</p>
-            		<ul>
-            			<p>{% trans "Single SMS Submission" %}<br />[<strong>GET</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submission" username=content_user.username %}</span><br />
-							[<strong>GET</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submission_form" username=content_user.username id_string=xform.id_string %}</span><br />
-            				{% trans "Params:" %} <span class="sms_autodoc_params">{"identity": "SENDER PHONE NUMBER", "text": "TEXT MESSAGE"}<br />
-            				{% trans "Returns:" %} <span class="sms_autodoc_params">{"status": "STATUS", "message": "MESSAGE", "id": "ID"}</p>
-            			<p>{% trans "Multiple SMS Submissions at once" %}<br />[<strong>POST</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submissions" username=content_user.username %}</span><br/>
-            				[<strong>POST</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submissions_form" username=content_user.username id_string=xform.id_string %}</span><br />
-            				{% trans "Params:" %} <span class="sms_autodoc_params">{"messages": [{"identity": "SENDER PHONE NUMBER", "text": "TEXT MESSAGE"}, ]<br />
-            				{% trans "Returns:" %} <span class="sms_autodoc_params">[{"status": "STATUS", "message": "MESSAGE", "id": "ID"}, ]</p>
-            		</ul>
-            		<p><span class="sms_autodoc_params">STATUS</span>: {% trans "One of" %} <span class="sms_autodoc_params">ACCEPTED, REJECTED, PARSING_FAILED</span><br />
-            		   <span class="sms_autodoc_params">MESSAGE</span>: {% trans "Either an error or success message. Suitable for end user." %}<br />
-            		   <span class="sms_autodoc_params">ID</span>: {% trans "Only if successful. A unique ID of the submission." %}</p>
-            	</div>
-            	{% for provider in sms_providers_doc %}<div style="display:none;" class="sms_support_api_doc" id="sms_support_api_doc_{{ provider.id }}">{{ provider.doc }}</div>{% endfor %}
-            	{% endautoescape %}
-            	</div>
+              </form>
+              {% autoescape off %}
+              <div class="sms_autodoc">
+              {% if xform.allows_sms %}
+              <h4>{% trans "Expected Format:" %}</h4>
+              <p class="sms_autodoc_line_names alert alert-info">{{ sms_support_doc.line_names }}</p>
+              <ul class="sms_autodoc_helpers">
+              {% for helper in sms_support_doc.helpers %}
+                <li class="sms_autodoc_helper"><sup class="sms_autodoc_helper_indice">{{ forloop.counter0 }}</sup> <span class="sms_autodoc_helper_name">{{ helper.0 }}:</span> <span class="sms_autodoc_helper_text">{{helper.1}}</span></li>
+              {% endfor %}
+              </ul>
+              <h4>{% trans "Example" %}</h4>
+            <p class="sms_autodoc_line_example alert alert-success">{{ sms_support_doc.line_values }}</p>
+              {% else %}
+                <p class="alert {{ sms_compatible.type }}">{{ sms_compatible.text }}</p>
+              {% endif %}
+              <h4>{% trans "Usage" %}</h4>
+              <p>Note that for each case, you can select either the simplest form of the URL (containing only your username) or the one including the <em>id_string</em> of the form.</p>
+              <p>The latter works without specifyin the <em>SMS Keyword</em> in front of every message.</p>
+              <p>You would use it when your SMS Setup/Provider is used for only one form.</p>
+              <select id="sms_support_api"><option>{% trans "Select an SMS API" %}</option>{% for provider in sms_providers_doc %}<option value="{{ provider.id }}">{{ provider.name }}</option>{% endfor %}<option value="generic">{% trans "Generic SMS API" %}</option></select>
+              <div style="display:none;" class="sms_support_api_doc" id="sms_support_api_doc_generic">
+                <p>{% trans "Use the Generic SMS API to write your own wrapper around Formhub." %}</p>
+                <ul>
+                  <p>{% trans "Single SMS Submission" %}<br />[<strong>GET</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submission" username=content_user.username %}</span><br />
+              [<strong>GET</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submission_form" username=content_user.username id_string=xform.id_string %}</span><br />
+                    {% trans "Params:" %} <span class="sms_autodoc_params">{"identity": "SENDER PHONE NUMBER", "text": "TEXT MESSAGE"}<br />
+                    {% trans "Returns:" %} <span class="sms_autodoc_params">{"status": "STATUS", "message": "MESSAGE", "id": "ID"}</p>
+                  <p>{% trans "Multiple SMS Submissions at once" %}<br />[<strong>POST</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submissions" username=content_user.username %}</span><br/>
+                    [<strong>POST</strong>] <span class="sms_autodoc_example">{{ url_root }}{% url "sms_submissions_form" username=content_user.username id_string=xform.id_string %}</span><br />
+                    {% trans "Params:" %} <span class="sms_autodoc_params">{"messages": [{"identity": "SENDER PHONE NUMBER", "text": "TEXT MESSAGE"}, ]<br />
+                    {% trans "Returns:" %} <span class="sms_autodoc_params">[{"status": "STATUS", "message": "MESSAGE", "id": "ID"}, ]</p>
+                </ul>
+                <p><span class="sms_autodoc_params">STATUS</span>: {% trans "One of" %} <span class="sms_autodoc_params">ACCEPTED, REJECTED, PARSING_FAILED</span><br />
+                   <span class="sms_autodoc_params">MESSAGE</span>: {% trans "Either an error or success message. Suitable for end user." %}<br />
+                   <span class="sms_autodoc_params">ID</span>: {% trans "Only if successful. A unique ID of the submission." %}</p>
+              </div>
+              {% for provider in sms_providers_doc %}<div style="display:none;" class="sms_support_api_doc" id="sms_support_api_doc_{{ provider.id }}">{{ provider.doc }}</div>{% endfor %}
+              {% endautoescape %}
+              </div>
             </div>
         </div>
       </div>
