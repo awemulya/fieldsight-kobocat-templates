@@ -23,7 +23,9 @@ ul, .list-unstyled {
 ul li {
     /*list-style:none;*/
 }
-
+.clearfixx{
+    clear: both;
+}
 a,a:hover,a:focus {
     text-decoration:none;
     outline:none;
@@ -6041,4 +6043,42 @@ ul.errorlist.nonfield {
 }
 /*------------popopcss----------*/
 /*------------mapcss----------*/
+/*------------organization css----------*/
+.organization-list {
+    background: #fff;
+    
+}
+.org-grg{
+    border-bottom: 1px solid #E6E6E6;
+}
+.org-logo {
+    padding: 15px 0px;
+}
+.org-grg span {
+    margin-right: 10px;
+}
+.organization-list a{
+    transition:all 0.2s ease-in-out;
+    -moz-transition:all 0.2s ease-in-out;
+    -webkit-transition:all 0.2s ease-in-out;
+}
+.organization-list a:hover .org-grg {
+    transform: translateY(-3px);
+   box-shadow: 0 0 20px rgba(174,174,174,0.6);
+   transition:all 0.2s ease-in-out;
+    -moz-transition:all 0.2s ease-in-out;
+    -webkit-transition:all 0.2s ease-in-out;
+}
+.service_area a:hover .service_block{
+    transform: translateY(-3px);
+   box-shadow: 0 0 20px rgba(174,174,174,0.6);
+   transition:all 0.2s ease-in-out;
+    -moz-transition:all 0.2s ease-in-out;
+    -webkit-transition:all 0.2s ease-in-out;
+   
+}
+.organization-list .org-logo img {
+    width: 100%;
+}
+/*------------organization css----------*/
 /*----------dashboard page csss-------------*/
