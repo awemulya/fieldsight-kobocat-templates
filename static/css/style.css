@@ -6005,5 +6005,40 @@ ul.errorlist.nonfield {
     margin-left:4px;
     margin-top:4px;
 }
+
+
+/*------------popopcss----------*/
+.map-container-fieldsight {
+    position: relative;
+}
+.popop-container {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    left: 10px;
+    background: rgba(255,255,255,0.7);
+    padding: 10px;
+}
+.popop-head {
+    position: relative;
+    margin-bottom: 15px;
+}
+.popop-head.changed:after {
+    display: block;
+    content: '';
+    width: 85px;
+    height: 2px;
+    position: absolute;
+    background-color: #d5d4d7;
+    bottom: -10px;
+    left: 0;
+}
+.popop-gallery .item img {
+    width: 200px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+/*------------popopcss----------*/
 /*------------mapcss----------*/
 /*----------dashboard page csss-------------*/
