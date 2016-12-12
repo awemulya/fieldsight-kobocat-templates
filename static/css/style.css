@@ -5945,3 +5945,29 @@ ul.errorlist.nonfield {
     margin: 20px 0 5px;
 }
 /*----------login page csss-------------*/
+
+
+/*----------dashboard page csss-------------*/
+.mini-flagged-forms {
+    padding: 20px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    background: #fff;
+    text-align: center;
+    color: #000;
+}
+.yellow-flagged {
+    background: #efff55;
+}
+.green-flagged {
+    background: #a2d481;
+}
+.red-flagged {
+    background: #ff805a;
+}
+.purple-flagged {
+    background: #ae6ad5;
+}
+/*----------dashboard page csss-------------*/
