@@ -6069,16 +6069,56 @@ ul.errorlist.nonfield {
     -moz-transition:all 0.2s ease-in-out;
     -webkit-transition:all 0.2s ease-in-out;
 }
-.service_area a:hover .service_block{
+
+.organization-list .org-logo img {
+    width: 100%;
+}
+/*------------organization css----------*/
+/*------------organization detail css----------*/
+.organization-long-detail .tab-content {
+    padding: 10px;
+}
+.organization-long-detail .nav-tabs>li.active>a, .organization-long-detail .nav-tabs>li.active>a:focus, .organization-long-detail .nav-tabs>li.active>a:hover {
+    color: #296FD5;
+    cursor: default;
+    background-color: #fff;
+    border: 0px;
+    border-bottom: 2px solid #296FD5;
+}
+.image-org img {
+    width: 100%;
+}
+.detail-org span {
+    margin-right: 10px;
+}
+.add-people {
+    text-align: right;
+    margin-bottom: 10px;
+}
+a.add_org_people {
+    padding: 10px;
+    background: #237DFF;
+    border-radius: 5px;
+    color: #fff;
+}
+a.add_org_people:hover {
+    
+    background: #296fd5;
+    
+    color: #fff;
+}
+
+.org-site-list a{
+    transition:all 0.2s ease-in-out;
+    -moz-transition:all 0.2s ease-in-out;
+    -webkit-transition:all 0.2s ease-in-out;
+}
+.org-site-list a:hover .org-site{
     transform: translateY(-3px);
    box-shadow: 0 0 20px rgba(174,174,174,0.6);
    transition:all 0.2s ease-in-out;
     -moz-transition:all 0.2s ease-in-out;
     -webkit-transition:all 0.2s ease-in-out;
-   
 }
-.organization-list .org-logo img {
-    width: 100%;
-}
-/*------------organization css----------*/
+/*------------organization detail css----------*/
 /*----------dashboard page csss-------------*/
