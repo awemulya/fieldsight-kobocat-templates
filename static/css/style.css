@@ -6121,4 +6121,18 @@ a.add_org_people:hover {
     -webkit-transition:all 0.2s ease-in-out;
 }
 /*------------organization detail css----------*/
+/*------------site detail css----------*/
+.org-logo img{
+    width: 100%;
+}
+.abt-org .progress-sm {
+    height: 20px;
+}
+.progress-bar-value {
+    font-weight: bold;
+    font-size: 20px;
+    color: #296FD5;
+}
+/*------------site detail css----------*/
+
 /*----------dashboard page csss-------------*/
