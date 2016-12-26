@@ -6133,6 +6133,47 @@ a.add_org_people:hover {
     font-size: 20px;
     color: #296FD5;
 }
+.form-list {
+    height: 500px;
+    overflow-y: scroll;
+}
+.form-list .org-site {
+    border-bottom: 1px solid #d8d8d8;
+}
+.form-list .org-site .address {
+    margin-bottom: 0px;
+}
+.outstanding-and-all .nav-tabs > li:first-child.active > a, .outstanding-and-all .nav-tabs > li:first-child.active > a:focus, .outstanding-and-all .nav-tabs > li:first-child.active > a:hover {
+    color: #000;
+    cursor: default;
+    background-color: #ae6ad5;
+    border: 0px;
+    border-bottom: 2px solid #AE6AD5;
+}
+.outstanding-and-all .nav-tabs > li.active:nth-child(2) > a, .outstanding-and-all .nav-tabs > li.active:nth-child(2) > a:focus, .outstanding-and-all .nav-tabs > li.active:nth-child(2) > a:hover {
+    color: #000;
+    cursor: default;
+    background-color: #ff805a;
+    border: 0px;
+    border-bottom: 2px solid #FF805A;
+}
+.outstanding-and-all .nav-tabs > li.active:nth-child(3) > a, .outstanding-and-all .nav-tabs > li.active:nth-child(3) > a:focus, .outstanding-and-all .nav-tabs > li.active:nth-child(3) > a:hover {
+    color: #000;
+    cursor: default;
+    background-color: #a2d481;
+    border: 0px;
+    border-bottom: 2px solid #A2D481;
+}
+.outstanding-and-all .nav-tabs > li.active:last-child > a, .outstanding-and-all .nav-tabs > li.active:last-child > a:focus, .outstanding-and-all .nav-tabs > li.active:last-child > a:hover {
+    color: #000;
+    cursor: default;
+    background-color: #efff55;
+    border: 0px;
+    border-bottom: 2px solid #EFFF55;
+}
+.assign-form-to-site {
+    margin-bottom: 20px;
+}
 /*------------site detail css----------*/
 
 /*----------dashboard page csss-------------*/
