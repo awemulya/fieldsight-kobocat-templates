@@ -6177,3 +6177,140 @@ a.add_org_people:hover {
 /*------------site detail css----------*/
 
 /*----------dashboard page csss-------------*/
+
+
+/*----------userlist page csss-------------*/
+.person-div {
+    position: relative;
+    -webkit-transition: all ease .2s;
+    -moz-transition: all ease .2s;
+    -o-transition: all ease .2s;
+    -ms-transition: all ease .2s;
+    transition: all ease .2s;
+}
+.person-div:hover{
+    -webkit-box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.17);
+    -moz-box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.17);
+    box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.17);
+    -webkit-transition: all ease .2s;
+    -moz-transition: all ease .2s;
+    -o-transition: all ease .2s;
+    -ms-transition: all ease .2s;
+    transition: all ease .2s;
+}
+.person-div:hover .person-edit-delete{
+    visibility: visible;
+}
+.person-div:hover .details-of-person {
+    background: #FFF;
+}
+/*.person-div:hover .image-of-person img {
+    -webkit-filter: blur(1px);
+    filter: blur(1px);
+}*/
+.person-edit-delete {
+    position: absolute;
+    top: 3px;
+    right: 4px;
+    padding: 10px;
+    background: #fff;
+    visibility: hidden;
+}
+.person-edit-delete a {
+    color: black;
+   
+}
+.person-edit-delete a:hover {
+    color: #296fd5 !important;
+   
+}
+.person-edit-delete a:first-child {
+    margin-right: 10px;
+}
+.image-of-person img {
+    width: 100%;
+}
+.details-of-person {
+    padding: 10px;
+    background: #F7F7F7;
+}
+.details-of-person span {
+    margin-right: 10px;
+}
+.personname {
+    margin-top: 0px;
+    font-weight: bold;
+}
+.personphone {
+    display: inline-block;
+}
+.perso-usernname {
+    font-weight: bold;
+}
+
+.person-active {
+    text-transform: capitalize;
+    font-weight: bold;
+    color: #296fd5;
+
+}
+.in-active {
+    filter: none;
+    -webkit-filter: grayscale(1);
+}
+
+
+
+/*----------userlist page csss-------------*/
+
+/*----------userprofile page csss-------------*/
+.profile-user-pic-blur {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+.profile-user-pic-blur > img {
+    width: 100%;
+    -webkit-filter: blur(8px);
+    filter: blur(8px);
+}
+.profile-user-all {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+.profile-user-all-cell {
+    display: table;
+    width: 100%;
+    height: 400px;
+    background: rgba(0, 0, 0,0.4);
+    padding: 10px;
+}
+.profile-user-table {
+    display: table-cell;
+    vertical-align: middle;
+}
+.img-profile {
+    width: 320px;
+    height: auto;
+    float: left;
+    margin-right: 15px;
+}
+.detail-profile {
+    display: inline-block;
+    color: #fff;
+}
+.detail-profile h3 {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.img-profile img{
+    width: 100%;
+}
+.detail-profile span {
+    margin-right: 10px;
+}
+/*----------userprofile page csss-------------*/
+
