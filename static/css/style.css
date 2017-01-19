@@ -6121,7 +6121,117 @@ a.add_org_people:hover {
     -webkit-transition:all 0.2s ease-in-out;
 }
 /*------------organization detail css----------*/
+@import url(http://saeedalipoor.github.io/icono/icono.min.css);
+
+.containerd {
+    margin-bottom: 1em;
+    /* position: fixed; */
+    bottom: 0;
+    right: 0;
+}
+.containerd:hover .buttons-fab:not(:last-of-type) {
+  width: 40px;
+  height: 40px;
+  margin: 10px auto 0;
+  opacity: 1;
+}
+.containerd:hover .rotate-fab {
+  /*background-image: url("http://goo.gl/0eJslQ");*/
+  transform: rotate(45deg);
+}
+
+.buttons-fab {
+  display: block;
+  width: 35px;
+  height: 35px;
+  margin: 10px auto 0;
+  text-decoration: none;
+  position: relative;
+  border-radius: 50%;
+  box-shadow: 0px 5px 11px -2px rgba(0, 0, 0, 0.18), 0px 4px 12px -7px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: .2s;
+}
+.buttons-fab:nth-last-of-type(2) {
+  transition-delay: 20ms;
+}
+.buttons-fab:nth-last-of-type(3) {
+  transition-delay: 40ms;
+}
+.buttons-fab:nth-last-of-type(4) {
+  transition-delay: 60ms;
+}
+
+.buttons-fab:nth-last-of-type(1) {
+  width: 56px;
+  height: 56px;
+  opacity: 1;
+}
+.buttons-fab:nth-last-of-type(2) {
+  background-color: #D2A518;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.buttons-fab:nth-last-of-type(3) {
+  background-color: #3C80F6;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+.buttons-fab:nth-last-of-type(4) {
+  background-color: #57BB8A;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+}
+
+.buttons-fab:hover {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+}
+
+.containerd span {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+.containerd span.rotate-fab {
+  background: #e67e22 url("http://goo.gl/EfgECT") center no-repeat;
+  position: absolute;
+  transform: rotate(90deg);
+  transition: .3s;
+}
+
+[tooltip]:before {
+  content: attr(tooltip);
+  background: #585858;
+  padding: 5px 7px;
+  margin-right: 10px;
+  border-radius: 2px;
+  color: #FFF;
+  font: 500 12px;
+  white-space: nowrap;
+  position: absolute;
+  bottom: 20%;
+  right: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s;
+}
+[tooltip]:hover:before {
+  visibility: visible;
+  opacity: 1;
+}
 /*------------site detail css----------*/
+.abt-org {
+    position: relative;
+    padding: 0px 0px 70px;
+}
+.manage-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
 .org-logo img{
     width: 100%;
 }
@@ -6180,6 +6290,16 @@ a.add_org_people:hover {
 
 
 /*----------userlist page csss-------------*/
+.users-in-this-org .tab-content {
+    padding-top: 20px;
+}
+.users-in-this-org .nav-tabs>li.active>a,.users-in-this-org .nav-tabs>li.active>a:focus,.users-in-this-org .nav-tabs>li.active>a:hover {
+    color: #296FD5;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
 .person-div {
     position: relative;
     -webkit-transition: all ease .2s;
@@ -6187,6 +6307,7 @@ a.add_org_people:hover {
     -o-transition: all ease .2s;
     -ms-transition: all ease .2s;
     transition: all ease .2s;
+    margin-bottom: 20px;
 }
 .person-div:hover{
     -webkit-box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.17);
@@ -6313,4 +6434,93 @@ a.add_org_people:hover {
     margin-right: 10px;
 }
 /*----------userprofile page csss-------------*/
+
+
+
+/*----------all inputs csss-------------*/
+input {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    border: 1px solid #e2e2e4;
+    box-shadow: none;
+    color: #c2c2c2;
+}
+input:focus {
+    border: 1px solid #296FD5;
+    box-shadow: none;
+}
+select{
+    height: 34px;
+    line-height: 46px;
+    border: 1px solid #e2e2e4;
+    box-shadow: none;
+    color: #c2c2c2;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    display: block;
+    width: 100%;
+    background-color: #fff;
+    background-image: none;
+    webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+select:focus{
+    border: 1px solid #296FD5;
+    box-shadow: none;
+}
+input[type=checkbox] {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(blue.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
+input[type=file] {
+    display: block;
+    background: transparent;
+    border: none;
+}
+textarea{
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    outline: none !important;
+    border: 1px solid #e2e2e4;
+    box-shadow: none;
+    color: #c2c2c2;
+    height: auto;
+}
+/*----------all inputs csss-------------*/
 
