@@ -17,11 +17,23 @@
     <div class="">
       {% csrf_token%}
       {% for field in form %}
+      {% ifnotequal field.name "organization" %}
        <div class="col-sm-12 registration_field">
          <div class="col-sm-3"> {{ field.label }}</div>
          <div class="col-sm-3">      {{ field }}</div>
          <div class="col-sm-6">      {{ field.errors }}</div>
        </div>
+       {% endifnotequal %}
+      
+       {% ifequal field.name "organization" %}
+       {% if not request.organization %}
+       <div class="col-sm-12 registration_field">
+         <div class="col-sm-3"> {{ field.label }}</div>
+         <div class="col-sm-3">      {{ field }}</div>
+         <div class="col-sm-6">      {{ field.errors }}</div>
+       </div>
+       {% endif %}
+       {% endifequal %}
      {% endfor %}
       <!-- <input type="submit" value="Create Account" class="registration__action" /> -->
       <button class="btn btn-lg btn-primary registration__action" type="submit" value="Create Account" >{% trans 'Create Account'%}</button>
