@@ -6523,4 +6523,20 @@ textarea{
     height: auto;
 }
 /*----------all inputs csss-------------*/
-
+.breadcrumb {
+    background-color: transparent;
+    display: inline-block;
+}
+/*----------fieldsighe instance export csss-------------*/
+.types {
+    /*margin-right: 15px;*/
+    font-weight: 600;
+}
+.typpes {
+    margin-bottom: 10px;
+}
+.medias-img img {
+    margin-bottom: 8px;
+    margin-right: 5px;
+}
+/*----------fieldsighe instance export csss-------------*/
