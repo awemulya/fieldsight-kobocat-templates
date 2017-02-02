@@ -30,6 +30,9 @@ a,a:hover,a:focus {
     text-decoration:none;
     outline:none;
 }
+a,a:focus,a:hover{
+    color:#009688;
+}
 ::selection {
     background:#1FB5AD;
     color:#fff;
@@ -6137,7 +6140,7 @@ a.add_org_people:hover {
 }
 .containerd:hover .rotate-fab {
   /*background-image: url("http://goo.gl/0eJslQ");*/
-  transform: rotate(45deg);
+  transform: rotate(270deg);
 }
 
 .buttons-fab {
@@ -6540,3 +6543,12 @@ textarea{
     margin-right: 5px;
 }
 /*----------fieldsighe instance export csss-------------*/
+/*----------add admin form-------------*/
+ .appended-link {
+    background: transparent;
+    padding: 10px 15px;
+    color: #296fd5;
+    font-weight: bold;
+}
+
+/*----------add admin form-------------*/
