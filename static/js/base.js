@@ -151,6 +151,9 @@ override_form = function (event) {
             $target.append(data);
             //form sent by callback is also overwritten to submit via ajax
             $target.find('form').submit({url: action}, override_form);
+        },
+        error: function (data) {
+           alert("User Already Exists! Change Username Or Email.")
         }
     });
 
