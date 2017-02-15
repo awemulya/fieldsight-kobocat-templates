@@ -153,7 +153,7 @@ override_form = function (event) {
             $target.find('form').submit({url: action}, override_form);
         },
         error: function (data) {
-           alert("User Already Exists! Change Username Or Email.")
+           alert("User Creation Failed, Please Correct Input Data.")
         }
     });
 
