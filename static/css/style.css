@@ -30,9 +30,9 @@ a,a:hover,a:focus {
     text-decoration:none;
     outline:none;
 }
-a,a:focus,a:hover{
+/*a,a:focus,a:hover{
     color:#009688;
-}
+}*/
 ::selection {
     background:#1FB5AD;
     color:#fff;
@@ -160,7 +160,8 @@ a,a:focus,a:hover{
     width: 240px;
     height: 100%;
     position: fixed;
-    background: #d8d9de;
+    background: #fff;
+    text-transform: uppercase;
     -webkit-transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
@@ -6054,9 +6055,7 @@ ul.errorlist.nonfield {
 .org-grg{
     border-bottom: 1px solid #E6E6E6;
 }
-.org-logo {
-    padding: 15px 0px;
-}
+
 .org-grg span {
     margin-right: 10px;
 }
@@ -6227,7 +6226,7 @@ a.add_org_people:hover {
 /*------------site detail css----------*/
 .abt-org {
     position: relative;
-    padding: 0px 0px 70px;
+    padding: 10px;
 }
 .manage-btn {
     position: absolute;
@@ -6529,6 +6528,7 @@ textarea{
 .breadcrumb {
     background-color: transparent;
     display: inline-block;
+    margin-bottom: 0px;
 }
 /*----------fieldsighe instance export csss-------------*/
 .types {
