@@ -6255,7 +6255,47 @@ a.add_org_people:hover {
 .form-list .org-site .address {
     margin-bottom: 0px;
 }
-.outstanding-and-all .nav-tabs > li:first-child.active > a, .outstanding-and-all .nav-tabs > li:first-child.active > a:focus, .outstanding-and-all .nav-tabs > li:first-child.active > a:hover {
+.outstanding-and-all .nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 14px;
+}
+
+.outstanding-and-all .nav-tabs > li.all.active > a{
+    background-color: #296fd5;
+    color: #fff;
+    border-bottom: 2px solid #296fd5;
+}
+.outstanding-and-all .nav-tabs > li.out.active > a{
+    background-color: #ae6ad5;
+    color: #434242;
+    border-bottom: 2px solid #296fd5;
+}
+.outstanding-and-all .nav-tabs > li.reg.active > a{
+    background-color: #ff805a;
+    color: #434242;
+    border-bottom: 2px solid #296fd5;
+}
+.outstanding-and-all .nav-tabs > li.flag.active > a{
+    background-color: #a2d481;
+    color: #434242;
+    border-bottom: 2px solid #296fd5;
+}
+.outstanding-and-all .nav-tabs > li.app.active > a{
+    background-color: #efff55;
+    color: #434242;
+    border-bottom: 2px solid #296fd5;
+}
+.detail-org {
+    padding: 1px 10px;
+}
+.detail-org .site_icon_float {
+    float: right;
+    color: #9E9E9E;
+    font-size: 12px;
+    margin-right: 15px;
+}
+/*.outstanding-and-all .nav-tabs > li:first-child.active > a, .outstanding-and-all .nav-tabs > li:first-child.active > a:focus, .outstanding-and-all .nav-tabs > li:first-child.active > a:hover {
     color: #000;
     cursor: default;
     background-color: #ae6ad5;
@@ -6282,7 +6322,7 @@ a.add_org_people:hover {
     background-color: #efff55;
     border: 0px;
     border-bottom: 2px solid #EFFF55;
-}
+}*/
 .assign-form-to-site {
     margin-bottom: 20px;
 }
