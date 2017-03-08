@@ -56,13 +56,16 @@ geoJsonLayer = new L.geoJson(data, {
     }
 });
 
-markers.addLayer(geoJsonLayer);
-map.addLayer(markers);
-
 markers.on('data:loaded', function (data) {
             map.fitBounds(markers.getBounds());
             
         });
+
+markers.addLayer(geoJsonLayer);
+
+map.addLayer(markers);
+
+
 // map.fitBounds(markers.getBounds());
 
 layerswitcher.addOverlay(markers, "Schools");
