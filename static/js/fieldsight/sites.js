@@ -50,11 +50,7 @@ function SitesViewModel(sites) {
         });
         self.sites(filter_sites);
     }
-    var len = self.mappedData().length;
-    for (var i = 0; i < len; i++) {
-        self.golfers()[i].par(self.availableCourses()[self.site()].courseP);
-    }
-});
+    });
 
 };
 
