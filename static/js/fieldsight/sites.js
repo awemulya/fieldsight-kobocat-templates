@@ -20,6 +20,10 @@ var Site =function (data){
     self[i] = ko.observable(data[i]);
               }
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
+
+  self.mapOne = ko.observable({
+        lat: ko.observable(27.714875814507074),
+        lng: ko.observable(85.3243088722229)});
 }
 
 
