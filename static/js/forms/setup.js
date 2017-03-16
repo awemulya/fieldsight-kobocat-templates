@@ -1,3 +1,28 @@
+function formatDate(date) {
+    var d = new Date(date || Date.now()),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+   return [year, month,day ].join('-');
+ }
+
+ function deployStatus(flag){
+  return (flag == true) ? "Deployed" : "Not Deployed";
+ }
+
+ function formStatus(flag){
+  if (flag == 0) return "Outstanding"
+  if (flag == 1) return "Rejected"
+  if (flag == 2) return "Flagged"
+  if (flag == 3) return "Approved"
+
+  }
+ 
+
 var FieldSightXF = function (data){
   self = this;
   self.id = ko.observable();
@@ -28,6 +53,7 @@ var GeneralVM = function(is_project, pk){
   self.pk = pk;
   self.is_project = is_project;
   self.label = "General";
+  self.forms = ko.observableArray();
   self.current_form = ko.observable();
   self.general_form_modal_visibility = ko.observable(false);
 
@@ -35,6 +61,28 @@ var GeneralVM = function(is_project, pk){
     self.current_form(new FieldSightXF());
     self.general_form_modal_visibility(true);
   };
+
+  self.getGeneralForms = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/general/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.forms(response);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+  self.getGeneralForms();
 }
 
 
