@@ -12,7 +12,8 @@ var FieldSightXF = function (data){
   self.is_deployed = ko.observable(false);
 
   self.save = function(){
-    vm.site_modal_visibility(false);
+    // vm.generalVm.general_form_modal_visibility(false);
+    alert(self.xf());
   };
   
   for (var i in data){
@@ -20,9 +21,6 @@ var FieldSightXF = function (data){
               }
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
 
-  self.mapOne = ko.observable({
-        lat: ko.observable(27.714875814507074),
-        lng: ko.observable(85.3243088722229)});
 }
 
 var GeneralVM = function(is_project, pk){
@@ -30,6 +28,13 @@ var GeneralVM = function(is_project, pk){
   self.pk = pk;
   self.is_project = is_project;
   self.label = "General";
+  self.current_form = ko.observable();
+  self.general_form_modal_visibility = ko.observable(false);
+
+  self.add_form = function(){
+    self.current_form(new FieldSightXF());
+    self.general_form_modal_visibility(true);
+  };
 }
 
 
