@@ -101,10 +101,19 @@ var GeneralVM = function(is_project, pk){
                 self.allGForms().unshift(response);
                 self.forms(self.allGForms());
 
+                App.notifyUser(
+                        'General Form'+response.name +'Created',
+                        'success'
+                    );
+
             };
     var failure =  function (errorThrown) {
                 App.hideProcessing();
-                console.log(errorThrown);
+                App.notifyUser(
+                        'Duplicate Form',
+                        'error'
+                    );
+
             };
 
     App.remotePost(url, fxf, success, failure);                                                                                                                    
