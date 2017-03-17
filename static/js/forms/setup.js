@@ -37,8 +37,8 @@ var FieldSightXF = function (data){
   self.is_deployed = ko.observable(false);
 
   self.save = function(){
-    // vm.generalVm.general_form_modal_visibility(false);
-    alert(self.xf());
+    vm.generalVm().saveGeneralForm(self.xf())
+    vm.generalVm().general_form_modal_visibility(false);
   };
   
   for (var i in data){
@@ -83,6 +83,32 @@ var GeneralVM = function(is_project, pk){
                 console.log(errorThrown);
             }
         });
+  };
+
+
+  self.saveGeneralForm = function(xf){
+    var url = '/forms/api/fxf/';
+    var fxf = new FieldSightXF();
+    fxf.xf = xf;
+    if (self.is_project == true){
+      fxf.project = self.pk;
+    }else {
+      fxf.site = self.pk;
+    }
+
+    var success =  function (response) {
+                App.hideProcessing();
+                self.allGForms().unshift(response);
+                self.forms(self.allGForms());
+
+            };
+    var failure =  function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            };
+
+    App.remotePost(url, fxf, success, failure);                                                                                                                    
+  
   };
 
   self.getGeneralForms();
