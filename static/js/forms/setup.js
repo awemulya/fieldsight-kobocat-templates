@@ -53,9 +53,11 @@ var GeneralVM = function(is_project, pk){
   self.pk = pk;
   self.is_project = is_project;
   self.label = "General";
+  self.allGForms = ko.observableArray();
   self.forms = ko.observableArray();
   self.current_form = ko.observable();
   self.general_form_modal_visibility = ko.observable(false);
+  self.search_key = ko.observable();
 
   self.add_form = function(){
     self.current_form(new FieldSightXF());
@@ -73,6 +75,7 @@ var GeneralVM = function(is_project, pk){
             success: function (response) {
                 App.hideProcessing();
                 self.forms(response);
+                self.allGForms(response);
 
             },
             error: function (errorThrown) {
@@ -83,6 +86,17 @@ var GeneralVM = function(is_project, pk){
   };
 
   self.getGeneralForms();
+
+    self.search_key.subscribe(function (newValue) {
+    if (!newValue) {
+        self.forms(self.allGForms());
+    } else {
+        filter_forms = ko.utils.arrayFilter(self.allGForms(), function(item) {
+            return ko.utils.stringStartsWith(item.name.toLowerCase(), newValue);
+        });
+        self.forms(filter_forms);
+    }
+    });
 }
 
 
