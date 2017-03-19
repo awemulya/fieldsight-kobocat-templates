@@ -64,8 +64,8 @@ var Schedule = function (data){
   self.project = ko.observable();
 
   self.save = function(){
-    vm.scheduleVm().saveSchedule(self);
-    vm.generalVm().general_form_modal_visibility(false);
+    vm.scheduleVm().saveSchedule();
+    vm.scheduleVm().schedule_form_modal_visibility(false);
   };
   
   for (var i in data){
@@ -195,14 +195,19 @@ var ScheduleVM = function(is_project, pk){
   };
 
 
-    self.saveSchedule = function(schedule){
+    self.saveSchedule = function(){
     var url = '/forms/api/schedule/';
+    var schedule = new Schedule();
     if (self.is_project == true){
       schedule.project = self.pk;
     }else {
       schedule.site = self.pk;
     }
-
+      schedule.xf = self.current_form().form();
+      schedule.name = self.current_form().name();
+      schedule.date_range_start = self.current_form().date_range_start().toISOString().slice(0,10);
+      schedule.date_range_end= self.current_form().date_range_end().toISOString().slice(0,10);
+      schedule.selected_days= self.current_form().selected_days();
     var success =  function (response) {
                 App.hideProcessing();
                 self.allForms().unshift(response);
@@ -262,7 +267,11 @@ self.search_key.subscribe(function (newValue) {
         self.forms(self.allForms());
     } else {
         filter_forms = ko.utils.arrayFilter(self.allForms(), function(item) {
+          if (item.name){
             return ko.utils.stringStartsWith(item.name.toLowerCase(), newValue);
+          }else{
+            return true;
+          }
         });
         self.forms(filter_forms);
     }
