@@ -1,3 +1,5 @@
+var today = new Date().toISOString().slice(0,10);
+
 function formatDate(date) {
     var d = new Date(date || Date.now()),
     month = '' + (d.getMonth() + 1),
@@ -53,8 +55,8 @@ var Schedule = function (data){
   self.id = ko.observable();
   self.name = ko.observable();
   self.form = ko.observable();
-  self.date_range_start = ko.observable();
-  self.date_range_end = ko.observable();
+  self.date_range_start = ko.observable(new Date())
+  self.date_range_end = ko.observable(new Date())
   self.selected_days = ko.observableArray();
   self.form_status = ko.observable();
   self.is_deployed = ko.observable(false);
@@ -167,8 +169,32 @@ var ScheduleVM = function(is_project, pk){
   self.current_form = ko.observable();
   self.schedule_form_modal_visibility = ko.observable(false);
   self.search_key = ko.observable();
+  self.days = ko.observableArray();
+
+
+  self.getDays = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/days/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.days(response);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
 
   self.add_form = function(){
+    self.getDays();
     self.current_form(new Schedule());
     self.schedule_form_modal_visibility(true);
   };

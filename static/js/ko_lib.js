@@ -518,3 +518,22 @@ ko.bindingHandlers.map = {
                 $("#" + element.getAttribute("id")).data("mapObj",mapObj);
             }
         };
+
+
+ko.bindingHandlers.datePicker = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {                    
+        // Register change callbacks to update the model
+        // if the control changes.       
+        ko.utils.registerEventHandler(element, "change", function () {            
+            var value = valueAccessor();
+            value(new Date(element.value));            
+        });
+    },
+    // Update the control whenever the view model changes
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value =  valueAccessor();        
+        element.value = value().toISOString().slice(0,10);;
+    }
+};
+
+
