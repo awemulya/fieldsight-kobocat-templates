@@ -259,7 +259,7 @@ var ScheduleVM = function(is_project, pk){
 
 self.search_key.subscribe(function (newValue) {
     if (!newValue) {
-        self.forms(self.allGForms());
+        self.forms(self.allForms());
     } else {
         filter_forms = ko.utils.arrayFilter(self.allForms(), function(item) {
             return ko.utils.stringStartsWith(item.name.toLowerCase(), newValue);
