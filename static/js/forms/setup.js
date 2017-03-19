@@ -60,9 +60,11 @@ var Schedule = function (data){
   self.selected_days = ko.observableArray();
   self.form_status = ko.observable();
   self.is_deployed = ko.observable(false);
+  self.site = ko.observable();
+  self.project = ko.observable();
 
   self.save = function(){
-    vm.scheduleVm().saveSchedule(self)
+    vm.scheduleVm().saveSchedule(self);
     vm.generalVm().general_form_modal_visibility(false);
   };
   
@@ -164,7 +166,7 @@ var ScheduleVM = function(is_project, pk){
   self.pk = pk;
   self.is_project = is_project;
   self.label = "Schedules";
-  self.allGForms = ko.observableArray();
+  self.allForms = ko.observableArray();
   self.forms = ko.observableArray();
   self.current_form = ko.observable();
   self.schedule_form_modal_visibility = ko.observable(false);
@@ -193,6 +195,60 @@ var ScheduleVM = function(is_project, pk){
   };
 
 
+    self.saveSchedule = function(schedule){
+    var url = '/forms/api/schedule/';
+    if (self.is_project == true){
+      schedule.project = self.pk;
+    }else {
+      schedule.site = self.pk;
+    }
+
+    var success =  function (response) {
+                App.hideProcessing();
+                self.allForms().unshift(response);
+                self.forms(self.allForms());
+
+                App.notifyUser(
+                        'Schedule Form'+response.name +'Created',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.non_field_errors;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, schedule, success, failure);                                                                                                                    
+  
+  };
+
+  self.getForms = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/schedules/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.forms(response);
+                self.allForms(response);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
   self.add_form = function(){
     self.getDays();
     self.current_form(new Schedule());
@@ -205,12 +261,14 @@ self.search_key.subscribe(function (newValue) {
     if (!newValue) {
         self.forms(self.allGForms());
     } else {
-        filter_forms = ko.utils.arrayFilter(self.allGForms(), function(item) {
+        filter_forms = ko.utils.arrayFilter(self.allForms(), function(item) {
             return ko.utils.stringStartsWith(item.name.toLowerCase(), newValue);
         });
         self.forms(filter_forms);
     }
     });
+
+  self.getForms();
 }
 
 
