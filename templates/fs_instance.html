@@ -40,11 +40,17 @@
 <div classs=row>
   <p>Show me status of this submission: <input type="checkbox" data-bind="checked: wantstatus" /></p>
 <div data-bind="visible: wantstatus">
-    <div><input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding</div>
-    <div><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected</div>
-    <div><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged</div>
-    <div><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved </div>
-    <div><input type="text" data-bind="value=message" placeholder="comment"></div>
+    <div><span>
+      <input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding
+    </span></div>
+    <div><span><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected
+    </span></div>
+    <div>
+      <span><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged
+      </span></div>
+    <div><span><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved 
+    </span></div>
+    <div><input type="textarea" rows="5" data-bind="value=message" placeholder="comment"></div>
     <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
 </div>
   </div>
