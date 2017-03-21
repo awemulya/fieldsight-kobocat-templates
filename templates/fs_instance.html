@@ -37,6 +37,17 @@
 {% if messages %}
 <div>{{messages}}</div>
 {% endif %}
+<div classs=row>
+  <p>Show me status of this submission: <input type="checkbox" data-bind="checked: wantstatus" /></p>
+<div data-bind="visible: wantstatus">
+    <div><input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding</div>
+    <div><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected</div>
+    <div><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged</div>
+    <div><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved </div>
+    <div><input type="text" data-bind="value=message" placeholder="comment"></div>
+    <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
+</div>
+  </div>
 <div id="data"></div>
 
  <div id="delete-modal" class="modal hide fade">
@@ -56,6 +67,40 @@
 
 {% block javascript %}
 {{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/knockout.js" ></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/base.js" ></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ko_lib.js" ></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/fieldsight/plugin/toastr.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/fieldsight/App.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/forms/alter_status.js"></script>
+<link href="{{STATIC_URL}}css/toastr.css" rel="stylesheet">
+
+<script>
+
+$(document).ready(function() {
+var fxf = "{{fxf.pk}}";
+var ins = location.hash.split("#/")[1];
+
+ vm = new StatusViewModel(fxf, ins);
+
+ ko.applyBindings(vm);
+});
+
+</script>
+
+<script>
+
+function locationHashChanged() {
+  var new_ins = location.hash.split("#/")[1];
+    var fxf = "{{fxf.pk}}";
+   vm = new StatusViewModel(fxf, new_ins);
+   
+}
+
+window.onhashchange = locationHashChanged;
+</script>
+
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.dataTables.pagination.js"></script>
 <script type="text/javascript" charset="utf-8" src="{{STATIC_URL}}js/sammy-0.7.1.min.js"></script>
