@@ -37,23 +37,7 @@
 {% if messages %}
 <div>{{messages}}</div>
 {% endif %}
-<div classs=row>
-  <p>Show me status of this submission: <input type="checkbox" data-bind="checked: wantstatus" /></p>
-<div data-bind="visible: wantstatus">
-    <div><span>
-      <input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding
-    </span></div>
-    <div><span><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected
-    </span></div>
-    <div>
-      <span><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged
-      </span></div>
-    <div><span><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved 
-    </span></div>
-    <div><input type="textarea" rows="5" data-bind="value=message" placeholder="comment"></div>
-    <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
-</div>
-  </div>
+
 <div id="data"></div>
 
  <div id="delete-modal" class="modal hide fade">
@@ -69,6 +53,21 @@
               <a href="#" onclick="$('#delete-modal').modal('hide');" class="btn">{% trans "Cancel" %}</a>
             </div>
           </div>
+<div classs="row" data-bind="with:model">
+  <h3>{% trans 'Submission  Status' %}<h3>
+    <div><span>
+      <input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding
+    </span></div>
+    <div><span><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected
+    </span></div>
+    <div>
+      <span><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged
+      </span></div>
+    <div><span><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved 
+    </span></div>
+    <div><input type="textarea" rows="5" data-bind="value=message" placeholder="comment"></div>
+    <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
+</div>
 {% endblock %}
 
 {% block javascript %}
@@ -99,8 +98,9 @@ var ins = location.hash.split("#/")[1];
 
 function locationHashChanged() {
   var new_ins = location.hash.split("#/")[1];
-    var fxf = "{{fxf.pk}}";
-   vm = new StatusViewModel(fxf, new_ins);
+    // var fxf = "{{fxf.pk}}";
+   // vm = new StatusViewModel(fxf, new_ins);
+   vm.model(new ChangeStatus(new_ins, 0, ""));
    
 }
 

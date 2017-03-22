@@ -1,20 +1,16 @@
-var ChangeStatus = function(data){
+var MyObject = function(){
+var self=this;
+};
 
-  for (var i in data){
-    self[i] = ko.observable(data[i]);
-              }
-}
-
-function StatusViewModel(fxf, instance) {
-  var self=this;
-  self.wantstatus =  ko.observable(true);
-  self.formStatus = ko.observable();
-  self.message = ko.observable();
-  self.fxf = ko.observable(fxf);
+var ChangeStatus = function(instance, status, message){
+  var self = this;
+  self.formStatus = ko.observable(status);
+  self.message = ko.observable(message);
   self.instance = ko.observable(instance);
 
-  	self.getStatus= function(){
-  		var url = '/forms/instance/status/'+ String(self.instance());
+
+    self.getStatus= function(){
+      var url = '/forms/instance/status/'+ String(self.instance());
     App.showProcessing();
         $.ajax({
             url: url,
@@ -28,7 +24,7 @@ function StatusViewModel(fxf, instance) {
 
             },
             error: function (errorThrown) {
-            	var err_msg = errorThrown.responseJSON.error;
+              var err_msg = errorThrown.responseJSON.error;
                 App.hideProcessing();
                 App.notifyUser(
                         err_msg,
@@ -42,7 +38,7 @@ function StatusViewModel(fxf, instance) {
 
   self.saveStatus = function(){
     var url = '/forms/instance/status/'+ String(self.instance());
-    var changeStatus = new ChangeStatus();
+    var changeStatus = new MyObject();
     changeStatus.status = self.formStatus();
     changeStatus.message = self.message();
 
@@ -68,6 +64,14 @@ function StatusViewModel(fxf, instance) {
   
   };
 
-	self.getStatus();
+  self.getStatus();
 
+}
+
+function StatusViewModel(fxf, instance) {
+  var self=this;
+  self.wantstatus =  ko.observable(true);
+  self.fxf = ko.observable(fxf);
+  self.instance = ko.observable(instance);
+  self.model = ko.observable(new ChangeStatus(instance, 0, ""));
   };
