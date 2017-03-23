@@ -80,7 +80,10 @@ var SubStage = function(data){
   self.name = ko.observable();
   self.description = ko.observable();
   self.order = ko.observable();
-  self.stage = ko.observable();
+
+     for (var i in data){
+      self[i] = ko.observable(data[i]);
+    }
 
 }
 
@@ -95,6 +98,13 @@ var Stage = function(data){
   self.site = ko.observable();
   self.project = ko.observable();
   self.parent = ko.observableArray();
+  
+  self.show_substage = function(){
+    alert("called");
+  }
+  self.add_sub_stage = function(){
+    alert("called");
+  }
 
    for (var i in data){
     if(i == "parent"){
@@ -350,6 +360,28 @@ var StageVM = function(is_project, pk){
             }
         });
   };
+
+  self.add_stage = function(){
+    console.log("add");
+
+  };
+
+
+self.search_key.subscribe(function (newValue) {
+    if (!newValue) {
+        self.stages(self.allStages());
+    } else {
+        filter_stages = ko.utils.arrayFilter(self.allStages(), function(item) {
+          if (item.name()){
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
+          }else{
+            return true;
+          }
+        });
+        self.stages(filter_stages);
+    }
+    });
+
 
   self.getStages();
  }
