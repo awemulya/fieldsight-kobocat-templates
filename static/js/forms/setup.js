@@ -26,7 +26,7 @@ function formatDate(date) {
  
 
 var FieldSightXF = function (data){
-  self = this;
+  var self = this;
   self.id = ko.observable();
   self.xf = ko.observable();
   self.is_staged = ko.observable(false);
@@ -51,7 +51,7 @@ var FieldSightXF = function (data){
 }
 
 var Schedule = function (data){
-  self = this;
+  var self = this;
   self.id = ko.observable();
   self.name = ko.observable();
   self.form = ko.observable();
@@ -74,6 +74,40 @@ var Schedule = function (data){
 
 }  
 
+var SubStage = function(data){
+  var self = this;
+  self.id = ko.observable();
+  self.name = ko.observable();
+  self.description = ko.observable();
+  self.order = ko.observable();
+  self.stage = ko.observable();
+
+}
+
+var Stage = function(data){
+  var self = this;
+  self.id = ko.observable();
+  self.name = ko.observable();
+  self.description = ko.observable();
+  self.order = ko.observable();
+  self.date_created = ko.observable();
+  self.date_modified = ko.observable();
+  self.site = ko.observable();
+  self.project = ko.observable();
+  self.parent = ko.observableArray();
+
+   for (var i in data){
+    if(i == "parent"){
+      self.parent = ko.utils.arrayMap(data[i], function(item) {
+            return new SubStage(item);
+                    });
+     
+    }else{
+      self[i] = ko.observable(data[i]);
+    }
+
+  }
+}
 
 var GeneralVM = function(is_project, pk){
   var self = this;
@@ -161,6 +195,7 @@ var GeneralVM = function(is_project, pk){
     }
     });
 }
+
 var ScheduleVM = function(is_project, pk){
   var self = this;
   self.pk = pk;
@@ -195,7 +230,7 @@ var ScheduleVM = function(is_project, pk){
   };
 
 
-    self.saveSchedule = function(){
+self.saveSchedule = function(){
     var url = '/forms/api/schedule/';
     var schedule = new Schedule();
     if (self.is_project == true){
@@ -280,6 +315,45 @@ self.search_key.subscribe(function (newValue) {
   self.getForms();
 }
 
+var StageVM = function(is_project, pk){
+
+  var self = this;
+  self.pk = pk;
+  self.is_project = is_project;
+  self.allStages = ko.observableArray();
+  self.stages = ko.observableArray();
+  self.current_stage = ko.observable();
+  self.stage_form_visibility = ko.observable(false);
+  self.search_key = ko.observable();
+
+  self.getStages = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/stage/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                  var mappedData = ko.utils.arrayMap(response, function(item) {
+                      return new Stage(item);
+                    });
+                
+                self.stages(mappedData);
+                self.allStages(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+  self.getStages();
+ }
+
 
 function SetUpViewModel(is_project, pk) {
   var self = this;
@@ -309,7 +383,7 @@ function SetUpViewModel(is_project, pk) {
 
     }else if (newValue == "stages") {
      if (ko.utils.unwrapObservable(self.stagesVm()) == null){
-        self.stagesVm(new GeneralVM(is_project, pk));
+        self.stagesVm(new StageVM(is_project, pk));
       }
 
     }
