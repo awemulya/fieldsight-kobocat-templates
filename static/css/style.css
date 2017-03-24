@@ -6846,3 +6846,60 @@ li.dropdown.man-drop>a {
   font: 10px sans-serif;
 }
 
+
+
+/*setup forms page*/
+.btn-group-nav {
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+.btn-group-nav .btn {
+    border-radius: 0px;
+    background: #fff;
+}
+.btn-group-nav .btn-primary {
+    background-color: #fff;
+    color: #296FD5;
+    border: none;
+    border-bottom: 3px solid #296FD5;
+    border-radius: 0px;
+}
+
+.form-control-search {
+    border: none;
+    border-radius: 0px;
+    border-bottom: 2px solid #c2c2c2;
+    box-shadow: none;
+    color: #c2c2c2;
+    position: relative;
+}
+.form-control-search:focus {
+    border: none;
+    border-radius: 0px;
+    border-bottom: 2px solid #296FD5;
+    box-shadow: none;
+    color: #464646;
+}
+
+.each-stage-grp {
+    padding: 0px 20px;
+}
+.stage-name-c {
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.sub-stage-name-c {
+    font-weight: 600;
+}
+.name-stage-grp {
+    border-bottom: 1px solid #767676;
+    padding: 0px 5px;
+}
+.all-sub-grp {
+    padding-bottom: 10px;
+}
+.each-sub-grp {
+    padding: 0px 20px;
+}
+
+/*setup forms page*/
