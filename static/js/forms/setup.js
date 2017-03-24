@@ -71,7 +71,6 @@ var Schedule = function (data){
   for (var i in data){
     self[i] = ko.observable(data[i]);
 }
-
 }  
 
 var SubStage = function(data){
@@ -98,15 +97,28 @@ var Stage = function(data){
   self.site = ko.observable();
   self.project = ko.observable();
   self.parent = ko.observableArray();
+  self.showmeSubstages = ko.observable(false);
+  self.newSubstage = ko.observable();
   
   self.show_substage = function(){
     alert("called");
   }
   self.add_sub_stage = function(){
+    self.newSubstage(new SubStage());
     alert("called");
   }
 
-   for (var i in data){
+  self.save_sub_stage = function(){
+    self.parent.push(self.newSubstage());
+    self.newSubstage(new SubStage());
+
+  };
+
+  self.save = function (){
+    self.vm.stagesVm().saveStage(self);
+  }
+
+for (var i in data){
     if(i == "parent"){
       self.parent = ko.utils.arrayMap(data[i], function(item) {
             return new SubStage(item);
@@ -115,7 +127,6 @@ var Stage = function(data){
     }else{
       self[i] = ko.observable(data[i]);
     }
-
   }
 }
 
@@ -161,7 +172,7 @@ var GeneralVM = function(is_project, pk){
     var url = '/forms/api/fxf/';
     var fxf = new FieldSightXF();
     fxf.xf = xf;
-    if (self.is_project == true){
+    if (self.is_project == "1"){
       fxf.project = self.pk;
     }else {
       fxf.site = self.pk;
@@ -243,7 +254,7 @@ var ScheduleVM = function(is_project, pk){
 self.saveSchedule = function(){
     var url = '/forms/api/schedule/';
     var schedule = new Schedule();
-    if (self.is_project == true){
+    if (self.is_project == "1"){
       schedule.project = self.pk;
     }else {
       schedule.site = self.pk;
@@ -360,11 +371,54 @@ var StageVM = function(is_project, pk){
             }
         });
   };
+self.add_stage = function(){
+  self.current_stage(new Stage());
+}
 
-  self.add_stage = function(){
-    console.log("add");
+self.saveStage = function(stage){
+      if(vm.is_project == "1"){
+        stage.project = vm.pk;
+      }else{
+        stage.site = vm.pk;
+      }
+    var url = '/forms/api/stage/' + String(vm.is_project) + '/' + String(vm.pk);
+var success =  function (response) {
+                App.hideProcessing();
+                save_mode = true;
+                 ko.utils.arrayForEach(self.stagesVm().allStages(), function(item) {
+                  if (item.id() == response.id) {
+                      save_mode =  false;
+                      return;
+                  }
+              });
+                  if(save_mode == true){
+                    self.allStages().push(new Stage(response));
+                    self.stages(self.allStages());
+                    self.current_stage(new Stage());
 
+                  }
+
+                App.notifyUser(
+                        'Stage Form'+response.name +'Saved',
+                        'success'
+                    );
+
+            };
+    
+var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.non_field_errors;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, stage, success, failure);                                                                                                                    
+  
   };
+
 
 
 self.search_key.subscribe(function (newValue) {
@@ -389,7 +443,7 @@ self.search_key.subscribe(function (newValue) {
 
 function SetUpViewModel(is_project, pk) {
   var self = this;
-  self.is_project = (is_project === '0') ? false : true;
+  self.is_project = is_project;
   self.pk = pk;
   self.currentVm = ko.observable("general");
   self.generalVm = ko.observable();
