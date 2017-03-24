@@ -6763,3 +6763,86 @@ input[type="radio"]:checked + label:after {
     margin-right: 10px;
 }
 /*----------setup user-------------*/
+
+
+
+.organization-detail-page .navbar-nav>li>a {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    line-height: 20px;
+}
+.organization-detail-page .navbar-nav>li>a:hover {
+    background: #296FD5;
+    color: #fff;
+}
+
+li.responses-all {
+    background: #296FD5;
+    margin-right: 10px;
+}
+li.responses-all a {
+    color: #fff;
+}
+
+.organization-detail-page .mini-stat {
+    background: #fff;
+    padding: 10px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.bar-gauge-diagrams {
+    padding: 10px;
+    padding-top: 30px;
+}
+li.dropdown.man-drop {
+    background: #296FD5 !important;
+}
+li.dropdown.man-drop:focus, li.dropdown.man-drop:hover {
+    background: #237dff;
+}
+li.dropdown.man-drop>a {
+    color: #fff;
+    background: #296FD5;
+}
+
+
+/*flagged all in dashboard*/
+.flags-dash {
+    margin-top: 20px;
+}
+.flags-dash .length-flags-forms {
+    font-size: 38px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.out-dash-flag,.flag-dash-flag ,.reg-dash-flag,.app-dash-flag{
+    padding: 10px 0px;
+}
+.out-dash-flag {
+    background: #a48ad4;
+}
+.flag-dash-flag {
+    background: #efff55;
+}
+.reg-dash-flag {
+    background: #ff805a;
+}
+.app-dash-flag {
+    background: #aec785;
+}
+/*flagged all in dashboard*/
+
+
+
+.bar rect {
+  fill: steelblue;
+}
+
+.bar text {
+  fill: #fff;
+  font: 10px sans-serif;
+}
+

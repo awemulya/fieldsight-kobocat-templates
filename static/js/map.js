@@ -1,8 +1,4 @@
 
-var map = L.map("map", {
-        center: [27.73672, 85.31942],
-        zoom: 7
-});
 
 var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
@@ -33,11 +29,8 @@ var baseLayers = {
     "Google Terrain": googleTerrain
 };
 
-map.addLayer(osm);
-layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
-var markers = L.markerClusterGroup();
 
-geoJsonLayer = new L.geoJson(data, {
+markers = new L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
         icon = L.icon({
                         //iconSize: [27, 27],
@@ -56,19 +49,19 @@ geoJsonLayer = new L.geoJson(data, {
     }
 });
 
-markers.on('data:loaded', function (data) {
-            map.fitBounds(markers.getBounds());
-            
-        });
+        map = L.map("map",{layers:osm}).fitBounds(markers);
+        
+        //map.addLayer(osm);
+        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
 
-markers.addLayer(geoJsonLayer);
+        map.addLayer(markers);
 
-map.addLayer(markers);
+
 
 
 // map.fitBounds(markers.getBounds());
 
-layerswitcher.addOverlay(markers, "Schools");
+        layerswitcher.addOverlay(markers, "Schools");
 
 markers.on('click',function(e){
     var site_id = e.layer.feature.id;
