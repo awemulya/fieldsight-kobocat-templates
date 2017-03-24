@@ -99,30 +99,36 @@ var Stage = function(data){
   self.parent = ko.observableArray();
   self.showmeSubstages = ko.observable(false);
   self.newSubstage = ko.observable();
-  
-  self.show_substage = function(){
-    alert("called");
-  }
+  self.addSubStageMode = ko.observable(false);
+
   self.add_sub_stage = function(){
-    self.newSubstage(new SubStage());
-    alert("called");
-  }
+    self.newSubstage(new SubStage({'order':self.parent().length+1, 'name':"",'description':""}));
+    self.addSubStageMode(true);
+  };
 
   self.save_sub_stage = function(){
+    if(self.newSubstage().name().length >0){
     self.parent.push(self.newSubstage());
-    self.newSubstage(new SubStage());
+    self.newSubstage(new SubStage({'order':self.parent().length+1, 'name':"",'description':""}));
+      
+    }else{
+
+      App.notifyUser('SubStage Name Cannot be Empty', 'error');
+
+    }
 
   };
 
   self.save = function (){
     self.vm.stagesVm().saveStage(self);
-  }
+  };
 
 for (var i in data){
     if(i == "parent"){
-      self.parent = ko.utils.arrayMap(data[i], function(item) {
+      var sub_stages = ko.utils.arrayMap(data[i], function(item) {
             return new SubStage(item);
                     });
+      self.parent(sub_stages);
      
     }else{
       self[i] = ko.observable(data[i]);
@@ -346,6 +352,7 @@ var StageVM = function(is_project, pk){
   self.current_stage = ko.observable();
   self.stage_form_visibility = ko.observable(false);
   self.search_key = ko.observable();
+  self.addStageMode = ko.observable(true);
 
   self.getStages = function(){
     App.showProcessing();
@@ -372,8 +379,14 @@ var StageVM = function(is_project, pk){
         });
   };
 self.add_stage = function(){
-  self.current_stage(new Stage());
+  self.addStageMode(false);
+  self.current_stage(new Stage({'order':1,'parent':[]}));
 }
+
+self.save_new_stage = function(){
+self.saveStage(self.current_stage());
+self.addStageMode(true);
+};
 
 self.saveStage = function(stage){
       if(vm.is_project == "1"){
