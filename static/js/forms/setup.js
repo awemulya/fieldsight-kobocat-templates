@@ -112,7 +112,6 @@ var Stage = function(data){
   self.add_sub_stage = function(){
     var parentLength = self.parent().length || 0;
     self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':""}));
-    self.stageChanged(true);
     self.addSubStageMode(true);
   };
 
@@ -122,6 +121,7 @@ var Stage = function(data){
       if(self.newSubstage().order() == parentLength+1){
         self.parent.push(self.newSubstage());
         self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':""}));
+        self.stageChanged(true);
           
         }else{
 
@@ -139,7 +139,12 @@ var Stage = function(data){
   };
 
   self.save = function (){
-    // vm.stagesVm().saveStage(self);
+      if(vm.is_project == "1"){
+        self.project(vm.pk);
+      }else{
+        self.site(vm.pk);
+      }
+    vm.stagesVm().saveStage(self);
     self.stageChanged(false);
     self.addSubStageMode(false);
   };
@@ -404,22 +409,31 @@ self.add_stage = function(){
   self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
 }
 
-self.save_new_stage = function(){
-self.saveStage(self.current_stage());
-self.addStageMode(true);
-};
 
 self.saveStage = function(stage){
-      if(vm.is_project == "1"){
-        stage.project = vm.pk;
-      }else{
-        stage.site = vm.pk;
-      }
-    var url = '/forms/api/stage/' + String(vm.is_project) + '/' + String(vm.pk);
+  var stageobj = new Stage();
+  stageobj.id = stage.id();
+  stageobj.name = stage.name();
+  stageobj.description = stage.name();
+  stageobj.order = stage.order();
+  stageobj.site = stage.site();
+  stageobj.project = stage.project();
+  var parent = ko.utils.arrayMap(stage.parent(), function(item) {
+                      sub_st = new SubStage();
+                      sub_st.id = item.id();
+                      sub_st.name = item.name();
+                      sub_st.description = item.description();
+                      sub_st.order = item.order();
+                      return sub_st;
+                    });
+                
+
+  stageobj.parent = parent;
+ var url = '/forms/api/stage/' + String(vm.is_project) + '/' + String(vm.pk);
 var success =  function (response) {
                 App.hideProcessing();
                 save_mode = true;
-                 ko.utils.arrayForEach(self.stagesVm().allStages(), function(item) {
+                 ko.utils.arrayForEach(self.allStages(), function(item) {
                   if (item.id() == response.id) {
                       save_mode =  false;
                       return;
@@ -429,6 +443,8 @@ var success =  function (response) {
                     self.allStages().push(new Stage(response));
                     self.stages(self.allStages());
                     self.current_stage(new Stage());
+                    // self.addStageMode(true);
+
 
                   }
 
@@ -449,7 +465,7 @@ var failure =  function (errorThrown) {
 
             };
 
-    App.remotePost(url, stage, success, failure);                                                                                                                    
+    App.remotePost(url, stageobj, success, failure);                                                                                                                    
   
   };
 
