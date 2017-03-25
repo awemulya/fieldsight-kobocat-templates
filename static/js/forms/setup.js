@@ -100,27 +100,48 @@ var Stage = function(data){
   self.showmeSubstages = ko.observable(false);
   self.newSubstage = ko.observable();
   self.addSubStageMode = ko.observable(false);
+  self.stageChanged = ko.observable(false);
+
+//   ko.computed(function() {
+//     return ko.toJSON(self.parent());
+// }).subscribe(function() {
+//     alert("changed");
+//     self.stageChanged(true);
+// });
 
   self.add_sub_stage = function(){
-    self.newSubstage(new SubStage({'order':self.parent().length+1, 'name':"",'description':""}));
+    var parentLength = self.parent().length || 0;
+    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':""}));
+    self.stageChanged(true);
     self.addSubStageMode(true);
   };
 
   self.save_sub_stage = function(){
+    var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
-    self.parent.push(self.newSubstage());
-    self.newSubstage(new SubStage({'order':self.parent().length+1, 'name':"",'description':""}));
+      if(self.newSubstage().order() == parentLength+1){
+        self.parent.push(self.newSubstage());
+        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':""}));
+          
+        }else{
+
+          App.notifyUser('SubStage Order Must Be '+ (parentLength+1), 'error');
+
+        }
       
     }else{
 
       App.notifyUser('SubStage Name Cannot be Empty', 'error');
 
     }
+   
 
   };
 
   self.save = function (){
-    self.vm.stagesVm().saveStage(self);
+    // vm.stagesVm().saveStage(self);
+    self.stageChanged(false);
+    self.addSubStageMode(false);
   };
 
 for (var i in data){
@@ -380,7 +401,7 @@ var StageVM = function(is_project, pk){
   };
 self.add_stage = function(){
   self.addStageMode(false);
-  self.current_stage(new Stage({'order':1,'parent':[]}));
+  self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
 }
 
 self.save_new_stage = function(){
