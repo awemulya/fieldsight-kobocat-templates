@@ -130,13 +130,31 @@ var Stage = function(data){
   self.stageChanged = ko.observable(false);
   self.show_substages = ko.observable(false);
 
-self.show_substages.subscribe(function(newValue) {
-  if (newValue == true ){
+  self.edit = function(){
+    vm.stagesVm().editSage(self);
+
+  };
+
+self.setShowSubstages = function(){
+    if (self.show_substages() == false){
+      self.show_substages(true);
+    }else{
+      self.show_substages(false);
+    }
     if (self.newSubstage() == undefined){
       self.add_sub_stage();
     }
-  }
-});
+
+} 
+
+
+// self.show_substages.subscribe(function(newValue) {
+//   if (newValue == true ){
+//     if (self.newSubstage() == undefined){
+//       self.add_sub_stage();
+//     }
+//   }
+// });
 
   self.add_sub_stage = function(){
     var parentLength = self.parent().length || 0;
@@ -409,6 +427,7 @@ var StageVM = function(is_project, pk){
   self.stage_form_visibility = ko.observable(false);
   self.search_key = ko.observable();
   self.addStageMode = ko.observable(true);
+  self.stage_form_modal_visibility = ko.observable(false);
 
   self.getStages = function(){
     App.showProcessing();
@@ -462,8 +481,15 @@ var StageVM = function(is_project, pk){
 self.add_stage = function(){
   self.addStageMode(false);
   self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
+  self.current_stage().setShowSubstages();
+  self.stage_form_modal_visibility(true);
 }
 
+self.editSage = function(stage){
+  self.current_stage(stage);
+  self.current_stage().setShowSubstages();
+  self.stage_form_modal_visibility(true);
+}
 
 self.saveStage = function(stage){
   var stageobj = new Stage();
@@ -498,7 +524,8 @@ var success =  function (response) {
                   if(save_mode == true){
                     self.allStages().push(new Stage(response));
                     self.stages(self.allStages());
-                    self.current_stage(new Stage());
+                    self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
+                    self.current_stage().setShowSubstages();
                     // self.addStageMode(true);
 
 
@@ -508,11 +535,15 @@ var success =  function (response) {
                         'Stage Form'+response.name +'Saved',
                         'success'
                     );
+                self.stage_form_modal_visibility(false);
 
             };
     
 var failure =  function (errorThrown) {
       var err_message = errorThrown.responseJSON.non_field_errors;
+      if (err_message==undefined){
+        err_message = "Invalid Data Check Form Data Correctly"
+      }
                 App.hideProcessing();
                 App.notifyUser(
                         err_message,
