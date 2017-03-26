@@ -23,7 +23,15 @@ function formatDate(date) {
   if (flag == 3) return "Approved"
 
   }
- 
+ var Xform = function (data){
+   var self = this;
+   self.id = ko.observable();
+   self.title = ko.observable();
+
+    for (var i in data){
+        self[i] = ko.observable(data[i]);
+    }
+ }
 
 var FieldSightXF = function (data){
   var self = this;
@@ -78,12 +86,31 @@ var SubStage = function(data){
   self.id = ko.observable();
   self.name = ko.observable();
   self.description = ko.observable();
+  self.xf = ko.observable();
+  self.form_name = ko.observable();
   self.order = ko.observable();
 
      for (var i in data){
       self[i] = ko.observable(data[i]);
     }
 
+self.form_name_display = function (){
+  not_xf = self.xf() || true;
+  if(not_xf == true){
+    return "";
+  }
+  if (self.xf().length <1){
+    return ""
+  }
+      var title = "";
+      ko.utils.arrayForEach(vm.stagesVm().xforms(), function(item) {
+                  if (item.id() == self.xf()) {
+                      title = item.title();
+                      return;
+                  }
+              });
+    return title;
+  }
 }
 
 var Stage = function(data){
@@ -101,17 +128,19 @@ var Stage = function(data){
   self.newSubstage = ko.observable();
   self.addSubStageMode = ko.observable(false);
   self.stageChanged = ko.observable(false);
+  self.show_substages = ko.observable(false);
 
-//   ko.computed(function() {
-//     return ko.toJSON(self.parent());
-// }).subscribe(function() {
-//     alert("changed");
-//     self.stageChanged(true);
-// });
+self.show_substages.subscribe(function(newValue) {
+  if (newValue == true ){
+    if (self.newSubstage() == undefined){
+      self.add_sub_stage();
+    }
+  }
+});
 
   self.add_sub_stage = function(){
     var parentLength = self.parent().length || 0;
-    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':""}));
+    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'xf':""}));
     self.addSubStageMode(true);
   };
 
@@ -120,7 +149,7 @@ var Stage = function(data){
     if(self.newSubstage().name().length >0){
       if(self.newSubstage().order() == parentLength+1){
         self.parent.push(self.newSubstage());
-        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':""}));
+        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':"",'xf':""}));
         self.stageChanged(true);
           
         }else{
@@ -374,6 +403,7 @@ var StageVM = function(is_project, pk){
   self.pk = pk;
   self.is_project = is_project;
   self.allStages = ko.observableArray();
+  self.xforms = ko.observableArray();
   self.stages = ko.observableArray();
   self.current_stage = ko.observable();
   self.stage_form_visibility = ko.observable(false);
@@ -404,6 +434,31 @@ var StageVM = function(is_project, pk){
             }
         });
   };
+  
+  self.getXforms = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/xf/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                  var mappedData = ko.utils.arrayMap(response, function(item) {
+                      return new Xform(item);
+                    });
+                
+                self.xforms(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
 self.add_stage = function(){
   self.addStageMode(false);
   self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
@@ -424,6 +479,7 @@ self.saveStage = function(stage){
                       sub_st.name = item.name();
                       sub_st.description = item.description();
                       sub_st.order = item.order();
+                      sub_st.xf = item.xf();
                       return sub_st;
                     });
                 
@@ -487,7 +543,22 @@ self.search_key.subscribe(function (newValue) {
     });
 
 
+  self.getXforms();
   self.getStages();
+  // self.form_name_display = function (xf_id){
+  //   if (xf_id() =="") return ""
+  //   if (xf_id() == undefined) return ""
+  //     alert(xf_id());
+  //     var title = "";
+  //     ko.utils.arrayForEach(self.xforms(), function(item) {
+  //                 if (item.id() == xf_id) {
+  //                     title = item.title();
+  //                     return;
+  //                 }
+  //             });
+  //   alert(title);
+  //   return title;
+  // }
  }
 
 
