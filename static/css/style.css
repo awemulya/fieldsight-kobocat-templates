@@ -5890,11 +5890,13 @@ ul.errorlist.nonfield {
     list-style: none;
     color: red;
 }
+
 .btn-primary {
     background-color: #296fd5;
     border-color: #296fd5;
     color: #FFFFFF;
 }
+
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
     background-color: #237dff;
     border-color: #237dff;
@@ -6271,7 +6273,7 @@ a.add_org_people:hover {
     color: #296FD5;
 }
 .form-list {
-    height: 500px;
+    height: 250px;
     overflow-y: scroll;
 }
 .form-list .org-site {
@@ -6813,6 +6815,7 @@ li.responses-all a {
 }
 li.dropdown.man-drop {
     background: #296FD5 !important;
+    margin-right: 20px;
 }
 li.dropdown.man-drop:focus, li.dropdown.man-drop:hover {
     background: #237dff;
@@ -6918,4 +6921,7 @@ li.dropdown.man-drop>a {
 .add-stage-button{
 
 }
+/*.drop-down-item{
+z-index: 500;
+}*/
 /*setup forms page*/

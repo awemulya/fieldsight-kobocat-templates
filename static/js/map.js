@@ -44,7 +44,9 @@ markers = new L.geoJson(data, {
         
     }, 
     onEachFeature: function(feature, layer) {
-        layer.bindPopup(feature.properties.public_desc+'<br/>'+feature.properties.name+'<br/>'+feature.properties.address);
+        var address = feature.properties.address || "";
+        var url = "<a href=fieldsight/site-dashboard/"+feature.id+">"+feature.properties.name+"</a>";
+        layer.bindPopup(url+'<br/>'+address);
         
     }
 });
@@ -52,7 +54,7 @@ markers = new L.geoJson(data, {
         map = L.map("map",{layers:osm}).fitBounds(markers);
         
         //map.addLayer(osm);
-        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
+        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true, position: "topleft"}).addTo(map);
 
         map.addLayer(markers);
 
@@ -75,15 +77,16 @@ img = '';
 for(i=0;i<data.images.length;i++){console.log(data.images[i]);
     img += '<img src = '+data.images[i]+'/>';
 }
+
+ $('.popop-container').show();
  $('.popop-gallery').html(img);
 //$('.popop-gallery').html(data.images);
 },
 failure: function(data) { 
-alert('Count Load Site IMages');
 }
 }); 
     $('.popop-head').addClass('changed');
-    $('.popop-head').html(e.layer.feature.properties.public_desc);
+    $('.popop-head').html(e.layer.feature.properties.name);
     $('.address-popop').html(e.layer.feature.properties.address);
     //$('.contact-popup').html(e.layer.feature.properties.contact);
 
