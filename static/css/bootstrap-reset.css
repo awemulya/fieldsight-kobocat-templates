@@ -104,8 +104,8 @@ a:hover {
 }
 
 .modal-header {
-    background: #FAFAFA;
-    color: #333;
+    background: #296fd5;
+    color: #fff;
     border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
     /*border-bottom: none;*/
@@ -113,6 +113,7 @@ a:hover {
 
 .modal-header .close {
     margin-top: 0;
+    color: #fff;
 }
 
 /*text input*/

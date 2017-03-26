@@ -6868,7 +6868,7 @@ li.dropdown.man-drop>a {
 .form-control-search {
     border: none;
     border-radius: 0px;
-    border-bottom: 2px solid #c2c2c2;
+    border-bottom: 2px solid #296fd5;
     box-shadow: none;
     color: #c2c2c2;
     position: relative;
@@ -6892,8 +6892,8 @@ li.dropdown.man-drop>a {
     font-weight: 600;
 }
 .name-stage-grp {
-    border-bottom: 1px solid #767676;
-    padding: 0px 5px;
+    padding: 5px 10px;
+    padding-top: 10px;
 }
 .all-sub-grp {
     padding-bottom: 10px;
@@ -6901,5 +6901,7 @@ li.dropdown.man-drop>a {
 .each-sub-grp {
     padding: 0px 20px;
 }
+.add-stage-button{
 
+}
 /*setup forms page*/
