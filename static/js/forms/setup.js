@@ -383,7 +383,7 @@ self.deploy = function (df_id, is_deployed){
         self.forms(self.allGForms());
     } else {
         filter_forms = ko.utils.arrayFilter(self.allGForms(), function(item) {
-            return ko.utils.stringStartsWith(item.name.toLowerCase(), newValue);
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
         });
         self.forms(filter_forms);
     }
@@ -547,7 +547,7 @@ self.search_key.subscribe(function (newValue) {
     } else {
         filter_forms = ko.utils.arrayFilter(self.allForms(), function(item) {
           if (item.name){
-            return ko.utils.stringStartsWith(item.name.toLowerCase(), newValue);
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
           }else{
             return true;
           }
