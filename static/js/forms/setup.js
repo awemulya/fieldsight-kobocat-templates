@@ -99,6 +99,23 @@ var Schedule = function (data){
   for (var i in data){
     self[i] = ko.observable(data[i]);
 }
+
+self.deploy = function(){
+
+      if(vm.is_project =="1" && self.is_deployed() ==true){
+      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
+      return false;
+    }else{
+
+    vm.scheduleVm().deploy(self.id(), self.is_deployed());
+    
+    if(self.is_deployed() == true){
+      self.is_deployed(false);
+    }else{
+      self.is_deployed(true);
+    }
+  }
+  };
 }  
 
 var SubStage = function(data){
@@ -332,7 +349,7 @@ self.deploy = function (df_id, is_deployed){
                 App.hideProcessing();
 
                 App.notifyUser(
-                        'From Deployed To Mobile',
+                        'Sucessfully Saved',
                         'success'
                     );
 
@@ -346,7 +363,7 @@ self.deploy = function (df_id, is_deployed){
                     );
 
             };
-    if(vm.is_project =="1" && is_deployed ==true){
+    if(vm.is_project =="1" && is_deployed == true){
       alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
       return false;
     }else{
@@ -382,6 +399,7 @@ var ScheduleVM = function(is_project, pk){
   self.forms = ko.observableArray();
   self.current_form = ko.observable();
   self.schedule_form_modal_visibility = ko.observable(false);
+  self.is_deployed = ko.observable(false);
   self.search_key = ko.observable();
   self.days = ko.observableArray();
 
@@ -406,6 +424,43 @@ var ScheduleVM = function(is_project, pk){
         });
   };
 
+self.deploy = function (df_id, is_deployed){
+    var s = new Schedule();
+    s.id = df_id;
+    s.is_deployed = is_deployed;
+    App.showProcessing();
+    var url = '/forms/deploy-survey/'+ String(vm.is_project) + '/' + String(vm.pk);
+    
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'Sucessfully Saved',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+    if(vm.is_project =="1" && is_deployed ==true){
+      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
+      return false;
+    }else{
+
+    App.remotePost(url, s, success, failure);                                                                                                                    
+      
+    }
+
+  
+  };
+
 
 self.saveSchedule = function(){
   App.showProcessing();
@@ -423,7 +478,11 @@ self.saveSchedule = function(){
       schedule.selected_days= self.current_form().selected_days();
     var success =  function (response) {
                 App.hideProcessing();
-                self.allForms().unshift(response);
+                var date_st = response.date_range_start.slice(0,10);
+                var date_end = response.date_range_end.slice(0,10);
+                response.date_range_start = date_st;
+                response.date_range_end = date_end;
+                self.allForms().unshift(new Schedule(response));
                 self.forms(self.allForms());
 
                 App.notifyUser(
@@ -456,8 +515,15 @@ self.saveSchedule = function(){
             // async: true,
             success: function (response) {
                 App.hideProcessing();
-                self.forms(response);
-                self.allForms(response);
+                 var mappedData = ko.utils.arrayMap(response, function(item) {
+                  var date_st = item.date_range_start.slice(0,10);
+                var date_end = item.date_range_end.slice(0,10);
+                item.date_range_start = date_st;
+                item.date_range_end = date_end;
+                      return new Schedule(item);
+                    });
+                self.forms(mappedData);
+                self.allForms(mappedData);
 
             },
             error: function (errorThrown) {
