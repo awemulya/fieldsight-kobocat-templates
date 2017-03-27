@@ -13,7 +13,7 @@ function formatDate(date) {
  }
 
  function deployStatus(flag){
-  return (flag == true) ? "Deployed" : "Not Deployed";
+  return (flag == true) ? "Undeploy" : "Deploy";
  }
 
  function formStatus(flag){
@@ -45,16 +45,36 @@ var FieldSightXF = function (data){
   self.form_status = ko.observable();
   self.fsform = ko.observable();
   self.is_deployed = ko.observable(false);
+  self.date_created = ko.observable();
 
   self.save = function(){
     vm.generalVm().saveGeneralForm(self.xf())
     vm.generalVm().general_form_modal_visibility(false);
   };
-  
+ 
+
   for (var i in data){
     self[i] = ko.observable(data[i]);
               }
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
+
+self.deploy = function(){
+
+      if(vm.is_project =="1" && self.is_deployed() ==true){
+      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
+      return false;
+    }else{
+
+    vm.generalVm().deploy(self.id(), self.is_deployed());
+    
+    if(self.is_deployed() == true){
+      self.is_deployed(false);
+    }else{
+      self.is_deployed(true);
+    }
+  }
+  };
+
 
 }
 
@@ -245,8 +265,14 @@ var GeneralVM = function(is_project, pk){
             // async: true,
             success: function (response) {
                 App.hideProcessing();
-                self.forms(response);
-                self.allGForms(response);
+                var mappedData = ko.utils.arrayMap(response, function(item) {
+                  var date_created = item.date_created.slice(0,10);
+                  item.date_created = date_created;
+                        return new FieldSightXF(item);
+                    });
+                self.forms(mappedData);
+
+                self.allGForms(mappedData);
 
             },
             error: function (errorThrown) {
@@ -270,7 +296,9 @@ var GeneralVM = function(is_project, pk){
 
     var success =  function (response) {
                 App.hideProcessing();
-                self.allGForms().unshift(response);
+                var date_created = response.date_created.slice(0,10);
+                response.date_created = date_created;
+                self.allGForms().unshift(new FieldSightXF(response));
                 self.forms(self.allGForms());
 
                 App.notifyUser(
@@ -292,6 +320,44 @@ var GeneralVM = function(is_project, pk){
     App.remotePost(url, fxf, success, failure);                                                                                                                    
   
   };
+
+self.deploy = function (df_id, is_deployed){
+    var fsxf = new FieldSightXF();
+    fsxf.id = df_id;
+    fsxf.is_deployed = is_deployed;
+    App.showProcessing();
+    var url = '/forms/deploy-general/'+ String(vm.is_project) + '/' + String(vm.pk);
+    
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'From Deployed To Mobile',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+    if(vm.is_project =="1" && is_deployed ==true){
+      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
+      return false;
+    }else{
+
+    App.remotePost(url, fsxf, success, failure);                                                                                                                    
+      
+    }
+
+  
+  };
+
 
   self.getGeneralForms();
 
