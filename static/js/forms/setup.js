@@ -258,6 +258,7 @@ var GeneralVM = function(is_project, pk){
 
 
   self.saveGeneralForm = function(xf){
+    App.showProcessing();
     var url = '/forms/api/fxf/';
     var fxf = new FieldSightXF();
     fxf.xf = xf;
@@ -341,6 +342,7 @@ var ScheduleVM = function(is_project, pk){
 
 
 self.saveSchedule = function(){
+  App.showProcessing();
     var url = '/forms/api/schedule/';
     var schedule = new Schedule();
     if (self.is_project == "1"){
@@ -495,6 +497,33 @@ self.add_stage = function(){
   self.stage_form_modal_visibility(true);
 }
 
+self.deployStages = function (){
+  App.showProcessing();
+    var url = '/forms/set-deploy-stages/'+ String(vm.is_project) + '/' + String(vm.pk);
+    
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'Stages Deployed',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, {}, success, failure);                                                                                                                    
+  
+  };
+
 self.editSage = function(stage){
   self.current_stage(stage);
   self.current_stage().setShowSubstages();
@@ -502,6 +531,7 @@ self.editSage = function(stage){
 }
 
 self.saveStage = function(stage){
+  App.showProcessing();
   var stageobj = new Stage();
   stageobj.id = stage.id();
   stageobj.name = stage.name();
