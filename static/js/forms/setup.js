@@ -89,6 +89,7 @@ var SubStage = function(data){
   self.xf = ko.observable();
   self.form_name = ko.observable();
   self.order = ko.observable();
+  self.editable = ko.observable(false);
 
      for (var i in data){
       self[i] = ko.observable(data[i]);
@@ -110,6 +111,13 @@ self.form_name_display = function (){
                   }
               });
     return title;
+  };
+
+  self.edit = function(){
+    self.editable(true);
+  }
+  self.edit_done = function(){
+    self.editable(false);
   }
 }
 
@@ -138,8 +146,10 @@ var Stage = function(data){
 self.setShowSubstages = function(){
     if (self.show_substages() == false){
       self.show_substages(true);
+      self.stageChanged(true);
     }else{
       self.show_substages(false);
+      self.stageChanged(false);
     }
     if (self.newSubstage() == undefined){
       self.add_sub_stage();
