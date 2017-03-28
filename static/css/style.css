@@ -734,7 +734,8 @@ ul.top-menu>li>a:hover,ul.top-menu>li>a:focus {
     margin-top:0;
     opacity:0;
     position:absolute;
-    left:16px;
+    left:16px;;
+
     top:-20px;
     transition:all 0.25s ease 0s;
     z-index:10;
@@ -6921,7 +6922,31 @@ li.dropdown.man-drop>a {
 .add-stage-button{
 
 }
-/*.drop-down-item{
-z-index: 500;
-}*/
-/*setup forms page*/
+
+.ko_container {
+    width: 500px;
+    min-height: 50px;
+    background-color: #AAA;
+}
+
+.item {
+    background-color: #DDD;
+    cursor: move;
+    text-align: center;
+    margin: 20px;
+    padding: 5px;
+    border: black 1px solid;
+}
+
+.stage-item {
+    background-color: #DDD;
+    text-align: center;
+    margin: 20px;
+    padding: 5px;
+    border: black 1px solid;
+}
+
+.item.ui-state-disabled {
+    cursor: default;
+    color: #AAA;
+}
