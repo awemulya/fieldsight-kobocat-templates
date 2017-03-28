@@ -47,6 +47,12 @@
 
 {% block javascript %}
 {{ block.super }}
+<style type="text/css">
+img {
+    max-width: 200px;
+    max-height: 200px;
+}
+</style>
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.dataTables.pagination.js"></script>
 <script type="text/javascript" charset="utf-8" src="{{STATIC_URL}}js/sammy-0.7.1.min.js"></script>
@@ -165,9 +171,10 @@ var canEdit = {% if can_edit %}true;{% else %}false;{% endif %}
 
 })(jQuery);
 
+
 function _attachment_url(name, size)
 {
-    return '{% url "onadata.apps.viewer.views.attachment_url" %}' + size + '?media_file=' + '{{ username }}/attachments/' + name;
+    return '/media/{{ username }}/attachments/' + name;
 }
 
 </script>
