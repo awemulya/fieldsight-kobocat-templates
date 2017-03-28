@@ -158,6 +158,15 @@ self.form_name_display = function (){
   }
 }
 
+var SimpleStage = function(data){
+  var self = this;
+  self.id = ko.observable();
+
+  for (var i in data){
+    self[i] = ko.observable(data[i]);
+  }
+}
+
 var Stage = function(data){
   var self = this;
   self.id = ko.observable();
@@ -212,16 +221,9 @@ self.setShowSubstages = function(){
   self.save_sub_stage = function(){
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
-      if(self.newSubstage().order() == parentLength+1){
         self.parent.push(self.newSubstage());
         self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':"",'xf':""}));
         self.stageChanged(true);
-          
-        }else{
-
-          App.notifyUser('SubStage Order Must Be '+ (parentLength+1), 'error');
-
-        }
       
     }else{
 
@@ -569,7 +571,7 @@ var StageVM = function(is_project, pk){
   self.stages = ko.observableArray();
   self.current_stage = ko.observable();
   self.stage_form_visibility = ko.observable(false);
-  self.search_key = ko.observable();
+  // self.search_key = ko.observable();
   self.addStageMode = ko.observable(true);
   self.stage_form_modal_visibility = ko.observable(false);
 
@@ -676,7 +678,6 @@ self.saveStage = function(stage){
                       sub_st.id = item.id();
                       sub_st.name = item.name();
                       sub_st.description = item.description();
-                      sub_st.order = item.order();
                       sub_st.xf = item.xf();
                       return sub_st;
                     });
@@ -728,22 +729,63 @@ var failure =  function (errorThrown) {
   
   };
 
+self.saveStagesOrder = function(){
+App.showProcessing();
+  var object_rearrange = new SimpleStage();
+  var stagesWithOrder = ko.utils.arrayMap(self.stages(), function(item) {
+                      var st = new SimpleStage();
+                      st.id = item.id();
+                      return st;
+                    });
+  object_rearrange.orders = stagesWithOrder;
+                
 
+ var url = '/forms/api/stage-rearrange/' + String(vm.is_project) + '/' + String(vm.pk);
+var success =  function (response) {
+                App.hideProcessing();
 
-self.search_key.subscribe(function (newValue) {
-    if (!newValue) {
-        self.stages(self.allStages());
-    } else {
-        filter_stages = ko.utils.arrayFilter(self.allStages(), function(item) {
-          if (item.name()){
-            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
-          }else{
-            return true;
-          }
-        });
-        self.stages(filter_stages);
-    }
-    });
+                App.notifyUser(
+                        'Stage  rearranged ',
+                        'success'
+                    );
+
+            };
+    
+var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+      if (err_message==undefined){
+        err_message = "Failed to rearrange Stages";
+      }
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, object_rearrange, success, failure);                                                                                                                    
+  
+  };
+
+self.orderChanged = function(){
+  self.saveStagesOrder();
+};
+
+// self.search_key.subscribe(function (newValue) {
+//     if (!newValue) {
+//         self.stages(self.allStages());
+//     } else {
+//         filter_stages = ko.utils.arrayFilter(self.allStages(), function(item) {
+//           if (item.name()){
+//             return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
+//           }else{
+//             return true;
+//           }
+//         });
+//         self.stages(filter_stages);
+//     }
+//     });
 
 
   self.getXforms();
