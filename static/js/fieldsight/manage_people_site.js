@@ -45,6 +45,7 @@ var NewUser = function(){
   self.cpassword =  ko.observable("");
   self.error = ko.observable();
 
+
    
    self.valid = ko.computed(function() {
     if (!self.username()){
@@ -95,6 +96,7 @@ var Role = function (data){
   self = this;
   self.id = ko.observable();
   self.user = ko.observable();
+  self.users = ko.observableArray();
   self.group_name = ko.observable();
   self.started_at = ko.observable();
   self.group = ko.observable();
@@ -161,7 +163,8 @@ var SiteVM = function(level, pk){
             // data: post_data,
             // async: true,
             success: function (response) {
-                
+                self.supervisors([]);
+                self.reviewers([]);
                 App.hideProcessing();
                 ko.utils.arrayMap(response, function(item) {
                   if (item.group == "Site Supervisor"){
@@ -235,6 +238,7 @@ function ManagePeopleViewModel(pk, level, organization) {
   self.organizationVm = ko.observable();
 
   self.addRole = function(group){
+    self.selected_users([]);
     var mapped_available_users = [];
 
     if(group == "Site Supervisor"){
@@ -250,13 +254,29 @@ function ManagePeopleViewModel(pk, level, organization) {
       self.available_users(mapped_available_users);
 
     }
+  }else if(group == "Reviewer"){
+      if(self.siteVm().reviewers().length <1){
+        self.available_users(self.users());
 
-    }
+      }else{
+
+      mapped_available_users = ko.utils.arrayFilter(self.users(), function(item) {
+            return notFound(item.id(), self.siteVm().reviewers());
+        });
+      self.available_users(mapped_available_users);
+
+      }
+
+     }
     
     
 
     self.new_role(new Role({'group':group, 'user':{}}));
     self.add_people_form_visibility(true);
+    if(self.available_users().length<1){
+      self.addUser();
+
+    }
 
   };
 
@@ -281,7 +301,42 @@ self.setSelected = function(user){
 };
 
   self.doAssign = function(){
-    alert("saved");
+    
+    ko.utils.arrayMap(self.selected_users(), function(item) {
+                    self.new_role().users.push(item.id());
+                    });
+       App.showProcessing();
+    
+    var url = '/userrole/api/people/'+ String(level) + '/' + String(pk);
+
+    
+
+    var success =  function (response) {
+                App.hideProcessing();
+                if ((self.new_role().group() =='Site Supervisor') || self.new_role().group() =='Reviewer' ){
+                  vm.siteVm().loadSupervisor();
+
+                }
+
+                App.notifyUser(
+                        'People Assigned Sucess',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
+    self.selected_users([]);                                                                                                                  
+  
     self.add_people_form_visibility(false);
     };
 
@@ -292,13 +347,8 @@ self.setSelected = function(user){
   };
 
   self.saveUser = function(){
-    
-    // check valid
-
-    // save user and add to available users
-    self.add_user_form_visibility(false);
-
-  };
+    self.saveUserData();
+   };
 
   self.showDetail = function(role){
     self.role(role);
@@ -336,6 +386,37 @@ if (self.level == "0"){
                 console.log(errorThrown);
             }
         });
+  };
+
+    self.saveUserData = function(){
+    App.showProcessing();
+    var url = '/users/list/'+ String(self.organization)+'/';
+    
+
+    var success =  function (response) {
+                App.hideProcessing();
+                self.users.push(new User(response));
+                self.selected_users.push(new User(response));
+                self.add_user_form_visibility(false);
+
+                App.notifyUser(
+                        'User '+response.username +'Created',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, ko.toJS(self.new_user()), success, failure);                                                                                                                    
+  
   };
 
   self.loadUsers();
