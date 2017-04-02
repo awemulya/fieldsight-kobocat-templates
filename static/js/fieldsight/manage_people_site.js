@@ -127,6 +127,7 @@ var Role = function (data){
 
 }
 
+
 var SiteVM = function(level, pk){
   var self=this;
   self.group = ko.observable("Site Supervisor");
@@ -210,6 +211,66 @@ var SiteVM = function(level, pk){
     });
 
   self.loadSupervisor();
+
+};
+
+var ProjectVM = function(level, pk){
+  var self=this;
+  self.group = ko.observable("Project Manager");
+
+  self.search_key = ko.observable();
+  self.projectManagers = ko.observableArray();
+  self.allProjectManagers = ko.observableArray();
+
+  
+  self.available_projectManagers = ko.observableArray(); 
+
+
+  self.add = function(){
+    vm.addRole(self.group());  
+  };
+  
+ 
+
+  self.loadProjectManagers = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/userrole/api/people/'+ String(level) + '/' + String(pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                self.projectManagers([]);
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        return new Role(item);
+                    });
+                self.allProjectManagers(mappedData);
+
+                self.projectManagers(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+  self.search_key.subscribe(function (newValue) {
+    if (!newValue) {
+        self.projectManagers(self.allProjectManagers());
+    } else {
+        filter_data = ko.utils.arrayFilter(self.allProjectManagers(), function(item) {
+            return ko.utils.stringStartsWith(item.user().first_name().toLowerCase(), newValue);
+        });
+        self.projectManagers(filter_data);
+    }
+    });
+
+  
+  self.loadProjectManagers();
 
 };
 
@@ -413,6 +474,10 @@ self.unAssignUserROle = function(role_id){
 if (self.level == "0"){
   self.currentVm("site");
   self.siteVm(new SiteVM(level, pk));
+}else if (self.level == "1"){
+  self.currentVm("project");
+  self.projectVm(new ProjectVM(level, pk));
+
 }  
 
   self.loadUsers = function(){
