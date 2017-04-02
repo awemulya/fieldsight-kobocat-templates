@@ -304,26 +304,39 @@ function ManagePeopleViewModel(pk, level, organization) {
     var mapped_available_users = [];
 
     if(group == "Site Supervisor"){
-      if(self.siteVm().supervisors().length <1){
+      if(self.siteVm().allSupervisors().length <1){
         self.available_users(self.users());
 
       }else{
 
 
       mapped_available_users = ko.utils.arrayFilter(self.users(), function(item) {
-            return notFound(item.id(), self.siteVm().supervisors());
+            return notFound(item.id(), self.siteVm().allSupervisors());
         });
       self.available_users(mapped_available_users);
 
     }
   }else if(group == "Reviewer"){
-      if(self.siteVm().reviewers().length <1){
+      if(self.siteVm().allReviewers().length <1){
         self.available_users(self.users());
 
       }else{
 
       mapped_available_users = ko.utils.arrayFilter(self.users(), function(item) {
-            return notFound(item.id(), self.siteVm().reviewers());
+            return notFound(item.id(), self.siteVm().allReviewers());
+        });
+      self.available_users(mapped_available_users);
+
+      }
+
+     }else if(group == "Project Manager"){
+      if(self.projectVm().allProjectManagers().length <1){
+        self.available_users(self.users());
+
+      }else{
+
+      mapped_available_users = ko.utils.arrayFilter(self.users(), function(item) {
+            return notFound(item.id(), self.projectVm().allProjectManagers());
         });
       self.available_users(mapped_available_users);
 
@@ -379,14 +392,22 @@ self.unAssignUserROle = function(role_id){
         self.siteVm().allSupervisors(rm_roles);                   
         
         
-      }
-      if (level == "Reviewer"){
+      }else if (level == "Reviewer"){
 
          var rm_roles = ko.utils.arrayFilter(self.siteVm().allReviewers(), function(item) {
             return item.id() != response.role;
         });
         self.siteVm().reviewers(rm_roles);                   
         self.siteVm().allReviewers(rm_roles);                   
+        
+        
+      }else if (level == "Project Manager"){
+
+       var rm_roles = ko.utils.arrayFilter(self.projectVm().allProjectManagers(), function(item) {
+            return item.id() != response.role;
+        });
+        self.projectVm().projectManagers(rm_roles);                   
+        self.projectVm().allProjectManagers(rm_roles);                   
         
         
       }
@@ -429,6 +450,8 @@ self.unAssignUserROle = function(role_id){
                 if ((self.new_role().group() =='Site Supervisor') || self.new_role().group() =='Reviewer' ){
                   vm.siteVm().loadSupervisor();
 
+                }else if(self.new_role().group() =='Project Manager'){
+                  vm.projectVm().loadProjectManagers();
                 }
 
                 App.notifyUser(
