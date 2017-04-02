@@ -10,6 +10,7 @@ var notFOund  = true;
 return notFOund;
 }
 
+
 var User = function(data){
   var self = this;
 
@@ -93,7 +94,7 @@ var NewUser = function(){
 }
 
 var Role = function (data){
-  self = this;
+  var self = this;
   self.id = ko.observable();
   self.user = ko.observable();
   self.users = ko.observableArray();
@@ -105,14 +106,6 @@ var Role = function (data){
   self.organization = ko.observable();
 
 
-  self.remove = function(){
-
-  };
-  self.detail = function(){
-    vm.showDetail(self);
-
-  };
-
 
   for (var i in data){
     if(i == "user"){
@@ -122,6 +115,16 @@ var Role = function (data){
     self[i] = ko.observable(data[i]);
       }
     }
+  
+  self.rmrole = function(){
+   vm.unAssignUserROle(self.id());
+  };
+
+  self.detail = function(){
+    vm.showDetail(self);
+
+  };
+
 }
 
 var SiteVM = function(level, pk){
@@ -150,9 +153,7 @@ var SiteVM = function(level, pk){
     vm.addRole(self.group());  
   };
   
-  self.remove = function(){
-
-  };
+ 
 
   self.loadSupervisor = function(){
     App.showProcessing();
@@ -298,6 +299,57 @@ self.setSelected = function(user){
   self.selected_users.remove(user);
   self.available_users.push(user);
 }
+};
+
+self.unAssignUserROle = function(role_id){
+
+    var url = '/userrole/api/people/deactivate/';
+
+    
+
+    var success =  function (response) {
+      var level = response.role_name;
+      if (level == "Site Supervisor"){
+
+         var rm_roles = ko.utils.arrayFilter(self.siteVm().allSupervisors(), function(item) {
+            return item.id() != response.role;
+        });
+        self.siteVm().supervisors(rm_roles);                   
+        self.siteVm().allSupervisors(rm_roles);                   
+        
+        
+      }
+      if (level == "Reviewer"){
+
+         var rm_roles = ko.utils.arrayFilter(self.siteVm().allReviewers(), function(item) {
+            return item.id() != response.role;
+        });
+        self.siteVm().reviewers(rm_roles);                   
+        self.siteVm().allReviewers(rm_roles);                   
+        
+        
+      }
+      var message = response.msg;
+                App.hideProcessing();
+               
+                App.notifyUser(
+                        message,
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, {'id':role_id,'level':self.level,'dashboard_pk':self.pk}, success, failure);  
+
 };
 
   self.doAssign = function(){
