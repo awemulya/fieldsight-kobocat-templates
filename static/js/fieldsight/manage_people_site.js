@@ -238,10 +238,7 @@ var ProjectVM = function(level, pk){
             url: '/userrole/api/people/'+ String(level) + '/' + String(pk),
             method: 'GET',
             dataType: 'json',
-            // data: post_data,
-            // async: true,
             success: function (response) {
-                self.projectManagers([]);
                 App.hideProcessing();
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         return new Role(item);
@@ -274,6 +271,65 @@ var ProjectVM = function(level, pk){
 
 };
 
+var OrgVM = function(level, pk){
+  var self=this;
+  self.group = ko.observable("Organization Admin");
+
+  self.search_key = ko.observable();
+  self.admins = ko.observableArray();
+  self.allAdmins = ko.observableArray();
+
+  
+  self.available_admins = ko.observableArray(); 
+
+
+  self.add = function(){
+    vm.addRole(self.group());  
+  };
+  
+ 
+
+  self.loadAdmins = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/userrole/api/people/'+ String(level) + '/' + String(pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        return new Role(item);
+                    });
+                self.allAdmins(mappedData);
+
+                self.admins(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+  self.search_key.subscribe(function (newValue) {
+    if (!newValue) {
+        self.admins(self.allAdmins());
+    } else {
+        filter_data = ko.utils.arrayFilter(self.allAdmins(), function(item) {
+            return ko.utils.stringStartsWith(item.user().first_name().toLowerCase(), newValue);
+        });
+        self.admins(filter_data);
+    }
+    });
+
+  
+  self.loadAdmins();
+
+};
+
 
 function ManagePeopleViewModel(pk, level, organization) {
   var self=this;
@@ -297,7 +353,7 @@ function ManagePeopleViewModel(pk, level, organization) {
   
   self.siteVm = ko.observable();
   self.projectVm = ko.observable();
-  self.organizationVm = ko.observable();
+  self.orgVm = ko.observable();
 
   self.addRole = function(group){
     self.selected_users([]);
@@ -337,6 +393,19 @@ function ManagePeopleViewModel(pk, level, organization) {
 
       mapped_available_users = ko.utils.arrayFilter(self.users(), function(item) {
             return notFound(item.id(), self.projectVm().allProjectManagers());
+        });
+      self.available_users(mapped_available_users);
+
+      }
+
+     }else if(group == "Organization Admin"){
+      if(self.orgVm().allAdmins().length <1){
+        self.available_users(self.users());
+
+      }else{
+
+      mapped_available_users = ko.utils.arrayFilter(self.users(), function(item) {
+            return notFound(item.id(), self.orgVm().allAdmins());
         });
       self.available_users(mapped_available_users);
 
@@ -410,6 +479,15 @@ self.unAssignUserROle = function(role_id){
         self.projectVm().allProjectManagers(rm_roles);                   
         
         
+      }else if (level == "Organization Admin"){
+
+       var rm_roles = ko.utils.arrayFilter(self.orgVm().allAdmins(), function(item) {
+            return item.id() != response.role;
+        });
+        self.orgVm().admins(rm_roles);                   
+        self.orgVm().allAdmins(rm_roles);                   
+        
+        
       }
       var message = response.msg;
                 App.hideProcessing();
@@ -452,6 +530,8 @@ self.unAssignUserROle = function(role_id){
 
                 }else if(self.new_role().group() =='Project Manager'){
                   vm.projectVm().loadProjectManagers();
+                }else if(self.new_role().group() =='Organization Admin'){
+                  vm.orgVm().loadAdmins();
                 }
 
                 App.notifyUser(
@@ -500,6 +580,10 @@ if (self.level == "0"){
 }else if (self.level == "1"){
   self.currentVm("project");
   self.projectVm(new ProjectVM(level, pk));
+
+}else if (self.level == "2"){
+  self.currentVm("organization");
+  self.orgVm(new OrgVM(level, pk));
 
 }  
 
