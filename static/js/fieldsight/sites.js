@@ -28,15 +28,42 @@ var Site =function (data){
 
 
 
-function SitesViewModel(sites) {
+function SitesViewModel() {
   var self=this;
-  var mappedData = ko.utils.arrayMap(sites, function(item) {
-    item.fields.id = item.pk;
-    return new Site(item.fields);
-});
+  self.allSites = ko.observableArray();
+  self.sites = ko.observableArray();
+
+
+  self.loadSites = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/fieldsight/api/sites/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        return new Site(item);
+                    });
+                self.allSites(mappedData);
+
+                self.sites(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+
+  self.loadSites();
+  
   self.search_key = ko.observable();
 
-  self.sites = ko.observableArray(mappedData);
   self.site_modal_visibility = ko.observable(false);
   self.current_site = ko.observable();
 
@@ -47,9 +74,9 @@ function SitesViewModel(sites) {
 
   self.search_key.subscribe(function (newValue) {
     if (!newValue) {
-        self.sites(mappedData);
+        self.sites(self.allSites());
     } else {
-        filter_sites = ko.utils.arrayFilter(mappedData, function(item) {
+        filter_sites = ko.utils.arrayFilter(self.allSites(), function(item) {
             return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
         });
         self.sites(filter_sites);
