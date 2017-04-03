@@ -132,23 +132,27 @@ var SubStage = function(data){
       self[i] = ko.observable(data[i]);
     }
 
-self.form_name_display = function (){
-  not_xf = self.xf() || true;
-  if(not_xf == true){
-    return "";
-  }
-  if (self.xf().length <1){
-    return ""
-  }
-      var title = "";
-      ko.utils.arrayForEach(vm.stagesVm().xforms(), function(item) {
-                  if (item.id() == self.xf()) {
-                      title = item.title();
-                      return;
-                  }
+  self.form_name_display = ko.computed(function() {
+    if (self.xf() == undefined){
+      return "";
+    }else if(self.xf().length <1){
+        return ""
+      }else{
+
+       var matched =  ko.utils.arrayFilter(vm.stagesVm().xforms(), function(item) {
+                  return (item.id() == self.xf());
               });
-    return title;
-  };
+       if (matched.length >0){
+
+   return matched[0].title() ||"";
+       }
+       return "";
+
+    }
+    
+  
+
+    }, self);
 
   self.edit = function(){
     self.editable(true);
