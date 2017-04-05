@@ -6962,3 +6962,21 @@ li.dropdown.man-drop>a {
     cursor: default;
     color: #AAA;
 }
+
+.square {
+    width: 30%;
+    padding-bottom: 30%; /* = width for a square aspect ratio */
+}
+
+
+.sq{
+  -webkit-border-radius: 4px !important;
+     -moz-border-radius: 4px !important;
+          border-radius: 4px !important;
+  -webkit-border-top: 4px !important;
+     -moz-border-top: 4px !important;
+          border-top: 4px !important;
+  -webkit-border-bottom: 4px !important;
+     -moz-border-bottom: 4px !important;
+          border-bottom: 4px !important;
+}
