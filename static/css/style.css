@@ -6713,7 +6713,7 @@ input[type="radio"]:checked + label:after {
 
 .current-input {
     display: inline-block;
-    width: 90%;
+    width: 30%;
     border-radius: 5px 0px 0px 5px;
     margin-right: -3px;
 }
@@ -6970,9 +6970,7 @@ li.dropdown.man-drop>a {
 
 
 .sq{
-  -webkit-border-radius: 4px !important;
-     -moz-border-radius: 4px !important;
-          border-radius: 4px !important;
+
   -webkit-border-top: 4px !important;
      -moz-border-top: 4px !important;
           border-top: 4px !important;

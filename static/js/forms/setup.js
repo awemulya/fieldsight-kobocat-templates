@@ -73,8 +73,17 @@ self.deploy = function(){
       self.is_deployed(true);
     }
   }
-  };
+};
 
+self.deploy_to_remaining = function(){
+    if(self.is_deployed() == false){
+      alert("You Cannot Deploy To Remaining; Form is Not Deployed");
+      return false;
+    }else{
+
+    vm.generalVm().deploy_to_remaining(self.id(), self.is_deployed());
+  }
+};
 
 }
 
@@ -378,6 +387,36 @@ self.deploy = function (df_id, is_deployed){
       
     }
 
+  
+  };
+self.deploy_to_remaining = function (df_id, is_deployed){
+    var fsxf = new FieldSightXF();
+    fsxf.id = df_id;
+    fsxf.is_deployed = is_deployed;
+    App.showProcessing();
+    var url = '/forms/deploy-general-remaining/'+ String(vm.is_project) + '/' + String(vm.pk);
+    
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'Sucessfully Deployed To Remaining Sites',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+ 
+
+    App.remotePost(url, fsxf, success, failure);                                                                                                                    
   
   };
 
