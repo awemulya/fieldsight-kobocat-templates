@@ -45,7 +45,7 @@ markers = new L.geoJson(data, {
     }, 
     onEachFeature: function(feature, layer) {
         var address = feature.properties.address || "";
-        var url = "<a href=fieldsight/site-dashboard/"+feature.id+">"+feature.properties.name+"</a>";
+        var url = "<a href=/fieldsight/site-dashboard/"+feature.id+">"+feature.properties.name+"</a>";
         layer.bindPopup(url+'<br/>'+address);
         
     }
