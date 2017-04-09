@@ -51,7 +51,13 @@ markers = new L.geoJson(data, {
     }
 });
 
-        map = L.map("map",{layers:osm}).fitBounds(markers);
+        //console.log(data.features.length);
+        if(data.features.length!=0){
+           map = L.map("map",{layers:osm}).fitBounds(markers); 
+        }
+        else{
+            map = L.map("map",{layers:osm}).setView([27, 85], 6);;
+        }
         
         //map.addLayer(osm);
         layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true, position: "topleft"}).addTo(map);
