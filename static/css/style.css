@@ -2239,7 +2239,7 @@ ul.inbox-pagination li {
     font-family:'Open Sans',sans-serif;
 }
 .modal-body label {
-    font-weight:400;
+    font-weight:600 !important;
     font-family: 'Open Sans',sans-serif;
 }
 
@@ -6088,6 +6088,7 @@ ul.errorlist.nonfield {
 
 .organization-list .org-logo img {
     width: 100%;
+    height: 200px;
 }
 /*------------organization css----------*/
 /*------------organization detail css----------*/
@@ -6740,7 +6741,7 @@ input[type="radio"]:checked + label:after {
     border: 1px solid #bad0f1;
     margin-right: 7px;
     border-radius: 8px;
-    width: 28%;
+    width: 32%;
     position: relative;
     margin-bottom: 5px;
     padding: 10px;
@@ -6956,16 +6957,15 @@ li.dropdown.man-drop>a {
 .ko_container {
     width: 500px;
     min-height: 50px;
-    background-color: #AAA;
 }
 
 .item {
-    background-color: #DDD;
+    background-color: #e2ebf9;
     cursor: move;
-    text-align: center;
+    /*text-align: center;*/
     margin: 20px;
-    padding: 5px;
-    border: black 1px solid;
+    padding: 5px 5px 5px 30px;
+    border: #9cbef1 1px solid;
 }
 
 .stage-item {
@@ -7001,7 +7001,8 @@ li.dropdown.man-drop>a {
 @media (min-width: 768px)
 {.modal-dialog {
     margin: 30px auto;
-    width: 100% !important;
+    width: 80% !important;
+}
 }
 
 div.box-user-pop{
@@ -7023,19 +7024,22 @@ div.box-user-pop{
 
 
 .demo-3 {
-    position:relative;
-    width:300px;
-    height:200px;
-    overflow:hidden;
-    float:left;
-    margin-right:20px
-}
+
+    position: relative;
+    /* width: 300px; */
+    width: 100%;
+    height: 186px;
+    overflow: hidden;
+    float: left;
+    margin-right: 20px;
+    }
+
 .demo-3 figure {
     margin:0;
     padding:0;
     position:relative;
     cursor:pointer;
-    margin-left:-50px
+    
 }
 .demo-3 figure img {
     display:block;
@@ -7096,5 +7100,41 @@ div.box-user-pop{
 .demo-3 figure:hover figcaption,figure.hover figcaption {
     -webkit-transform:rotateY(0);
     -moz-transform:rotateY(0);
-    transform:rotateY(0)
+    transform:rotateY(0);
+}
+
+.panel-heading{
+    border:none !important;
+    background: none !important;
+}
+
+i.fa.fa-edit.edit1 {
+    float: right;
+    color: #296fd5;
+    padding-top: 6px;
+}
+.cancel{
+    position: relative;
+    left: 84%;
+
+}
+.box-body .form-group input{
+    padding: 20px 12px !important;
+}
+
+.form-modal{
+    width: 52% !important;
+}
+
+.is-empty{
+    padding-left:14px ;
+}
+
+.box-warning{
+    color: red;
+}
+
+.form-cancel{
+    left: 74%;
+    position: relative;
 }
