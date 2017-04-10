@@ -73,5 +73,5 @@ function StatusViewModel(fxf, instance) {
   self.wantstatus =  ko.observable(true);
   self.fxf = ko.observable(fxf);
   self.instance = ko.observable(instance);
-  self.model = ko.observable(new ChangeStatus(instance, 0, comment));
+  self.model = ko.observable(new ChangeStatus(instance, 0, ""));
   };
