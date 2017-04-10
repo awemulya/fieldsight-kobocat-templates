@@ -41,6 +41,12 @@ a,a:hover,a:focus {
     background:#1FB5AD;
     color:#fff;
 }
+
+.substage{
+    margin: 12px 33px;
+}
+
+
 #container {
     width:100%;
     height:100%;
@@ -4658,10 +4664,10 @@ div.tagsinput span.tag {
     border-radius:100% !important;
 }
 .widget-h {
-    color:#afaebc;
+    color:black;
     font-size:16px;
     text-transform:uppercase;
-    margin:0px 0px 10px 0px;
+    margin:23px 0px 10px 0px;
     text-align:center;
 }
 .gauge-canvas {
@@ -6485,16 +6491,12 @@ input {
     color: #555;
     background-color: #fff;
     background-image: none;
-    border: 0px;
-    border-bottom: 1px solid #ccc;
-    border-radius: 0px;
+    border: 1px solid;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    border-bottom: 1px solid #e2e2e4;
-    box-shadow: none;
     color: #c2c2c2;
 }
 input:focus {
@@ -6939,9 +6941,10 @@ li.dropdown.man-drop>a {
 }
 .sub-stage-name-c {
     font-weight: 600;
+    font-size: 14px;
 }
 .name-stage-grp {
-    padding: 5px 10px;
+    padding: 5px 3px;
     padding-top: 10px;
 }
 .all-sub-grp {
@@ -7137,4 +7140,34 @@ i.fa.fa-edit.edit1 {
 .form-cancel{
     left: 74%;
     position: relative;
+}
+.form-description{
+    display: inline-block;
+    padding-left: 12px;
+}
+
+.substage-name{
+    display: inline-block;
+    margin-left: 5px !important;
+}
+.edit2{
+    color: red !important;
+}
+
+.modal-body{
+    padding: 15px 15px 0px 15px !important;
+}
+
+.modal-footer{
+    border: none;
+    padding: 0px 12px 17px 12px;
+}
+
+.modal-manage{
+    margin-bottom: 0px !important;
+    margin-left:4px !important;
+}
+
+#submission-chart svg{
+    margin-right: 45% !important;
 }
