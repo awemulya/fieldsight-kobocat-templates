@@ -65,7 +65,7 @@
       </span></div>
     <div><span><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved 
     </span></div>
-    <div><textarea rows="5" data-bind="value=message" placeholder="comment"></textarea></div>
+    <div><textarea rows="5" type="text" data-bind="value:message" placeholder="comment"></textarea></div>
     <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
 </div>
 {% endblock %}
