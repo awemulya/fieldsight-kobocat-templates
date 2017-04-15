@@ -6305,8 +6305,9 @@ a.add_org_people:hover {
      border-bottom: 2px solid #296fd5;
  }
  .outstanding-and-all .nav-tabs > li.out.active > a{
-     background-color: #ae6ad5;
-     color: #434242;
+     
+     background-color: #296fd5;
+     color: white;
      border-bottom: 2px solid #296fd5;
  }
  .outstanding-and-all .nav-tabs > li.reg.active > a{
@@ -6506,9 +6507,9 @@ input:focus {
 select{
     height: 34px;
     line-height: 46px;
-    border: 1px solid #e2e2e4;
+    border: 1px solid #b7b5b5;
     box-shadow: none;
-    color: #c2c2c2;
+    color: #757575;
     padding: 6px 12px;
     font-size: 14px;
     border-radius: 4px;
@@ -6608,7 +6609,7 @@ textarea{
 
 a.setting-btn {
     color: #296fd5;
-    font-size: 16px;
+    font-size: 20px;
 }
 /*----------for all dashboard-------------*/
 .site-dashboard-map #map {
@@ -6993,6 +6994,15 @@ li.dropdown.man-drop>a {
     height: 8px;
 }
 
+.gap-high{
+    height: 30px;
+
+}
+
+.gap-medium{
+    height: 18px;
+}
+
 .organization_name{
     font-size: 23px;
 }
@@ -7130,7 +7140,7 @@ i.fa.fa-edit.edit1 {
 }
 
 .is-empty{
-    padding-left:14px ;
+    /*padding-left:14px ;*/
 }
 
 .box-warning{
@@ -7170,4 +7180,39 @@ i.fa.fa-edit.edit1 {
 
 #submission-chart svg{
     margin-right: 45% !important;
+}
+
+.object_name{
+    font-size: 24px !important;
+}
+
+
+.col-sm-2.label-site {
+    font-weight: 600;
+}
+
+.username{
+    font-size: 14px ;
+}
+
+.table_head{
+    font-size: 14px ;
+}
+
+.my-input{
+    border:1px solid #bbb6b6 !important;
+    color: #424040
+}
+
+.day-schedule{
+    width: 14px !important;
+    height: 13px !important;
+}
+
+.date1{
+    display: inline-block;
+}
+
+.date2{
+    display: inline-block;
 }
