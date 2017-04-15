@@ -479,7 +479,6 @@ ul.top-menu>li>a:hover,ul.top-menu>li>a:focus {
 .dropdown-menu.extended {
     max-width:320px !important;
     min-width:160px !important;
-    top:42px;
     width:300px !important;
     padding:0 10px;
    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
@@ -717,7 +716,7 @@ ul.top-menu>li>a:hover,ul.top-menu>li>a:focus {
     -webkit-border-radius:100px;
 }
 .top-nav .dropdown-menu.extended.logout {
-    top:50px;
+    /*top:50px;*/
 }
 .top-nav .nav .caret {
     border-bottom-color:#A4AABA;
@@ -7045,6 +7044,7 @@ div.box-user-pop{
     overflow: hidden;
     float: left;
     margin-right: 20px;
+    margin-bottom: 15px;
     }
 
 .demo-3 figure {
@@ -7215,4 +7215,19 @@ i.fa.fa-edit.edit1 {
 
 .date2{
     display: inline-block;
+}
+
+#fs_drop_menu{
+    left: auto !important;
+}
+
+.object_name{
+    font-size: 20px !important;
+}
+
+
+.organization-short-detail{
+    padding: 10px 0px !important;
+    box-shadow: 2px 2px 17px #98b1d6;
+    margin-bottom: 24px;"
 }
