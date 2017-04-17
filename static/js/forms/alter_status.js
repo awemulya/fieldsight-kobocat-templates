@@ -7,9 +7,11 @@ var ChangeStatus = function(instance, status, message){
   self.formStatus = ko.observable(status);
   self.message = ko.observable(message);
   self.instance = ko.observable(instance);
+  self.historyList = ko.observableArray();
+  self.modal_visibility = ko.observable(false);
+  self.current_history = ko.observable();
 
-
-    self.getStatus= function(){
+  self.getStatus= function(){
       var url = '/forms/instance/status/'+ String(self.instance());
     App.showProcessing();
         $.ajax({
@@ -64,6 +66,42 @@ var ChangeStatus = function(instance, status, message){
   
   };
 
+    self.loadHistory= function(){
+      var url = '/forms/api/instance/status-history/'+ String(self.instance());
+    App.showProcessing();
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.historyList(response);
+
+            },
+            error: function (errorThrown) {
+              var err_msg = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_msg,
+                        'error'
+                    );
+
+            }
+        });
+  };
+
+  self.history = function(){
+    self.current_history(new MyObject());
+    self.modal_visibility(true);
+    self.loadHistory();
+  };
+
+  self.close = function(){
+    self.modal_visibility(false);
+  };
+
   self.getStatus();
 
 }
@@ -74,4 +112,5 @@ function StatusViewModel(fxf, instance) {
   self.fxf = ko.observable(fxf);
   self.instance = ko.observable(instance);
   self.model = ko.observable(new ChangeStatus(instance, 0, ""));
+  
   };

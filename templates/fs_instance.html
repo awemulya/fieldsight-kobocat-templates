@@ -53,8 +53,51 @@
               <a href="#" onclick="$('#delete-modal').modal('hide');" class="btn">{% trans "Cancel" %}</a>
             </div>
           </div>
+
+
 <div classs="row" data-bind="with:model">
-  <h3>{% trans 'Submission  Status' %}<h3>
+
+  <div data-bind="with:current_history">
+<div class="modal" tabindex="-1" role="dialog" data-bind="modal:$parent.modal_visibility">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="click:$parent.close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{% trans 'Instance History' %}</h4>
+      </div>
+      <div class="modal-body">
+
+        <div>
+          <div class="row">
+            <div class="col=sm-1">{% trans 'SN'%}</div>
+            <div class="col-sm-5">{% trans 'comment'%}</div>
+            <div class="col-sm-2">{% trans 'Previous Status'%}</div>
+            <div class="col-sm-2">{% trans 'Changed Status'%}</div>
+            <div class="col-sm-2">{% trans 'Changed by'%}</div>
+          </div>
+          <div class="row" data-bind="foreach:$parent.historyList">
+            <div class="col-sm-1"><span data-bind="text:$index()+1"></span></div>
+            <div class="col-sm-5"><span data-bind="text:message"></span></div>
+            <div class="col-sm-2"><span data-bind="text:old_status"></span></div>
+            <div class="col-sm-2"><span data-bind="text:new_status"></span></div>
+            <div class="col-sm-2"><span data-bind="text:user"></span></div>
+          </div>
+        </div>
+          
+          
+        <button class="btn btn-primary registration__action" type="submit" data-bind="click:$parent.close" >
+            {% trans 'Close' %}</button>
+              <div class="gap"></div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+  <h3>{% trans 'Submission  Status' %} <h3><button class="btn btn-info btn-small" data-bind="click:history"> {% trans 'View History ' %}</button>
     <div><span>
       <input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding
     </span></div>
@@ -68,13 +111,13 @@
     <div><textarea rows="5" type="text" data-bind="value:message" placeholder="comment"></textarea></div>
     <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
 </div>
+
 {% endblock %}
 
 {% block javascript %}
 {{ block.super }}
 <link href="{{STATIC_URL}}css/toastr.css" rel="stylesheet">
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/knockout.js" ></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/base.js" ></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/ko_lib.js" ></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/fieldsight/plugin/toastr.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.blockUI.js"></script>
