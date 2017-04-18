@@ -69,18 +69,20 @@
 
         <div>
           <div class="row">
-            <div class="col=sm-1">{% trans 'SN'%}</div>
-            <div class="col-sm-5">{% trans 'comment'%}</div>
+            <div class="col-sm-1">{% trans 'SN'%}</div>
+            <div class="col-sm-3">{% trans 'comment'%}</div>
             <div class="col-sm-2">{% trans 'Previous Status'%}</div>
             <div class="col-sm-2">{% trans 'Changed Status'%}</div>
             <div class="col-sm-2">{% trans 'Changed by'%}</div>
+            <div class="col-sm-2">{% trans 'Changed Date'%}</div>
           </div>
           <div class="row" data-bind="foreach:$parent.historyList">
             <div class="col-sm-1"><span data-bind="text:$index()+1"></span></div>
-            <div class="col-sm-5"><span data-bind="text:message"></span></div>
+            <div class="col-sm-3"><span data-bind="text:message"></span></div>
             <div class="col-sm-2"><span data-bind="text:old_status"></span></div>
             <div class="col-sm-2"><span data-bind="text:new_status"></span></div>
             <div class="col-sm-2"><span data-bind="text:user"></span></div>
+            <div class="col-sm-2"><span data-bind="fieldsightFormatDate: date">"></span></div>
           </div>
         </div>
           
