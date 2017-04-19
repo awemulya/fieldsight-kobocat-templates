@@ -547,3 +547,13 @@ ko.bindingHandlers.confirmClick = {
         }}, viewModel);
     }
 }
+
+ko.bindingHandlers.fieldsightFormatDate = {
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var value = valueAccessor();
+        var newValueAccessor = ko.unwrap(value);
+        var dt = new Date(newValueAccessor);
+        if (newValueAccessor != null)
+            $(element).text(dt.toLocaleDateString());
+    }
+};
