@@ -7205,7 +7205,8 @@ i.fa.fa-edit.edit1 {
 
 .username{
     font-size: 14px ;
-    color: white !important;
+    /*color: white !important;*/
+    color: #296fd5 !important
 }
 
 .table_head{
@@ -7281,4 +7282,16 @@ ol.hidden-print>li>a{
 
 #progress-bar>svg{
     width: 100% !important;
+}
+
+.field-input > input , .field-input>select , .field-input>textarea{
+    border:1px solid #9d9fa2;
+}
+.field-input>select{
+    border:1px solid #9d9fa2;
+}
+
+.field-label{
+    font-size: 14px !important;
+    font-weight: 600;
 }
