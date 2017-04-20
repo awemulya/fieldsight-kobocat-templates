@@ -87,7 +87,7 @@ self.save_file_acync = function(){
 
             };
     var failure =  function (errorThrown) {
-      var err_message = errorThrown.responseJSON.non_field_errors;
+      var err_message = errorThrown.responseJSON.file;
                 App.hideProcessing();
                 App.notifyUser(
                         err_message,
@@ -97,7 +97,7 @@ self.save_file_acync = function(){
             };
 
             var formdata = new FormData();
-              formdata.append('file', $('#file')[0].files[0]);
+            formdata.append('file', self.upload_file());
     App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
   
   };
