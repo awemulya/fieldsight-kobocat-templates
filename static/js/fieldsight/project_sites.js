@@ -34,6 +34,9 @@ function SitesViewModel(project) {
   self.allSites = ko.observableArray();
   self.sites = ko.observableArray();
 
+  self.upload_file = ko.observable()
+
+  self.modal_visibility = ko.observable(false);
 
   self.loadSites = function(){
     App.showProcessing();
@@ -62,15 +65,57 @@ function SitesViewModel(project) {
 
 
   self.loadSites();
+
+  self.bulkUpload = function(){
+      self.modal_visibility(true);
+
+  };
+
+self.save_file_acync = function(){
+    App.showProcessing();
+    var url = '/fieldsight/api/bulk_upload_site/'+self.project+'/';
+
+    var success =  function (response) {
+    self.modal_visibility(false);
+      self.loadSites();
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Sites Bulk Upload Sucess',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.non_field_errors;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+              formdata.append('file', $('#file')[0].files[0]);
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
+
+
+  self.save_upload = function(){
+    // self.modal_visibility(false);
+    self.save_file_acync();
+  };
   
   self.search_key = ko.observable();
 
-  self.site_modal_visibility = ko.observable(false);
+  self.site_add_visibility = ko.observable(false);
   self.current_site = ko.observable();
 
   self.add_site = function(){
     self.current_site(new Site());
-    self.site_modal_visibility(true);
+    self.site_add_visibility(true);
   };
 
   self.search_key.subscribe(function (newValue) {
