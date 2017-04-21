@@ -1,3 +1,15 @@
+  var SiteType = function(data) {
+    var self = this;
+        this.id = ko.observable();
+        this.name = ko.observable();
+    
+  
+  for (var i in data){
+       self[i] = ko.observable(data[i]);
+              }
+
+    };
+
 var Site =function (data){
   self = this;
   self.id = ko.observable();
@@ -12,6 +24,9 @@ var Site =function (data){
   self.logo = ko.observable();
   self.is_active = ko.observable();
   self.location = ko.observable();
+  self.latitude = ko.observable();
+  self.longitude = ko.observable();
+  self.mapOne = ko.observable();
 
   self.save = function(){
     vm.site_modal_visibility(false);
@@ -21,9 +36,10 @@ var Site =function (data){
               }
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
 
-  self.mapOne = ko.observable({
-        lat: ko.observable(27.714875814507074),
-        lng: ko.observable(85.3243088722229)});
+  self.mapOne({'lat':ko.observable(self.latitude()),'lng':ko.observable(self.longitude())});
+
+
+  // self.type(new SiteType({'id':self.type().id,'name':self.type().name}));
 }
 
 
@@ -33,6 +49,7 @@ function SitesViewModel(project) {
   self.project = project;
   self.allSites = ko.observableArray();
   self.sites = ko.observableArray();
+  self.typeList = ko.observableArray();
 
   self.upload_file = ko.observable()
 
@@ -66,10 +83,38 @@ function SitesViewModel(project) {
 
   self.loadSites();
 
+    self.loadTypes = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/fieldsight/api/project-types/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                 var mappedTypeData = ko.utils.arrayMap(response, function(item) {
+                        return new SiteType(item);
+                    });
+
+                self.typeList(mappedTypeData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+
+  self.loadTypes();
+
   self.bulkUpload = function(){
       self.modal_visibility(true);
 
   };
+
 
 self.save_file_acync = function(){
     App.showProcessing();
@@ -103,6 +148,51 @@ self.save_file_acync = function(){
   };
 
 
+self.save_site_async = function(){
+    App.showProcessing();
+    var url = '/fieldsight/api/async_save_site/'+self.project+'/';
+
+    var success =  function (response) {
+    self.site_add_visibility(false);
+    self.current_site(new Site({'type':self.typeList()[0], 'latitude':27.7172, 'longitude':85.3240}));
+      self.loadSites();
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Site Creation Sucess',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+            formdata.append('id', self.current_site().id());
+            formdata.append('logo', self.current_site().logo());
+            formdata.append('identifier', self.current_site().identifier());
+            formdata.append('name', self.current_site().name());
+            formdata.append('address', self.current_site().address());
+            formdata.append('phone', self.current_site().phone());
+            formdata.append('is_active', self.current_site().is_active());
+            formdata.append('public_desc', self.current_site().public_desc());
+            formdata.append('additional_desc', self.current_site().additional_desc());
+            formdata.append('type', self.current_site().type().id());
+            formdata.append('project', self.project);
+            formdata.append('Latitude', self.current_site().mapOne().lat());
+            formdata.append('Longitude', self.current_site().mapOne().lng());
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
+
+
   self.save_upload = function(){
     // self.modal_visibility(false);
     self.save_file_acync();
@@ -113,9 +203,14 @@ self.save_file_acync = function(){
   self.site_add_visibility = ko.observable(false);
   self.current_site = ko.observable();
 
-  self.add_site = function(){
-    self.current_site(new Site());
+  self.addSite = function(){
+    self.current_site(new Site({'type':self.typeList()[0], 'latitude':27.7172, 'longitude':85.3240, 'is_active':true}));
     self.site_add_visibility(true);
+  };
+
+  self.saveSite = function(){
+    self.save_site_async();
+    self.site_add_visibility(false);
   };
 
   self.search_key.subscribe(function (newValue) {
