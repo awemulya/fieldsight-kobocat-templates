@@ -154,7 +154,7 @@ self.save_site_async = function(){
 
     var success =  function (response) {
     self.site_add_visibility(false);
-    self.current_site(new Site({'type':self.typeList()[0], 'latitude':27.7172, 'longitude':85.3240}));
+    self.current_site("");
       self.loadSites();
                 App.hideProcessing();
                 
@@ -204,13 +204,18 @@ self.save_site_async = function(){
   self.current_site = ko.observable();
 
   self.addSite = function(){
-    self.current_site(new Site({'type':self.typeList()[0], 'latitude':27.7172, 'longitude':85.3240, 'is_active':true}));
     self.site_add_visibility(true);
+    self.current_site(new Site({'type':self.typeList()[0], 'latitude':27.7172, 'longitude':85.3240, 'is_active':true}));
   };
 
   self.saveSite = function(){
     self.save_site_async();
     self.site_add_visibility(false);
+  };
+
+  self.clearSite = function(){
+  self.site_add_visibility(false);
+    self.current_site(undefined);
   };
 
   self.search_key.subscribe(function (newValue) {

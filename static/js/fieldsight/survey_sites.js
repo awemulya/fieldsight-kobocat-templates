@@ -55,8 +55,8 @@ function SitesViewModel(project) {
   self.typeList =  ko.observableArray();
   
   self.detail_survey = function(site){
+    self.site_modal_visibility(true);
   	self.current_site(site);
-  	self.site_modal_visibility(true);
   };
 
   self.update_survey = function(update_site){
@@ -75,6 +75,7 @@ function SitesViewModel(project) {
 var url = '/fieldsight/api/survey-sites-review-update/'+site.id+'/';
 var success =  function (response) {
                 App.hideProcessing();
+                self.current_site = ko.observable();
                 self.site_modal_visibility(false);
                 self.loadSites();
                 App.notifyUser(
@@ -104,7 +105,13 @@ var failure =  function (errorThrown) {
 
   self.save_detail = function(){
     self.update_survey(self.current_site());
+    self.site_modal_visibility(false);
   	
+  };
+
+  self.close = function(){
+    self.current_site = ko.observable();
+      self.site_modal_visibility(false);
   };
 
   self.loadSites = function(){
@@ -166,10 +173,6 @@ var failure =  function (errorThrown) {
   self.site_modal_visibility = ko.observable(false);
   self.current_site = ko.observable();
 
-  self.add_site = function(){
-    self.current_site(new Site());
-    self.site_modal_visibility(true);
-  };
 
   self.search_key.subscribe(function (newValue) {
     if (!newValue) {

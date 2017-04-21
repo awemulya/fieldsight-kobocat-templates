@@ -480,7 +480,8 @@ ko.bindingHandlers.modal = {
 
 ko.bindingHandlers.map = {
             init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-                var mapObj = ko.utils.unwrapObservable(valueAccessor());
+                $("#" + element.getAttribute("id")).data("mapObj","");
+                mapObj = ko.utils.unwrapObservable(valueAccessor());
                 var latLng = new google.maps.LatLng(
                     ko.utils.unwrapObservable(mapObj.lat),
                     ko.utils.unwrapObservable(mapObj.lng));
@@ -501,7 +502,9 @@ ko.bindingHandlers.map = {
                     var latLng = new google.maps.LatLng(
                         ko.utils.unwrapObservable(mapObj.lat),
                         ko.utils.unwrapObservable(mapObj.lng));
-                    mapObj.googleMap.setCenter(latLng);                 
+
+                    mapObj.googleMap.setCenter(latLng);
+                    mapObj.marker.setPosition(latLng);                 
                 };
                 
                 mapObj.onMarkerMoved = function(dragEnd) {
