@@ -7140,7 +7140,7 @@ i.fa.fa-edit.edit1 {
 }
 .cancel{
     position: relative;
-    left: 84%;
+    left: 77%;
 
 }
 .box-body .form-group input{
@@ -7294,4 +7294,8 @@ ol.hidden-print>li>a{
 .field-label{
     font-size: 14px !important;
     font-weight: 600;
+}
+
+.registration_field input#id_logo{
+    padding: 0px !important;
 }
