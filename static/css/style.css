@@ -2246,7 +2246,7 @@ ul.inbox-pagination li {
     background:#009da7;
 }
 .modal-header h4.modal-title {
-    font-weight:300;
+    font-weight:500;
     font-family:'Open Sans',sans-serif;
 }
 .modal-body label {
@@ -5267,6 +5267,10 @@ div.tagsinput span.tag {
     background: #00a65a !important;
 }
 
+.red{
+    background:#f03232;
+}
+
 .tar {
     background:#1fb5ac !important;
 }
@@ -6117,7 +6121,7 @@ ul.errorlist.nonfield {
     border-bottom: 2px solid #296FD5;
 }
 .image-org img {
-    width: 100%;
+    width: 85% !important;
 }
 .detail-person-time {
     float: right;
@@ -6378,7 +6382,7 @@ a.add_org_people:hover {
     visibility: visible;
 }
 .person-div:hover .details-of-person {
-    background: #FFF;
+    /*background: #FFF;*/
 }
 /*.person-div:hover .image-of-person img {
     -webkit-filter: blur(1px);
@@ -6500,16 +6504,18 @@ input {
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
-    color: #555;
+    /*color: #555;*/
     background-color: #fff;
     background-image: none;
-    border: 1px solid;
+    /*border: 1px solid;*/
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    color: #c2c2c2;
+    color: #626469 !important;
+    border: 1px solid #a5aab0 !important;
+    border-radius: 4px;
 }
 input:focus {
     border-bottom: 1px solid #296FD5;
@@ -6518,7 +6524,7 @@ input:focus {
 select{
     height: 34px;
     line-height: 46px;
-    border: 1px solid #b7b5b5;
+    border: 1px solid #a5aab0;
     box-shadow: none;
     color: #757575;
     padding: 6px 12px;
@@ -6549,7 +6555,9 @@ input[type=checkbox] {
 input[type=file] {
     display: block;
     background: transparent;
-    border: none;
+    border: none !important;
+    padding:0px !important;
+    -webkit-box-shadow: none !important;
 }
 textarea{
     display: block;
@@ -6558,10 +6566,10 @@ textarea{
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
-    color: #555;
+    /*color: #555;*/
     background-color: #fff;
     background-image: none;
-    border: 1px solid #ccc;
+    border: 1px solid #a5aab0;
     border-radius: 4px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
@@ -6569,9 +6577,9 @@ textarea{
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     outline: none !important;
-    border: 1px solid #e2e2e4;
+    /*border: 1px solid #e2e2e4;*/
     box-shadow: none;
-    color: #c2c2c2;
+    color: #323232;
     height: auto;
 }
 /*----------all inputs csss-------------*/
@@ -6729,7 +6737,7 @@ input[type="radio"]:checked + label:after {
 .current-input {
     display: inline-block;
     padding: 9px 14px;
-    border: 1px solid !important;
+    border: 1px solid #a5aab0 !important;
     height: auto;
     width: 90%;
     /*border-radius: 5px 0px 0px 5px;*/
@@ -6837,7 +6845,7 @@ input[type="radio"]:checked + label:after {
 
 li.responses-all {
     background: #296FD5;
-    margin-right: 10px;
+    margin-right: 2px;
 }
 li.responses-all a {
     color: #fff;
@@ -7140,11 +7148,12 @@ i.fa.fa-edit.edit1 {
 }
 .cancel{
     position: relative;
-    left: 77%;
+    left: 85%;
 
 }
 .box-body .form-group input{
-    padding: 20px 12px !important;
+    padding: 0px 12px !important;
+    height: 45px ;
 }
 
 .form-modal{
@@ -7285,17 +7294,49 @@ ol.hidden-print>li>a{
 }
 
 .field-input > input , .field-input>select , .field-input>textarea{
-    border:1px solid #9d9fa2;
+    border:1px solid #babcc0;
 }
 .field-input>select{
-    border:1px solid #9d9fa2;
+    border:1px solid #babcc0;
 }
 
 .field-label{
     font-size: 14px !important;
     font-weight: 600;
+    padding-top: 2px ;
 }
 
-.registration_field input#id_logo{
-    padding: 0px !important;
+
+.org-site{
+    border: 1px solid #d3dee6;
+    background: #f4f7f9;
+    width: 48%;
+    margin-right: 6px;
+    border-radius: 7px;
+ /*   margin-bottom: 6px;*/
+}
+
+.blue{
+    color: #296fd5 !important;
+}
+.form-heading{
+    right: 80%;
+    position: relative;
+    font-size: 19px;
+    /*color: #296fd5 !important;*/
+}
+
+.image-org1 img{
+    width: 100% !important;
+}
+
+.close{
+    opacity: 0.8 !important;
+    font-size: 28px !important;
+    line-height: 0.75 !important;
+}
+
+.map-right{
+    position: relative;
+    left: 3% !important;
 }
