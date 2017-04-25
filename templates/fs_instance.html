@@ -4,6 +4,34 @@
 {% block additional-headers %}
 {% load i18n %}
 
+<style >
+  .same-line{
+    display: inline-block;
+    padding-right: 10px !important;
+  }
+
+  #comment{
+    height: auto;
+    background: #ebebef !important;
+    border-radius: 3px !important;
+    padding: 11px;
+    margin-left: 20px;
+  }
+
+  .gap{
+    height: 12px !important;
+  }
+
+  .round{
+    border-radius: 6px !important;
+  }
+
+  .gap-small{
+    height: 5px !important;
+  }
+
+</style>
+
 <div class="sub-header-bar">
   <div class="container__wide">
      {% if fxf.project %}
@@ -58,36 +86,39 @@
 <div classs="row" data-bind="with:model">
 
   <div data-bind="with:current_history">
-<div class="modal" tabindex="-1" role="dialog" data-bind="modal:$parent.modal_visibility">
+<div class="modal" tabindex="-1" role="dialog" data-bind="modal:$parent.modal_visibility" style="width:60% !important; left:43% !important;">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="text-align: center !important;padding-top: 18px important;">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="click:$parent.close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{% trans 'Instance History' %}</h4>
+        <span class="modal-title" style="font-size:16px;">{% trans 'Submission Log' %}</span>
       </div>
       <div class="modal-body">
+        <div class="row" style="margin-left: 10px;">
 
-        <div>
-          <div class="row">
-            <div class="col-sm-1">{% trans 'SN'%}</div>
-            <div class="col-sm-3">{% trans 'comment'%}</div>
-            <div class="col-sm-2">{% trans 'Previous Status'%}</div>
-            <div class="col-sm-2">{% trans 'Changed Status'%}</div>
-            <div class="col-sm-2">{% trans 'Changed by'%}</div>
-            <div class="col-sm-2">{% trans 'Changed Date'%}</div>
-          </div>
-          <div class="row" data-bind="foreach:$parent.historyList">
-            <div class="col-sm-1"><span data-bind="text:$index()+1"></span></div>
-            <div class="col-sm-3"><span data-bind="text:message"></span></div>
-            <div class="col-sm-2"><span data-bind="text:old_status"></span></div>
-            <div class="col-sm-2"><span data-bind="text:new_status"></span></div>
-            <div class="col-sm-2"><span data-bind="text:user"></span></div>
-            <div class="col-sm-2"><span data-bind="fieldsightFormatDate: date">"></span></div>
-          </div>
+            
+            <div class="col-md-12" data-bind="foreach:$parent.historyList">
+                  <div class="line">
+                    <span> 
+                      <i class="fa fa-user" aria-hidden="true" style="padding-right:4px !important;"></i>
+                      <a href="#">
+                        <span data-bind="text:user"></span>
+                      </a>
+                        changed status from <span data-bind="text:old_status"></span> to <span data-bind="text:new_status"></span><!-- <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#comment" style="background: none !important; color: blue;border: none;">view-comment</button> -->
+                     <span style="float:right;"><i class="fa fa-clock-o" aria-hidden="true" ></i>
+                          <span data-bind="fieldsightFormatDate: date"></span></span></span>
+                  </div>
+                  <div id="comment" class="collapse1">
+                    <i class="fa fa-comments" aria-hidden="true" style="font-size: 16px;
+    margin-right: 12px;"></i><td><span data-bind="text:message"></span></td> 
+                  </div>
+                  <hr class="color:black;">
+            </div>
+
         </div>
-          
-          
-        <button class="btn btn-primary registration__action" type="submit" data-bind="click:$parent.close" >
+
+        
+        <button class="btn btn-primary registration__action round" type="submit" data-bind="click:$parent.close" >
             {% trans 'Close' %}</button>
               <div class="gap"></div>
 
@@ -99,19 +130,25 @@
 </div>
 </div>
 
-  <h3>{% trans 'Submission  Status' %} <h3><button class="btn btn-info btn-small" data-bind="click:history"> {% trans 'View History ' %}</button>
+  <h3>{% trans 'Submission  Status' %} </h3><button class="btn btn-info round" data-bind="click:history"> {% trans 'View History ' %}</button>
     <div><span>
       <input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding
     </span></div>
+    <div class="gap-small"></div>
     <div><span><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected
     </span></div>
+    <div class="gap-small"></div>
     <div>
       <span><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged
       </span></div>
+    <div class="gap-small"></div>
     <div><span><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved 
     </span></div>
+    <div class="gap-small"></div>
     <div><textarea rows="5" type="text" data-bind="value:message" placeholder="comment"></textarea></div>
-    <div> <button class="btn btn-lg btn-primary registration__action" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
+    <div class="gap"></div>
+    <div> <button class="btn  btn-primary registration__action round" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
+    <div class="gap"></div>
 </div>
 
 {% endblock %}
