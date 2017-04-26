@@ -19,7 +19,7 @@
       {% for field in form %}
       {% ifnotequal field.name "organization" %}
        <div class="col-sm-12 registration_field">
-         <div class="col-sm-3"> {{ field.label }}</div>
+         <div class="col-sm-3"><h5 class="italic1"><b>  {{ field.label }}</b></h5></div>
          <div class="col-sm-3">      {{ field }}</div>
          <div class="col-sm-6">      {{ field.errors }}</div>
        </div>
@@ -28,15 +28,16 @@
        {% ifequal field.name "organization" %}
        {% if not request.organization %}
        <div class="col-sm-12 registration_field">
-         <div class="col-sm-3"> {{ field.label }}</div>
+         <div class="col-sm-3"> <h5 class="italic1"><b> {{ field.label }}</b></h5></div>
          <div class="col-sm-3">      {{ field }}</div>
          <div class="col-sm-6">      {{ field.errors }}</div>
        </div>
        {% endif %}
        {% endifequal %}
      {% endfor %}
+     <div class="gap"></div>
       <!-- <input type="submit" value="Create Account" class="registration__action" /> -->
-      <button class="btn btn-lg btn-primary registration__action" type="submit" value="Create Account" >{% trans 'Create Account'%}</button>
+      <button class="btn  btn-primary registration__action" type="submit" value="Create Account" style="margin-left: 26px;" >{% trans 'Create Account'%}</button>
       <div class="registration__footer">
        {% if not request.user %} or <a href="{% url 'auth_login' %}">login</a> {% endif %}
       </div>
