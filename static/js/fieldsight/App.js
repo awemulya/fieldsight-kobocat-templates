@@ -205,6 +205,9 @@ var App = (function () {
             if (type == 'success') {
                 toastr.success(message, 'Successful');
             }
+            if (type == 'info') {
+                toastr.success(message, 'Successful');
+            }
             if (type == 'error') {
                 toastr.error(message, 'Error');
             }
