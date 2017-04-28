@@ -631,7 +631,8 @@ function JSONSurveyToHTML(data)
         for(idx in data._attachments)
         {
             var attachmentUrl = data._attachments[idx];
-            var imgSrc = attachmentsBaseUrl + '?media_file=' + encodeURIComponent(attachmentUrl);
+            var imgSrc = attachmentUrl.download_url;
+            // var imgSrc = attachmentsBaseUrl + '?media_file=' + encodeURIComponent(attachmentUrl);
             mediaContainer += '<li><a href="'+imgSrc+'" target="_blank">';
             var imgTag = _createElementAndSetAttrs('img', {"class":"thumbnail", "width":"210", "src": imgSrc});
             dummyContainer = _createElementAndSetAttrs('div', {});
