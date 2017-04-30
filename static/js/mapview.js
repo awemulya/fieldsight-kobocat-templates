@@ -630,15 +630,15 @@ function JSONSurveyToHTML(data)
         var mediaContainer = '<ul class="media-grid">';
         for(idx in data._attachments)
         {
-            var attachmentUrl = data._attachments[idx];
-            var imgSrc = attachmentUrl.download_url;
+            // var attachmentUrl = data._attachments[idx];
+            // // var imgSrc = attachmentUrl.download_url;
             // var imgSrc = attachmentsBaseUrl + '?media_file=' + encodeURIComponent(attachmentUrl);
-            mediaContainer += '<li><a href="'+imgSrc+'" target="_blank">';
-            var imgTag = _createElementAndSetAttrs('img', {"class":"thumbnail", "width":"210", "src": imgSrc});
-            dummyContainer = _createElementAndSetAttrs('div', {});
-            dummyContainer.appendChild(imgTag);
-            mediaContainer += dummyContainer.innerHTML;
-            mediaContainer += '</a></li>';
+            // mediaContainer += '<li><a href="'+imgSrc+'" target="_blank">';
+            // var imgTag = _createElementAndSetAttrs('img', {"class":"thumbnail", "width":"210", "src": imgSrc});
+            // dummyContainer = _createElementAndSetAttrs('div', {});
+            // dummyContainer.appendChild(imgTag);
+            // mediaContainer += dummyContainer.innerHTML;
+            // mediaContainer += '</a></li>';
 
         }
         mediaContainer += '</ul>';
@@ -685,7 +685,8 @@ function JSONSurveyToHTML(data)
                 });
             } else if(formJSONMngr.getTypeOfQuestion(questionName) === 'photo') {
               var attachmentUrl = data[questionName];
-              var imgSrc = attachmentsBaseUrl + '?media_file=' + encodeURIComponent(userName + '/attachments/' + attachmentUrl);
+              // var imgSrc = attachmentsBaseUrl + '?media_file=' + encodeURIComponent(userName + '/attachments/' + attachmentUrl);
+              var imgSrc = '/media/' +userName + '/attachments/' + attachmentUrl;
               var imgTag = _createElementAndSetAttrs('img', {"class":"thumbnail", "width":"210", "src": imgSrc});
               mediaContainer = _createElementAndSetAttrs('a', {'href': imgSrc, 'target': '_blank'});
               mediaContainer.appendChild(imgTag);
