@@ -423,7 +423,6 @@ ul.sidebar-menu li a.active i {
 .brand {
     background:#296fd5;
     float:left;
-    width:240px;
     height:80px;
     position:relative;
 }
@@ -6859,9 +6858,8 @@ li.responses-all a {
     -moz-border-radius: 3px;
     border-radius: 3px;
     margin-bottom: 8px;
-
     box-shadow: 0px 2px 5px;
-    padding: 0px;
+    padding: 3px;
 
 }
 
@@ -7270,7 +7268,7 @@ i.fa.fa-edit.edit1 {
 
 .organization-short-detail{
     padding: 10px 0px !important;
-    box-shadow: 2px 2px 17px #98b1d6;
+    border:1px solid #d7d7e4;
     margin-bottom: 24px;"
 }
 
@@ -7280,7 +7278,7 @@ i.fa.fa-edit.edit1 {
 
 .brand-side{
     height: 80px !important;
-    width: 81%;
+    
     background: #296fd5 !important;
     
     height: 80px !important;
@@ -7333,6 +7331,7 @@ ol.hidden-print>li>a{
     margin-right: 6px;
     margin-bottom: 10px ;
     border-radius: 7px;
+    display: inline-block;
  /*   margin-bottom: 6px;*/
 }
 
@@ -7373,4 +7372,8 @@ ol.hidden-print>li>a{
 .username1{
     color: white;
     font-weight: bold;
+}
+
+.org-grg .card .col-sm-7{
+    padding-left: 0px ;
 }
