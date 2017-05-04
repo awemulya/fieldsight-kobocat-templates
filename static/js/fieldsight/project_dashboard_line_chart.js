@@ -1,11 +1,11 @@
 var margin = {
     top: 30,
-    right: 20,
+    right: 0,
     bottom: 30,
-    left: 50
+    left: 0
 };
-var width = 800 - margin.left - margin.right;
-var height = 370 - margin.top - margin.bottom;
+var width = 500 - margin.left - margin.right;
+var height = 300;
 
 var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -13,7 +13,7 @@ var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(10);
+    .orient("bottom").ticks(6);
 
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
