@@ -1,4 +1,4 @@
-var margin = {top: 40, right: 0, bottom: 30, left: 0},
+var margin = {top: 30, right: 0, bottom: 30, left: 0},
     width = 400 - margin.left - margin.right,
     height = 300;
 
@@ -42,8 +42,8 @@ svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
     .append("text")
-    .attr("y", 20)
-    .attr("x",500)
+    .attr("y", 15)
+    .attr("x",465)
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text("Progress %");

@@ -6890,7 +6890,6 @@ li.dropdown.man-drop>a {
     font-weight: bold;
     margin-bottom: 0px;
     background: white;
-    font-style: italic;
     box-shadow: 1px 1px 0px #eef0f6;
 }
 
@@ -7404,4 +7403,18 @@ ol.hidden-print>li>a{
 
 .main_ul{
     margin-bottom: 0px !important;
+}
+
+@media (max-width: 479px){
+    body {
+        position: relative;
+        top: -80px !important;
+    }
+}
+
+@media (max-width: 479px)
+{
+    .brand {
+    position: relative !important;
+    }
 }

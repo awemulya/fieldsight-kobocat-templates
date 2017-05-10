@@ -2,7 +2,7 @@ var margin = {
     top: 30,
     right: 0,
     bottom: 30,
-    left: 0
+    left: 5
 };
 var width = 500 - margin.left - margin.right;
 var height = 300;
@@ -53,7 +53,7 @@ svg.append("path") // Add the valueline path.
 
 svg.append("g") // Add the X Axis
 .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(15," + height + ")")
     .call(xAxis);
 
 svg.append("g") // Add the Y Axis
