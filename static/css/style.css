@@ -7418,3 +7418,132 @@ ol.hidden-print>li>a{
     position: relative !important;
     }
 }
+
+
+.chat {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.chat li {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+.chat li.left .chat-body {
+    margin-left: 60px;
+}
+.chat li.right .chat-body {
+    margin-right: 60px;
+}
+.chat li .chat-body p {
+    margin: 0;
+    color: #777777;
+}
+.panel .slidedown .glyphicon,
+.chat .glyphicon {
+    margin-right: 5px;
+}
+.panel-body {
+    overflow-y: scroll;
+}
+
+.heading1-chat{
+    background: #337ab7 !important;
+    text-transform: none !important;
+}
+ .panel.panel-chat{
+
+    position: fixed;
+    z-index: 122;
+ }
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+}
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+}
+
+.panel.panel-chat
+        {
+        position: fixed;
+        bottom:0;
+        right:0;
+        width: 30%;
+        z-index: 1222;
+        }
+     
+        
+.panel.panel-chat .panel-body
+        {
+        display: block;
+        padding: 5px;
+        margin: 0;
+        border-left: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+        background: #EDEFF4;
+        overflow: scroll !important;
+        max-height: 300px;
+        }
+.panel.panel-chat .panel-body::-webkit-scrollbar {
+             display: none;
+         }
+.panel.panel-chat .panel-body .messageMe
+        {
+            border-bottom:1px dotted #b2b2b2;
+        }
+        
+.panel.panel-chat .panel-footer
+        {
+            padding: 0;
+            margin: 0;
+            border: 1px solid #b2b2b2;
+            
+        }
+.panel.panel-chat .panel-footer textarea
+        {
+            margin-bottom: -5px;
+            resize: none;
+            width: 100%;
+            height: 100%;
+        }
+
+.main-message{
+    background: white;
+    border-radius:5px;
+    border:1px solid white;
+}
+
+a.chatminimize {
+    color: white;
+}
+
+.messages-menu>a>i , .notifications-menu>a>i , .tasks-menu>a>i{
+    color: white;
+    font-size: 16px !important;
+}
+
+.nav>li>a:hover, .nav>li>a:active, .nav>li>a:focus {
+     background: #296fd5 !important;
+}
+
+.notification-div{
+    margin-top: 8px ;
+}
+
+li.dropdown>a>span{
+    position: absolute;
+    top: 9px;
+    right: 7px;
+    text-align: center;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9;
+}
