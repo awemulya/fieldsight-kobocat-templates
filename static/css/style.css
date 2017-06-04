@@ -166,7 +166,7 @@ a,a:hover,a:focus {
     width: 240px;
     height: 100%;
     position: fixed;
-    background:#CCFFCC;
+    background:#00628e;
     text-transform: uppercase;
     -webkit-transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
@@ -234,7 +234,7 @@ ul.sidebar-menu,ul.sidebar-menu li ul.sub {
 }
 ul.sidebar-menu {
     padding-top:80px;
-    background:#CCFFCC;
+    
 
 }
 #sidebar>ul>li>ul.sub {
@@ -300,11 +300,11 @@ ul.sidebar-menu li ul.sub li a:hover,ul.sidebar-menu li ul.sub li.active a {
     display:block;
     background:#a8a9ac;
 }
-ul.sidebar-menu li {
-    border-bottom:1px solid rgb(199, 215, 239);
+ul.sidebar-menu li.under-line {
+ /*   border-bottom:1px solid rgb(199, 215, 239);*/
 }
 ul.sidebar-menu li.sub-menu {
-    line-height:21px;
+    line-height:27px;
 }
 ul.sidebar-menu ul.sub li {
     border-bottom:none;
@@ -326,11 +326,12 @@ ul.sidebar-menu li a span {
     transition:all 0.3s ease;
 }*/
 ul.sidebar-menu li a {
-    color: #000;
+    color: #fff;
     text-decoration: none;
     display: block;
     padding: 18px 0 18px 25px;
     font-size: 12px;
+    font-weight: 600;
     outline: none;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -349,7 +350,7 @@ ul.sidebar-menu li a {
     transition:all 0.3s ease;
 }*/
 ul.sidebar-menu li a.active, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:focus {
-    background: #a8a9ac;
+    background: #ffffff;
     display: block;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -422,7 +423,7 @@ ul.sidebar-menu li a.active i {
     position:relative;
 }*/
 .brand {
-    background:#296fd5;
+    background:#3c8dbc;
     float:left;
     height:80px;
     position:relative;
@@ -6505,7 +6506,7 @@ a.add_org_people:hover {
 input {
     display: block;
     width: 100%;
-    height: 34px;
+    height: 42px !important;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
@@ -6528,7 +6529,7 @@ input:focus {
     box-shadow: none;
 }
 select{
-    height: 34px;
+    height: 42px;
     line-height: 46px;
     border: 1px solid #a5aab0 !important;
     box-shadow: none;
@@ -7281,7 +7282,7 @@ i.fa.fa-edit.edit1 {
 .brand-side{
     height: 80px !important;
     
-    background: #296fd5 !important;
+    background: #3c8dbc !important;
     
     height: 80px !important;
 }
@@ -7615,11 +7616,11 @@ li.dropdown>a>span{
 }
 
 .org-description{
-    background:#f8f8fb;
+    background: #f6f7f9;
     margin-top: 4px;
     border-radius: 4px;
     box-shadow: 0px 1px 5px rgba(0,0,0,0.3)!important;
-
+    height: 127px;
 }
 
 
@@ -7689,7 +7690,7 @@ li.user-block{
 
 .admin-list{
     margin-top: 4px;
-    height: 179px;
+    height: 127px;
     border-radius: 4px;
     box-shadow: 0px 1px 5px rgba(0,0,0,0.3)!important;
     border: 1px solid rgba(41, 111, 213, 0.03);
@@ -7739,7 +7740,15 @@ li.user-block{
 .detail-text {
   overflow: hidden;
   display: -webkit-box;
+  height: 36px;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.detail-text1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
@@ -7749,7 +7758,6 @@ li.user-block{
 /*  background: #f1f2f7;
   padding: 13px;*/
   padding: 5px;
-  background: #eaeaea;
   margin: 0px auto;
   float: right;
 }
@@ -7758,4 +7766,62 @@ li.user-block{
     color: blue;
     position: relative;
     left: 72%;
+}
+
+.logo-image>img{
+    width: 100%;
+    border-radius: 35%;
+}
+
+.site-list{
+    padding: 6px 5px 12px 0px;
+    margin-top: 20px;
+    background: #f1f2f7;
+}
+
+.no-btn-search{
+    height: 42px;
+}
+
+
+
+li.sub-menu>a:active {
+ background: white;
+    color: #00628e;
+}
+
+li.sub-menu>a:target {
+    background: white;
+    color: #00628e;
+}
+
+.marg4{
+    position: relative;
+    left: 4%;
+}
+
+.marg3{
+    position: relative;
+    left: 3%;
+}
+
+.top3{
+    margin-top: 5px;
+}
+
+.height-btn{
+    height: 42px;
+}
+
+.space{
+    margin-right: 5px;
+}
+
+.span-manage{
+    position: static !important;
+    padding: 0px !important;
+}
+
+.info-box-text{
+    white-space: normal;
 }
