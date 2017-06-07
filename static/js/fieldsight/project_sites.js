@@ -32,7 +32,9 @@ var Site =function (data){
     vm.site_modal_visibility(false);
   };
   for (var i in data){
-    self[i] = ko.observable(data[i]);
+    val = data[i] || "";
+    clean_val = val == "undefined" ? "" :val;
+    self[i] = ko.observable(val);
               }
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
 
