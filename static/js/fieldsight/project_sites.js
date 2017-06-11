@@ -32,7 +32,9 @@ var Site =function (data){
     vm.site_modal_visibility(false);
   };
   for (var i in data){
-    self[i] = ko.observable(data[i]);
+    val = data[i] || "";
+    clean_val = val == "undefined" ? "" :val;
+    self[i] = ko.observable(val);
               }
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
 
@@ -222,8 +224,10 @@ self.save_site_async = function(){
     if (!newValue) {
         self.sites(self.allSites());
     } else {
+      newValue = newValue.toLowerCase();
         filter_sites = ko.utils.arrayFilter(self.allSites(), function(item) {
-            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
+            return (ko.utils.stringStartsWith(item.name().toLowerCase(), newValue) || 
+              ko.utils.stringStartsWith(item.address().toLowerCase(), newValue));
         });
         self.sites(filter_sites);
     }
