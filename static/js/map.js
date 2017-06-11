@@ -29,7 +29,7 @@ var baseLayers = {
     "Google Terrain": googleTerrain
 };
 
-
+console.log(data);
 markers = new L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
         icon = L.icon({
@@ -80,6 +80,7 @@ type: 'get', // This is the default though, you don't actually need to always me
 dataType: "json",
 success: function(data) {
 img = '';
+console.log(data.images);
 for(i=0;i<data.images.length;i++){console.log(data.images[i]);
     img += '<img src = '+data.images[i]+'/>';
 }

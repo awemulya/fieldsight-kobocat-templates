@@ -6056,8 +6056,6 @@ ul.errorlist.nonfield {
     position: relative;
 }
 .popop-container {
-    position: absolute;
-    bottom: 10px;
     width: 100%;
     left: 10px;
     background: rgba(255,255,255,0.7);
@@ -6095,7 +6093,7 @@ ul.errorlist.nonfield {
 }
 
 .org-grg span {
-    margin-right: 10px;
+/*    margin-right: 10px;*/
 }
 .organization-list a{
     transition:all 0.2s ease-in-out;
@@ -6120,7 +6118,7 @@ ul.errorlist.nonfield {
     padding: 10px;
 }
 .organization-long-detail .nav-tabs>li.active>a, .organization-long-detail .nav-tabs>li.active>a:focus, .organization-long-detail .nav-tabs>li.active>a:hover {
-    color: #296FD5;
+    color: #fed65a;
     cursor: default;
     background-color: #fff;
     border: 0px;
@@ -6506,7 +6504,6 @@ a.add_org_people:hover {
 input {
     display: block;
     width: 100%;
-    height: 42px !important;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
@@ -6529,7 +6526,6 @@ input:focus {
     box-shadow: none;
 }
 select{
-    height: 42px;
     line-height: 46px;
     border: 1px solid #a5aab0 !important;
     box-shadow: none;
@@ -6647,7 +6643,7 @@ a.setting-btn {
     display: none;
 }
 .popop-gallery img {
-    height: 75px;
+    height: 90px;
     margin-right: 10px;
 }
 /*----------setup user-------------*/
@@ -6775,7 +6771,7 @@ input[type="radio"]:checked + label:after {
     margin-bottom: 5px;
     padding: 10px;
     background: #F5F5F5;
-    text-align: center;
+    
 }
 .current-person:hover .clear-btn-cu{
     visibility: visible;
@@ -7082,7 +7078,7 @@ div.box-user-pop{
     width: 100%;
     float: left;
     margin-right: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 40px;
     }
 
 .demo-3 figure {
@@ -7393,8 +7389,8 @@ ol.hidden-print>li>a{
 }
 
 .latest-image {
-    height: 200px !important;
-    width: 100%;
+/*    height: 200px !important;
+*/    width: 100%;
 }
 
 .img1 {
@@ -7630,17 +7626,17 @@ li.dropdown>a>span{
   border: none;
   color: #FFFFFF;
   text-align: center;
-  width: 135px;
+  width: 114px;
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
   text-transform: uppercase;
   margin: 0 auto;
- font-size: 14px;
- letter-spacing: 2px;
+ font-size: 12px;
+ letter-spacing: 1px;
  text-align: center;
- padding-top: 9px;
- padding-bottom: 9px;
+ padding-top: 8px;
+ padding-bottom: 8px;
  
 }
 
@@ -7728,9 +7724,12 @@ li.user-block{
 
  
 .next{
-    color: blue;
-    font-size: 17px;
+    color: #00628e;
+    font-size: 15px;
     float: right;
+    position: relative;
+    top: 4px;
+    padding-left: 5px;
 }
 
 .description-modal{
@@ -7759,7 +7758,7 @@ li.user-block{
   padding: 13px;*/
   padding: 5px;
   margin: 0px auto;
-  float: right;
+ 
 }
 
 .read_more{
@@ -7824,4 +7823,104 @@ li.sub-menu>a:target {
 
 .info-box-text{
     white-space: normal;
+}
+
+.box-side{
+    background: #9cb5bf !important;
+}
+
+.well-header{
+    font-size: 18px;
+}
+
+.blue{
+    color: blue;
+}
+.our-office{
+    margin-bottom: 0px;
+}
+
+.office-information{
+    padding: 17px;
+    background: rgba(245, 245, 245, 0.57);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+}
+
+.line-header{
+    font-size: 18px;
+    border-bottom: 1px solid;
+}
+/*
+.read-more-description{
+    display: flex;
+}*/
+
+.bottom-push{
+    margin-bottom: 20px;
+}
+
+.site-label{
+    color: black;
+}
+
+.list2{
+    margin-right: 3px !important;
+    width: auto !important;
+    border:none !important;
+    padding: 8px !important;
+}
+
+.site-nav{
+    margin-right: 3px !important;
+    width: auto !important;
+    border:none !important; 
+    padding: 8px !important;"
+}
+.site-nav1{
+    margin-right: 3px !important;
+    border:none !important;
+    padding: 8px !important;
+    box-shadow: 1px 1px 2px rgba(160, 160, 160, 0.68);
+    margin-top: 5px;
+}
+
+.wrap-word {
+    width:200px; 
+    overflow:hidden; 
+    border:1px solid #f00;
+    text-overflow:ellipsis;
+    white-space:nowrap; 
+}
+.org-description-sm{
+    background: #f6f7f9;
+    margin-top: 4px;
+    border-radius: 4px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.3)!important;
+    height: 114px;
+}
+
+.org-description-vsm{
+    background: #f6f7f9;
+    margin-top: 4px;
+    border-radius: 4px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.3)!important;
+    height: 100px;
+}
+
+
+.pad-left{
+    padding-left: 10px;
+}
+
+.site-survey-div{
+    margin-right: 3px !important;
+    margin-left: 9px;
+    margin-top:24px;
+    padding: 0px !important;
+    height: 81px;
+
+}
+.site-survey-inside{
+    margin-bottom: 0px !important; 
+    padding: 10px !important;
 }
