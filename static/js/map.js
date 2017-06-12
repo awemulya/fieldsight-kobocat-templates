@@ -29,7 +29,6 @@ var baseLayers = {
     "Google Terrain": googleTerrain
 };
 
-console.log(data);
 markers = new L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
         icon = L.icon({
