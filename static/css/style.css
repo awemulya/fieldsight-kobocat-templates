@@ -7924,3 +7924,103 @@ li.sub-menu>a:target {
     margin-bottom: 0px !important; 
     padding: 10px !important;
 }
+
+.note-div{
+    color: #1d2129;
+    padding: 10px;
+    display: flex;
+    border-bottom:1px solid rgba(144, 148, 156, 0.42);
+}
+
+.notification-title{
+    font-size: 15px;
+}
+
+.unread{
+/*    background: #e2e8f1 !important;*/
+    background:  rgba(237, 242, 250, 0.89);
+
+}
+
+.read{
+    background: #f9f9f9;
+    
+}
+
+.low{
+    color: #90949c;
+}
+.note-table{
+    padding: 2px !important;
+}
+
+.note-icon{
+   font-size: 27px;
+    position: relative;
+    top: 4px;
+    color: #2a9895;
+    left: 14px;
+}
+.title2_note{
+    font-size: 17px;
+    color: #3e4044;
+    font-weight: 600;
+    margin-bottom: 5px;
+    position: relative;
+    left: 20px;
+}
+
+.menu{
+    list-style: none;
+    padding-left: 0px;
+
+}
+
+.menu-top{
+    border: 1px solid rgba(100, 100, 100, .22);
+    border-radius: 0 0 2px 2px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+    color: #1d2129;
+}
+
+.note-icon-sm{
+    font-size: 24px;
+    color: #2a9895;
+}
+
+.note-div-sm{
+    color: #1d2129;
+    padding: 10px;
+    display: flex;
+    border-bottom:1px solid rgba(144, 148, 156, 0.42);
+}
+
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    background-color: #29bbea;
+    border-color: #337ab7
+}
+
+.notification-title-sm{
+    color: #1d2129;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu{
+    width: 350px;
+} 
+
+.full{
+    width: 100%;
+}
+
+.title2_note_div{
+    padding: 10px;
+}
+
+.title2_note_sm{
+    font-size: 16px;
+    color: #81858e
+}
+
+.note-footer{
+    min-height: auto;
+}
