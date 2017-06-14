@@ -423,7 +423,7 @@ ul.sidebar-menu li a.active i {
     position:relative;
 }*/
 .brand {
-    background:#3c8dbc;
+    background:#00628e;
     float:left;
     height:80px;
     position:relative;
@@ -7278,7 +7278,7 @@ i.fa.fa-edit.edit1 {
 .brand-side{
     height: 80px !important;
     
-    background: #3c8dbc !important;
+    background: #00628e !important;
     
     height: 80px !important;
 }
