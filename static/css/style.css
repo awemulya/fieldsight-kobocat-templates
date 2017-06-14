@@ -6309,8 +6309,8 @@ a.add_org_people:hover {
     margin-left: 4px;
 }
 .form-list {
-    height: 250px;
-/*    overflow-y: scroll;*/
+    height: 400px;
+    overflow-y: scroll;
 }
 .form-list .org-site {
     border-bottom: 1px solid #d8d8d8;
