@@ -6994,7 +6994,6 @@ li.dropdown.man-drop>a {
 }
 
 .ko_container {
-    width: 500px;
     min-height: 50px;
 }
 
@@ -8025,4 +8024,18 @@ li.sub-menu>a:target {
 
 .note-footer{
     min-height: auto;
+}
+
+.right{
+    float: right;
+}
+
+.list-heading{
+    font-size: 18px;
+    color: rgba(34, 34, 34, 0.78);
+}
+
+.gap_border{
+    margin-bottom: 5px;
+    border-top: 1px solid black;
 }
