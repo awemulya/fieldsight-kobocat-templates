@@ -65,7 +65,7 @@
      
 
 $( document ).ready(function() {
-Chart.defaults.global.defaultFontColor = '#FFF';
+// Chart.defaults.global.defaultFontColor = '#FFF';
 
 var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
@@ -77,8 +77,8 @@ var myChart = new Chart(ctx, {
         datasets: [{
             label: 'No of Submissions',
             data: cummulative_data,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255,99,132,1)',
+            backgroundColor: 'rgba(0,0,0,0.2)',
+            borderColor: 'rgba(0,99,132,0.2)',
             borderWidth: 1
         }]
     },
@@ -91,12 +91,13 @@ var myChart = new Chart(ctx, {
                         position: 'left',
                         ticks: {
                             callback: function(value, index, values) {
-                                return "Till " + value;
+                                return value;
                             }
                         },
                         scaleLabel:{
                             display: true,
                             labelString: 'No of Submissions',
+                            backgroundColor: 'rgba(0,0,0,0.2)',
                             fontColor: "#000"
                         }
                     }   
@@ -108,19 +109,19 @@ var myChart = new Chart(ctx, {
                         position: 'bottom',
                         ticks: {
                             callback: function(value, index, values) {
-                                return "Up to " + value;
+                                return value;
                             }
                         },
                         scaleLabel:{
                             display: true,
-                            labelString: 'Date',
+                            backgroundColor: 'rgba(255,255,255,0.2)',
                             fontColor: "#000"
                         }
                     }   
                 ]
   },
         title: {
-            display: true,
+            display: false,
             text: 'Custom Chart Title'
         },
         legend: {
