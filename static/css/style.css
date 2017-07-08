@@ -12,8 +12,7 @@ body {
     color:#767676;
     background:#F1F2F7;
     font-family:'Open Sans',sans-serif;
-    padding:0px !important;
-    margin:0px !important;
+    padding:0px !important;    margin:0px !important;
     font-size:13px;
     text-rendering:optimizeLegibility;
 }
@@ -8025,4 +8024,8 @@ li.sub-menu>a:target {
 
 .note-footer{
     min-height: auto;
+}
+
+.progress_col{
+    text-align: center;
 }
