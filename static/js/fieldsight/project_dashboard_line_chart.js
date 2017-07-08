@@ -92,7 +92,10 @@ var myChart = new Chart(ctx, {
                         ticks: {
                             callback: function(value, index, values) {
                                 return value;
-                            }
+                            },
+                             min: 0,
+                    sepSize: 1,
+                    max: 400
                         },
                         scaleLabel:{
                             display: true,
