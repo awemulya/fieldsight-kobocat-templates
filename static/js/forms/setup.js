@@ -33,7 +33,40 @@ function formatDate(date) {
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
+
+     self.label = ko.computed(function() {
+        var title = "";
+        ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
+            if(gxg.id() == self.id()){
+
+              title =  gxg.title();
+            }
+        });
+        return title;
+    }, self);
+
+    //   self.label = ko.computed(function() {
+
+    //     var selectemItem = ko.utils.arrayFirst(vm.stagesVm().gxforms(), function(gxform) {
+    //       return gxform.id() == self.id()
+    //     }
+    // }, self);
+
    }
+
+var GXform = function (data){
+   var self = this;
+   self.id = ko.observable();
+   self.title = ko.observable();
+
+    for (var i in data){
+        self[i] = ko.observable(data[i]);
+    }
+
+   }
+
+
+
 
   var FSXform = function (data){
    var self = this;
@@ -44,7 +77,7 @@ function formatDate(date) {
         self[i] = ko.observable(data[i]);
     }
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
- }
+}
 
 var FieldSightXF = function (data){
   var self = this;
@@ -612,6 +645,7 @@ var StageVM = function(is_project, pk){
   self.is_project = is_project;
   self.allStages = ko.observableArray();
   self.xforms = ko.observableArray();
+  self.gxforms = ko.observableArray();
   self.stages = ko.observableArray();
   self.current_stage = ko.observable();
   self.stage_form_visibility = ko.observable(false);
@@ -659,6 +693,30 @@ var StageVM = function(is_project, pk){
                     });
                 
                 self.xforms(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+self.getGlobalXforms = function(){
+     App.showProcessing();
+        $.ajax({
+            url: '/forms/api/xf/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                  var mappedData = ko.utils.arrayMap(response, function(item) {
+                      return new GXform(item);
+                    });
+                
+                self.gxforms(mappedData);
 
             },
             error: function (errorThrown) {
@@ -830,8 +888,9 @@ self.orderChanged = function(){
 //         self.stages(filter_stages);
 //     }
 //     });
-
-
+  
+  self.getGlobalXforms();
+  // setTimeout(myFunction, 1000);
   self.getXforms();
   self.getStages();
   // self.form_name_display = function (xf_id){
