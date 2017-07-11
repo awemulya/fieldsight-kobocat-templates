@@ -23,17 +23,7 @@ function formatDate(date) {
   if (flag == 3) return "Approved"
 
   }
- var FSXform = function (data){
-   var self = this;
-   self.id = ko.observable();
-   self.xf = ko.observable();
 
-    for (var i in data){
-        self[i] = ko.observable(data[i]);
-    }
-
-    self.xf(new Xform({'id':self.xf().id,'title':self.xf().title}));
- }
 
  var Xform = function (data){
    var self = this;
@@ -43,6 +33,17 @@ function formatDate(date) {
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
+   }
+
+  var FSXform = function (data){
+   var self = this;
+   self.id = ko.observable();
+   self.xf = ko.observable();
+
+    for (var i in data){
+        self[i] = ko.observable(data[i]);
+    }
+    self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
  }
 
 var FieldSightXF = function (data){
@@ -149,37 +150,11 @@ var SubStage = function(data){
 
   self.editable = ko.observable(false);
 
-
-  self.xf = ko.observable();
-  self.form_name = ko.observable();
-
-     for (var i in data){
+   for (var i in data){
       self[i] = ko.observable(data[i]);
     }
 
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
-
-  // self.form_name_display = ko.computed(function() {
-  //   if (self.xf() == undefined){
-  //     return "";
-  //   }else if(self.xf().length <1){
-  //       return ""
-  //     }else{
-
-  //      var matched =  ko.utils.arrayFilter(vm.stagesVm().xforms(), function(item) {
-  //                 return (item.id() == self.xf());
-  //             });
-  //      if (matched.length >0){
-
-  //  return matched[0].title() ||"";
-  //      }
-  //      return "";
-
-  //   }
-    
-  
-
-  //   }, self);
 
   self.edit = function(){
     self.editable(true);
