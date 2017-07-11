@@ -23,6 +23,18 @@ function formatDate(date) {
   if (flag == 3) return "Approved"
 
   }
+ var FSXform = function (data){
+   var self = this;
+   self.id = ko.observable();
+   self.xf = ko.observable();
+
+    for (var i in data){
+        self[i] = ko.observable(data[i]);
+    }
+
+    self.xf(new Xform({'id':self.xf().id,'title':self.xf().title}));
+ }
+
  var Xform = function (data){
    var self = this;
    self.id = ko.observable();
@@ -132,36 +144,42 @@ var SubStage = function(data){
   self.id = ko.observable();
   self.name = ko.observable();
   self.description = ko.observable();
+  self.order = ko.observable();
+  self.stage_forms = ko.observable();
+
+  self.editable = ko.observable(false);
+
+
   self.xf = ko.observable();
   self.form_name = ko.observable();
-  self.order = ko.observable();
-  self.editable = ko.observable(false);
 
      for (var i in data){
       self[i] = ko.observable(data[i]);
     }
 
-  self.form_name_display = ko.computed(function() {
-    if (self.xf() == undefined){
-      return "";
-    }else if(self.xf().length <1){
-        return ""
-      }else{
+  self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
 
-       var matched =  ko.utils.arrayFilter(vm.stagesVm().xforms(), function(item) {
-                  return (item.id() == self.xf());
-              });
-       if (matched.length >0){
+  // self.form_name_display = ko.computed(function() {
+  //   if (self.xf() == undefined){
+  //     return "";
+  //   }else if(self.xf().length <1){
+  //       return ""
+  //     }else{
 
-   return matched[0].title() ||"";
-       }
-       return "";
+  //      var matched =  ko.utils.arrayFilter(vm.stagesVm().xforms(), function(item) {
+  //                 return (item.id() == self.xf());
+  //             });
+  //      if (matched.length >0){
 
-    }
+  //  return matched[0].title() ||"";
+  //      }
+  //      return "";
+
+  //   }
     
   
 
-    }, self);
+  //   }, self);
 
   self.edit = function(){
     self.editable(true);
@@ -214,6 +232,14 @@ self.setShowSubstages = function(){
       self.add_sub_stage();
     }
 
+}
+
+self.mainStageClicked = function(){
+    if (self.show_substages() == false){
+      self.show_substages(true);
+    }else{
+      self.show_substages(false);
+    }
 } 
 
 
