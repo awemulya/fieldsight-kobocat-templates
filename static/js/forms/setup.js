@@ -34,6 +34,10 @@ function formatDate(date) {
         self[i] = ko.observable(data[i]);
     }
 
+    if(!self.id()){
+      self.id(vm.stagesVm().xforms()[0].id());
+      self.title(vm.stagesVm().xforms()[0].title());
+    }
      self.label = ko.computed(function() {
         var title = "";
         ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
@@ -43,6 +47,7 @@ function formatDate(date) {
             }
         });
         return title;
+        console.log(self.title());
     }, self);
 
     //   self.label = ko.computed(function() {
@@ -69,6 +74,7 @@ var GXform = function (data){
 
 
   var FSXform = function (data){
+    
    var self = this;
    self.id = ko.observable();
    self.xf = ko.observable();
@@ -76,7 +82,13 @@ var GXform = function (data){
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
+    if(!self.xf()){
+      console.log(vm.stagesVm().xforms()[0].id());
+      // self.xf(vm.stagesVm().xforms()[0]);
+      self.xf(new Xform({'id':'', 'title':''}));
+    }else{
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
+    }
 }
 
 var FieldSightXF = function (data){
@@ -245,11 +257,11 @@ self.setShowSubstages = function(){
 self.mainStageClicked = function(){
     if (self.show_substages() == false){
       self.show_substages(true);
+      self.stageChanged(true)
     }else{
       self.show_substages(false);
     }
 } 
-
 
 // self.show_substages.subscribe(function(newValue) {
 //   if (newValue == true ){
@@ -261,15 +273,19 @@ self.mainStageClicked = function(){
 
   self.add_sub_stage = function(){
     var parentLength = self.parent().length || 0;
-    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'xf':""}));
+    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':{}}));
     self.addSubStageMode(true);
   };
 
   self.save_sub_stage = function(){
     var parentLength = self.parent().length || 0;
+    console.log("called1");
     if(self.newSubstage().name().length >0){
+      console.log("called22");
         self.parent.push(self.newSubstage());
-        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':"",'xf':""}));
+        console.log("called");
+        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':"",'stage_forms':{}}));
+        console.log("called again");
         self.stageChanged(true);
       
     }else{
