@@ -209,6 +209,9 @@ var SubStage = function(data){
   self.edit_done = function(){
     self.editable(false);
   }
+
+
+
 }
 
 var SimpleStage = function(data){
@@ -274,20 +277,53 @@ self.mainStageClicked = function(){
 //   }
 // });
 
+  self.delete_substage = function(ss){
+    self.parent.remove(function(sub) {
+        return sub.id() == ss.id();
+    });
+  }
+
   self.add_sub_stage = function(){
     var parentLength = self.parent().length || 0;
-    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':{}}));
-    self.addSubStageMode(true);
+    st_form = {
+                    "xf": {
+                        "title": vm.stagesVm().xforms()[0].title(),
+                        "id": vm.stagesVm().xforms()[0].id()
+                    },
+                    "id": ""
+                }
+    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':st_form}));
+    // self.addSubStageMode(true);
   };
 
   self.save_sub_stage = function(){
+    st_form = {
+                    "xf": {
+                        "title": vm.stagesVm().xforms()[0].title(),
+                        "id": vm.stagesVm().xforms()[0].id()
+                    },
+                    "id": ""
+                }
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
-        self.parent.push(self.newSubstage());
-        console.log("called");
-        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':"",'stage_forms':{}}));
-        self.addSubStageMode(true);
-        console.log("called again");
+        var saved_substage = new SubStage({
+                "id": "",
+                "stage_forms": {
+                    "xf": {
+                        "title": "",
+                        "id": self.newSubstage().stage_forms().xf().id()
+                    },
+                    "id": ""
+                },
+                "name": self.newSubstage().name(),
+                "description": self.newSubstage().description(),
+                "order": self.newSubstage().order()
+            });
+        self.parent.push(saved_substage);
+        // console.log("called");
+        self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':st_form}));
+        // self.addSubStageMode(true);
+        // console.log("called again");
         self.stageChanged(true);
       
     }else{
@@ -300,6 +336,7 @@ self.mainStageClicked = function(){
   };
 
   self.save = function (){
+
       if(vm.is_project == "1"){
         self.project(vm.pk);
       }else{
