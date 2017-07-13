@@ -277,10 +277,48 @@ self.mainStageClicked = function(){
 //   }
 // });
 
+  self.deleteSubstageAjax = function(pk){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/delete-substage/' + String(pk) + '/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.parent.remove(function(sub) {
+              return sub.id() == pk;
+            });
+                App.notifyUser(
+                        'Substage Data Deleted',
+                        'success'
+                    );
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+                App.notifyUser(
+                        'Substage Data Deletion Fail',
+                        'error'
+                    );
+            }
+        });
+  };
+
+
   self.delete_substage = function(ss){
-    self.parent.remove(function(sub) {
+    if(ss.id()){
+      if (confirm('Are you sure deleting this sub stage. Submissions of this substage may lost?')) {
+      self.deleteSubstageAjax(ss.id());
+    }}else{
+
+      self.parent.remove(function(sub) {
         return sub.id() == ss.id();
     });
+    }
+    
   }
 
   self.add_sub_stage = function(){
