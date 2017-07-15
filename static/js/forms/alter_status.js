@@ -23,6 +23,42 @@ var ChangeStatus = function(instance, status, message){
             success: function (response) {
                 App.hideProcessing();
                 self.formStatus(response.formStatus);
+                var data = response.formStatus;
+                
+                switch( data)
+                {
+                   case '0':
+                    $(".sub-header-bar").addClass("pending-bar");
+                    $(".status-icon").find("span.pending").removeClass("hide").addClass("active");
+                    $("button.pending").addClass("border-left");
+                    break;
+
+                  case '1':
+                    $(".sub-header-bar").addClass("rejected-bar");
+                    
+                    $(".status-icon").find("span.rejected").removeClass("hide").addClass("active");
+                    $("button.pending").addClass("border-left");
+                    $("button.rejected").addClass("border-left");
+                    break;
+
+                  case '2':
+                    $(".sub-header-bar").addClass("flagged-bar");
+                    $(".status-icon").find("span.flagged").removeClass("hide").addClass("active");
+                    $("button.pending").addClass("border-left");
+                    $("button.flagged").addClass("border-left");
+                    break;
+
+                  case '3':
+                    $(".sub-header-bar").addClass("approved-bar");
+                    $(".status-icon").find("span.approved").removeClass("hide").addClass("active");
+                    $("button.approved").addClass("border-left");
+                    break;
+
+                  default:
+
+                }
+
+
 
             },
             error: function (errorThrown) {

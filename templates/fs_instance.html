@@ -30,20 +30,150 @@
     height: 5px !important;
   }
 
+
+
+
+.header-response{
+    display: inline-block;
+}
+
+.history-response{
+    display: inline-block;
+    float: right;
+}
+
+.hide{
+  display: none;
+}
+
+
+span.active{
+  display: block;
+  font-weight: 600;
+  border: 1px solid;
+  padding: 5px;
+  border-radius: 50%;
+  color: white;
+}
+
+
+button.rejected{
+  background: #ef7351;
+  color: white;
+}
+
+button.approved{
+
+  background: #8fb949 ;
+  color: white;
+
+}
+
+
+button.flagged{
+  background: #e6b007 ;
+  color: white;
+}
+
+
+
+button.pending{
+  color: #00c0ef;
+  color: white;
+}
+
+
+.status-icon{
+  font-size: 20px;
+  position: relative;
+  top: 4px;
+  display: inline-block;
+}
+
+.inline{
+  display: inline-block;
+}
+
+.inline button{
+  font-size: 17px;
+  padding: 8px 13px;
+}
+
+textarea.form-control{
+  width: 50%;
+}
+
+.btn-head-response{
+  background: white !important;
+  color: #373737 !important;
+  border: 1px solid !important;
+  padding: 6px 22px;
+}
+
+.btn-head-response:hover {
+    background: #00628e !important;
+    color: white !important;
+}
+
+
+.rejected-bar{
+  background: #ef7351;
+}
+
+.pending-bar{
+  background: rgb(92, 176, 214);
+}
+
+.flagged-bar{
+  background:#e6b007;
+}
+
+.approved-bar{
+  background: #8fb949;
+}
+
+.border-left{
+  border: 4px solid #2ab8b9 !important;
+  border-radius: 8px !important;
+}
+
 </style>
 
-<div class="sub-header-bar">
+<div class="sub-header-bar " id="sub-header-bar">
   <div class="container__wide">
-     {% if fxf.project %}
-            <a href="{% url 'fieldsight:project-dashboard' fxf.project.pk %}">Dashboard</a> |
-            <a href="{% url 'forms:project-responses' fxf.project.pk %}">Responses</a> |
-            <a href="{% url 'forms:project_html_export' fxf.pk %}">{{ fxf.xf.title }} All Submissions</a>
-        {% endif %}
-      {% if fxf.site %}
-            <a href="{% url 'fieldsight:site-dashboard' fxf.site.pk %}">Dashboard</a> |
-            <a href="{% url 'forms:site-responses' fxf.site.pk %}">Responses</a> |
-            <a href="{% url 'forms:formpack_html_export' fxf.pk %}">{{ fxf.xf.title }} All Submissions</a>
-      {% endif %} 
+    <div class='row'>
+      <div class="header-response col-sm-8 col-md-8 col-xs-12">
+       {% if fxf.project %}
+              <a href="{% url 'fieldsight:project-dashboard' fxf.project.pk %}">Dashboard</a> |
+              <a href="{% url 'forms:project-responses' fxf.project.pk %}">Responses</a> |
+              <a href="{% url 'forms:project_html_export' fxf.pk %}">{{ fxf.xf.title }} All Submissions</a>
+          {% endif %}
+
+        {% if fxf.site %}
+              <a href="{% url 'fieldsight:site-dashboard' fxf.site.pk %}">Dashboard</a> |
+              <a href="{% url 'forms:site-responses' fxf.site.pk %}">Responses</a> |
+              <a href="{% url 'forms:formpack_html_export' fxf.pk %}">{{ fxf.xf.title }} All Submissions</a>
+        {% endif %} 
+      </div>
+      
+      <div class="history-response col-sm-4 col-md-4 col-xs-12" data-bind="with:model">
+          
+          <button class="btn btn-head-response" data-bind="click:history"> {% trans 'View History ' %}</button>
+          
+          <span class="title-sm space " style="display:inline-block" >{% trans "current-status:" %}
+          </span>
+          <div class="status-icon" >
+            <span class="approved hide"><i class="fa fa-check-square-o" aria-hidden="true"></i></span>
+            <span class="rejected hide"><i class="fa fa-window-close" aria-hidden="true"></i></span>
+            <span class="pending hide"><i class="fa fa-hourglass-half" aria-hidden="true"></i></span>
+            <span class="flagged hide"><i class="fa fa-flag-checkered" aria-hidden="true"></i></span> 
+       </div>
+     </div>
+
+
+      </div> 
+
+
     <!-- <a href="{% url 'forms:data_view' fxf.pk %}"><i class="fa fa-chevron-left"></i> {% trans "Data View" %}</a> -->
   </div>
 </div>
@@ -130,24 +260,33 @@
 </div>
 </div>
 
-  <h3>{% trans 'Submission  Status' %} </h3><button class="btn btn-info round" data-bind="click:history"> {% trans 'View History ' %}</button>
-    <div><span>
-      <input type="radio" name="flavorGroup" value="0" data-bind="checked: formStatus" /> Outstanding
-    </span></div>
-    <div class="gap-small"></div>
-    <div><span><input type="radio" name="flavorGroup" value="1" data-bind="checked: formStatus" /> Rejected
-    </span></div>
-    <div class="gap-small"></div>
-    <div>
-      <span><input type="radio" name="flavorGroup" value="2" data-bind="checked: formStatus" /> Flagged
-      </span></div>
-    <div class="gap-small"></div>
-    <div><span><input type="radio" name="flavorGroup" value="3" data-bind="checked: formStatus" /> Approved 
-    </span></div>
-    <div class="gap-small"></div>
-    <div><textarea rows="5" type="text" data-bind="value:message" placeholder="comment"></textarea></div>
+  <h3>{% trans 'Submission  Status' %} </h3>
+  
+    <div class="form-group">
+      <textarea class="form-control" rows="7" type="text" data-bind="value:message" placeholder="comment"></textarea>
+    </div>
+
     <div class="gap"></div>
-    <div> <button class="btn  btn-primary registration__action round" type="submit" data-bind="click:saveStatus">{% trans 'Save Status' %}</button></div>
+
+
+
+
+
+    <div class="inline">
+      <button type="button" class=" btn pending"><i class="fa fa-hourglass-half space" aria-hidden="true"></i> Pending </button>
+    </div>
+    
+    <div class="inline">
+      <button type="button" class="btn rejected"><i class="fa fa-window-close space" aria-hidden="true"></i> Rejected </button>
+    </div>
+    <div class="inline">
+        <button type="button" class="btn flagged"><i class="fa fa-flag-checkered space " aria-hidden="true"></i> Flagged </button>
+    </div>
+    <div class="inline">
+      <button type="button" class="btn approved"><i class="fa fa-check-square-o space" aria-hidden="true"></i> Approved </button>
+    </div>
+  
+    
     <div class="gap"></div>
 </div>
 

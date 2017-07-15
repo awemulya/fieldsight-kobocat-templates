@@ -536,6 +536,7 @@ ul.dropdown-menu-right {
   color: green;
 }
 
+
 /* Boostrap buttons override */
 
 button.btn, a.btn,
@@ -544,10 +545,9 @@ input.btn, input.btn:hover,
 .btn:focus {
   border-radius: 0px;
   border: none;
-  font-weight: 600;
+  font-weight: 500;
   text-shadow: none;
-  background: #3C95D3;
-  border-bottom: 2px solid #336286;
+  background: #00628e;
   color: white;
 }
 

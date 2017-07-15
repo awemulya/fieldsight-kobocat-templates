@@ -31,6 +31,7 @@ var baseLayers = {
 
 markers = new L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
+        // rejected
         if(feature.status == 0){
                     icon = L.icon({
                                 //iconSize: [27, 27],
@@ -40,14 +41,16 @@ markers = new L.geoJson(data, {
                     });
                 }
                 else if(feature.status == 1){
+                    // flagged
                     icon = L.icon({
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/blue-small.png'
+                                iconUrl: static_url+'images/yellow-small.png'
                     });
                 }
                 else if(feature.status == 2){
+                    // approved
                     icon = L.icon({
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
@@ -56,6 +59,7 @@ markers = new L.geoJson(data, {
                     });
                 }
                 else if(feature.status == 3){
+                    // pending
                     icon = L.icon({
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
@@ -104,7 +108,7 @@ markers = new L.geoJson(data, {
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/green-small.png'
+                                iconUrl: static_url+'images/red-small.png'
                     });
                 }
                 else if(feature.progress >= 20 && feature.progress <= 40){
@@ -112,7 +116,7 @@ markers = new L.geoJson(data, {
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/gray-small.png'
+                                iconUrl: static_url+'images/violet-small.png'
                     });
                 }
                 else if(feature.progress >= 40 && feature.progress <= 60){
@@ -120,7 +124,7 @@ markers = new L.geoJson(data, {
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/yellow-small.png'
+                                iconUrl: static_url+'images/orange-small.png'
                     });
                 }
                 else if(feature.progress >= 60 && feature.progress <= 80){
@@ -128,7 +132,7 @@ markers = new L.geoJson(data, {
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/black-small.png'
+                                iconUrl: static_url+'images/yellow-small.png'
                     });
                 }
                 else if(feature.progress >= 80 && feature.progress <= 100){
@@ -136,7 +140,7 @@ markers = new L.geoJson(data, {
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/violet-small.png'
+                                iconUrl: static_url+'images/green-small.png'
                     });
                 }
                 //console.log(icon.options);
