@@ -23,6 +23,8 @@ function formatDate(date) {
   if (flag == 3) return "Approved"
 
   }
+
+
  var Xform = function (data){
    var self = this;
    self.id = ko.observable();
@@ -31,7 +33,62 @@ function formatDate(date) {
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
- }
+
+    // if(!self.id()){
+    //   self.id(vm.stagesVm().xforms()[0].id());
+    //   self.title(vm.stagesVm().xforms()[0].title());
+    // }
+     self.label = ko.computed(function() {
+        var title = "";
+        ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
+            if(gxg.id() == self.id()){
+
+              title =  gxg.title();
+            }
+        });
+        return title;
+        console.log(self.title());
+    }, self);
+
+    //   self.label = ko.computed(function() {
+
+    //     var selectemItem = ko.utils.arrayFirst(vm.stagesVm().gxforms(), function(gxform) {
+    //       return gxform.id() == self.id()
+    //     }
+    // }, self);
+
+   }
+
+var GXform = function (data){
+   var self = this;
+   self.id = ko.observable();
+   self.title = ko.observable();
+
+    for (var i in data){
+        self[i] = ko.observable(data[i]);
+    }
+
+   }
+
+
+
+
+  var FSXform = function (data){
+    
+   var self = this;
+   self.id = ko.observable();
+   self.xf = ko.observable();
+
+    for (var i in data){
+        self[i] = ko.observable(data[i]);
+    }
+    if(!self.xf()){
+      self.xf(vm.stagesVm().xforms()[0]);
+      // self.xf(new Xform({'id':'', 'title':''}));
+    }else{
+    self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
+    }
+}
 
 var FieldSightXF = function (data){
   var self = this;
@@ -132,36 +189,19 @@ var SubStage = function(data){
   self.id = ko.observable();
   self.name = ko.observable();
   self.description = ko.observable();
-  self.xf = ko.observable();
-  self.form_name = ko.observable();
   self.order = ko.observable();
+  self.stage_forms = ko.observable();
+
   self.editable = ko.observable(false);
 
-     for (var i in data){
+   for (var i in data){
       self[i] = ko.observable(data[i]);
     }
+  if(self.stage_forms()){
 
-  self.form_name_display = ko.computed(function() {
-    if (self.xf() == undefined){
-      return "";
-    }else if(self.xf().length <1){
-        return ""
-      }else{
-
-       var matched =  ko.utils.arrayFilter(vm.stagesVm().xforms(), function(item) {
-                  return (item.id() == self.xf());
-              });
-       if (matched.length >0){
-
-   return matched[0].title() ||"";
-       }
-       return "";
-
-    }
+  self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
     
-  
-
-    }, self);
+  }
 
   self.edit = function(){
     self.editable(true);
@@ -169,6 +209,9 @@ var SubStage = function(data){
   self.edit_done = function(){
     self.editable(false);
   }
+
+
+
 }
 
 var SimpleStage = function(data){
@@ -206,6 +249,7 @@ self.setShowSubstages = function(){
     if (self.show_substages() == false){
       self.show_substages(true);
       self.stageChanged(true);
+      self.addSubStageMode(true);
     }else{
       self.show_substages(false);
       self.stageChanged(false);
@@ -214,8 +258,16 @@ self.setShowSubstages = function(){
       self.add_sub_stage();
     }
 
-} 
+}
 
+self.mainStageClicked = function(){
+    if (self.show_substages() == false){
+      self.show_substages(true);
+      self.stageChanged(true)
+    }else{
+      self.show_substages(false);
+    }
+} 
 
 // self.show_substages.subscribe(function(newValue) {
 //   if (newValue == true ){
@@ -225,17 +277,91 @@ self.setShowSubstages = function(){
 //   }
 // });
 
+  self.deleteSubstageAjax = function(pk){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/delete-substage/' + String(pk) + '/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.parent.remove(function(sub) {
+              return sub.id() == pk;
+            });
+                App.notifyUser(
+                        'Substage Data Deleted',
+                        'success'
+                    );
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+                App.notifyUser(
+                        'Substage Data Deletion Fail',
+                        'error'
+                    );
+            }
+        });
+  };
+
+
+  self.delete_substage = function(ss){
+    if(ss.id()){
+      if (confirm('Are you sure deleting this sub stage. Submissions of this substage may lost?')) {
+      self.deleteSubstageAjax(ss.id());
+    }}else{
+
+      self.parent.remove(function(sub) {
+        return sub.id() == ss.id();
+    });
+    }
+    
+  }
+
   self.add_sub_stage = function(){
     var parentLength = self.parent().length || 0;
-    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'xf':""}));
-    self.addSubStageMode(true);
+    st_form = {
+                    "xf": {
+                        "title": vm.stagesVm().xforms()[0].title(),
+                        "id": vm.stagesVm().xforms()[0].id()
+                    },
+                    "id": ""
+                }
+    self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':st_form}));
+    // self.addSubStageMode(true);
   };
 
   self.save_sub_stage = function(){
+    st_form = {
+                    "xf": {
+                        "title": vm.stagesVm().xforms()[0].title(),
+                        "id": vm.stagesVm().xforms()[0].id()
+                    },
+                    "id": ""
+                }
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
-        self.parent.push(self.newSubstage());
-        self.newSubstage(new SubStage({'order':parentLength+2, 'name':"",'description':"",'xf':""}));
+        var saved_substage = new SubStage({
+                "id": "",
+                "stage_forms": {
+                    "xf": {
+                        "title": "",
+                        "id": self.newSubstage().stage_forms().xf().id()
+                    },
+                    "id": ""
+                },
+                "name": self.newSubstage().name(),
+                "description": self.newSubstage().description(),
+                "order": self.newSubstage().order()
+            });
+        self.parent.push(saved_substage);
+        // console.log("called");
+        self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':st_form}));
+        // self.addSubStageMode(true);
+        // console.log("called again");
         self.stageChanged(true);
       
     }else{
@@ -248,6 +374,7 @@ self.setShowSubstages = function(){
   };
 
   self.save = function (){
+
       if(vm.is_project == "1"){
         self.project(vm.pk);
       }else{
@@ -611,6 +738,7 @@ var StageVM = function(is_project, pk){
   self.is_project = is_project;
   self.allStages = ko.observableArray();
   self.xforms = ko.observableArray();
+  self.gxforms = ko.observableArray();
   self.stages = ko.observableArray();
   self.current_stage = ko.observable();
   self.stage_form_visibility = ko.observable(false);
@@ -667,6 +795,30 @@ var StageVM = function(is_project, pk){
         });
   };
 
+self.getGlobalXforms = function(){
+     App.showProcessing();
+        $.ajax({
+            url: '/forms/api/xf/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                  var mappedData = ko.utils.arrayMap(response, function(item) {
+                      return new GXform(item);
+                    });
+                
+                self.gxforms(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
 self.add_stage = function(){
   self.addStageMode(false);
   self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
@@ -705,6 +857,8 @@ self.editSage = function(stage){
   self.current_stage(stage);
   self.current_stage().setShowSubstages();
   self.stage_form_modal_visibility(true);
+  // self.addSubStageMode(true);
+
 }
 
 self.saveStage = function(stage){
@@ -717,12 +871,15 @@ self.saveStage = function(stage){
   stageobj.site = stage.site();
   stageobj.project = stage.project();
   var parent = ko.utils.arrayMap(stage.parent(), function(item) {
-                      sub_st = new SubStage();
-                      sub_st.id = item.id();
-                      sub_st.name = item.name();
-                      sub_st.description = item.description();
-                      sub_st.xf = item.xf();
-                      return sub_st;
+                          sub_st = new SubStage();
+                          sub_st.id = item.id();
+                          sub_st.name = item.name();
+                          sub_st.description = item.description();
+                          sub_st.stage_forms = {"xf": {"title": item.stage_forms().xf().label(),
+                                                  "id": item.stage_forms().xf().id()},
+                                                 "id": item.stage_forms().id() };
+                          return sub_st;
+
                     });
                 
 
@@ -730,22 +887,46 @@ self.saveStage = function(stage){
  var url = '/forms/api/stage/' + String(vm.is_project) + '/' + String(vm.pk);
 var success =  function (response) {
                 App.hideProcessing();
-                save_mode = true;
-                 ko.utils.arrayForEach(self.allStages(), function(item) {
-                  if (item.id() == response.id) {
-                      save_mode =  false;
-                      return;
-                  }
-              });
-                  if(save_mode == true){
-                    self.allStages().push(new Stage(response));
+                stage.show_substages(false);
+                stage.stageChanged(false);
+                
+                if(stage.id()){
+                  console.log("edit");
+                  responseStage = new Stage(response);
+                  stage.parent(responseStage.parent());
+                  stage.name(responseStage.name());
+                  stage.description(responseStage.description());
+                  stage.order(responseStage.order());
+                  stage.date_modified(responseStage.date_modified());
+                  stage.site(responseStage.site());
+                  stage.project(responseStage.project());
+                }else{
+
+                  console.log("new stage saved");
+                   self.allStages().push(new Stage(response));
                     self.stages(self.allStages());
                     self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
                     self.current_stage().setShowSubstages();
-                    // self.addStageMode(true);
+                    self.addStageMode(true);
+
+                }
 
 
-                  }
+
+              //    ko.utils.arrayForEach(self.allStages(), function(item) {
+              //     if (item.id() == response.id) {
+              //         save_mode =  false;
+              //         return;
+              //     }
+              // }); 
+              //     if(save_mode == true){
+              //       self.allStages().push(new Stage(response));
+              //       self.stages(self.allStages());
+              //       self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
+              //       self.current_stage().setShowSubstages();
+              //       // self.addStageMode(true);
+
+              //     }
 
                 App.notifyUser(
                         'Stage Form'+response.name +'Saved',
@@ -829,8 +1010,9 @@ self.orderChanged = function(){
 //         self.stages(filter_stages);
 //     }
 //     });
-
-
+  
+  self.getGlobalXforms();
+  // setTimeout(myFunction, 1000);
   self.getXforms();
   self.getStages();
   // self.form_name_display = function (xf_id){
