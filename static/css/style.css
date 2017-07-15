@@ -6427,18 +6427,13 @@ a.add_org_people:hover {
 }
 .personname {
     margin-top: 0px;
-    font-weight: bold;
 }
 .personphone {
     display: inline-block;
 }
-.perso-usernname {
-    font-weight: bold;
-}
 
 .person-active {
     text-transform: capitalize;
-    font-weight: bold;
     color: #296fd5;
 
 }
