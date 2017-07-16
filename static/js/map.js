@@ -32,7 +32,7 @@ var baseLayers = {
 markers = new L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
         // rejected
-        if(feature.status == 0){
+        if(feature.status == 3){
                     icon = L.icon({
                                 //iconSize: [27, 27],
                                 iconAnchor: [13, 27],
@@ -40,7 +40,7 @@ markers = new L.geoJson(data, {
                                 iconUrl: static_url+'images/red-small.png'
                     });
                 }
-                else if(feature.status == 1){
+                else if(feature.status == 2){
                     // flagged
                     icon = L.icon({
                                 //iconSize: [27, 27],
@@ -49,7 +49,7 @@ markers = new L.geoJson(data, {
                                 iconUrl: static_url+'images/yellow-small.png'
                     });
                 }
-                else if(feature.status == 2){
+                else if(feature.status == 1){
                     // approved
                     icon = L.icon({
                                 //iconSize: [27, 27],
@@ -58,7 +58,7 @@ markers = new L.geoJson(data, {
                                 iconUrl: static_url+'images/green-small.png'
                     });
                 }
-                else if(feature.status == 3){
+                else if(feature.status == 0){
                     // pending
                     icon = L.icon({
                                 //iconSize: [27, 27],
