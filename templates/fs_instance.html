@@ -273,17 +273,17 @@ textarea.form-control{
 
 
     <div class="inline">
-      <button type="button" class=" btn pending"><i class="fa fa-hourglass-half space" aria-hidden="true"></i> Pending </button>
+      <button type="button" class="btn pending" data-bind="click: function () { saveStatus(0); }"><i class="fa fa-hourglass-half space" aria-hidden="true"></i> Pending </button>
     </div>
     
     <div class="inline">
-      <button type="button" class="btn rejected"><i class="fa fa-window-close space" aria-hidden="true"></i> Rejected </button>
+      <button type="button" class="btn rejected" data-bind="click: function () { saveStatus(1); }"><i class="fa fa-window-close space" aria-hidden="true"></i> Rejected </button>
     </div>
     <div class="inline">
-        <button type="button" class="btn flagged"><i class="fa fa-flag-checkered space " aria-hidden="true"></i> Flagged </button>
+        <button type="button" class="btn flagged" data-bind="click: function () { saveStatus(2); }"><i class="fa fa-flag-checkered space " aria-hidden="true"></i> Flagged </button>
     </div>
     <div class="inline">
-      <button type="button" class="btn approved"><i class="fa fa-check-square-o space" aria-hidden="true"></i> Approved </button>
+      <button type="button" class="btn approved" data-bind="click: function () { saveStatus(3); }"><i class="fa fa-check-square-o space" aria-hidden="true"></i> Approved </button>
     </div>
   
     

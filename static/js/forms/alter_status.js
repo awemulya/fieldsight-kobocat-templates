@@ -74,10 +74,10 @@ var ChangeStatus = function(instance, status, message){
   };
   
 
-  self.saveStatus = function(){
+  self.saveStatus = function(new_status){
     var url = '/forms/instance/status/'+ String(self.instance());
     var changeStatus = new MyObject();
-    changeStatus.status = self.formStatus();
+    changeStatus.status = new_status;
     changeStatus.message = self.message();
 
     var success =  function (response) {
