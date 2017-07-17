@@ -95,7 +95,7 @@ var myChart = new Chart(ctx, {
                             },
                              min: 0,
                     sepSize: 1,
-                    max: 400
+                    max: Math.max.apply(Math, cummulative_data)
                         },
                         scaleLabel:{
                             display: true,
