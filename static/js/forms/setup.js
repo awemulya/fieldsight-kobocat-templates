@@ -245,6 +245,11 @@ var Stage = function(data){
 
   };
 
+  self.delete_stage = function(){
+    vm.stagesVm().delete_stage(self);
+
+  };
+
 self.setShowSubstages = function(){
     if (self.show_substages() == false){
       self.show_substages(true);
@@ -860,6 +865,37 @@ self.editSage = function(stage){
   // self.addSubStageMode(true);
 
 }
+  self.delete_stage = function(del_stage){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/delete-mainstage/' + String(del_stage.id()) + '/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.allStages.remove(function(stage) {
+              return stage.id() == del_stage.id();
+            });
+                self.stages(self.allStages());
+                App.notifyUser(
+                        'Stage Data Deleted',
+                        'success'
+                    );
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+                App.notifyUser(
+                        'Stage Data Deletion Fail',
+                        'error'
+                    );
+            }
+        });
+  };
+
 
 self.saveStage = function(stage){
   App.showProcessing();
@@ -891,7 +927,6 @@ var success =  function (response) {
                 stage.stageChanged(false);
                 
                 if(stage.id()){
-                  console.log("edit");
                   responseStage = new Stage(response);
                   stage.parent(responseStage.parent());
                   stage.name(responseStage.name());
@@ -902,7 +937,6 @@ var success =  function (response) {
                   stage.project(responseStage.project());
                 }else{
 
-                  console.log("new stage saved");
                    self.allStages().push(new Stage(response));
                     self.stages(self.allStages());
                     self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
