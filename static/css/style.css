@@ -6674,9 +6674,6 @@ a.setting-btn {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-input[type="radio"] {
-  display: none;
-}
 
 input[type="radio"] + label {
   position: relative;
@@ -7289,6 +7286,12 @@ i.fa.fa-edit.edit1 {
     margin: 10px 0px !important;
     box-shadow: 1px 1px 7px #7e8188;
     padding: 7px;
+}
+
+.card_inside{
+    margin: 10px 0px !important;
+    box-shadow: 1px 1px 7px #c9cbce;
+    padding: 9px;
 }
 
 .brand-side{
@@ -8076,6 +8079,11 @@ li.sub-menu>a:target {
     border-top: 1px solid rgba(165, 170, 176, 0.55);
 }
 
+.gap_border_danger{
+    margin: 5px 0px;
+    border-top: 1px solid red;
+}
+
 .hundred{
     width: 100%;
 }
@@ -8133,6 +8141,11 @@ a:active{
     border-left:7px solid #00628e;
 }
 
+
+.notice-danger{
+    border-left:7px solid #e84747;
+    
+}
 
 @media(max-width: 500px){
  .profile-user-pic-blur {
