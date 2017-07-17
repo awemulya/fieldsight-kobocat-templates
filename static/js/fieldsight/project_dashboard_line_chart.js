@@ -66,6 +66,7 @@
 
 $( document ).ready(function() {
 // Chart.defaults.global.defaultFontColor = '#FFF';
+height_max = Math.max.apply(Math, cummulative_data) | 10;
 
 var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
@@ -95,7 +96,7 @@ var myChart = new Chart(ctx, {
                             },
                              min: 0,
                     sepSize: 1,
-                    max: Math.max.apply(Math, cummulative_data)
+                    max: height_max
                         },
                         scaleLabel:{
                             display: true,
