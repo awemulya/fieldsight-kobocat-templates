@@ -66,7 +66,8 @@
 
 $( document ).ready(function() {
 // Chart.defaults.global.defaultFontColor = '#FFF';
-height_max = Math.max.apply(Math, cummulative_data) | 10;
+height_max = Math.max.apply(Math, cummulative_data) || 10;
+height_max = Math.ceil(height_max / 10) * 10;
 
 var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
@@ -78,7 +79,7 @@ var myChart = new Chart(ctx, {
         datasets: [{
             label: 'No of Submissions',
             data: cummulative_data,
-            backgroundColor: 'rgba(0,0,0,0.2)',
+            backgroundColor: 'rgba(41,128,185,0.5)',
             borderColor: 'rgba(0,99,132,0.2)',
             borderWidth: 1
         }]
