@@ -557,7 +557,7 @@ ko.bindingHandlers.fieldsightFormatDate = {
         var newValueAccessor = ko.unwrap(value);
         var dt = new Date(newValueAccessor);
         if (newValueAccessor != null)
-            $(element).text(dt.toLocaleDateString());
+            $(element).text(dt.toDateString()+ "  " + dt.toLocaleTimeString());
     }
 };
 
