@@ -191,6 +191,7 @@ var SubStage = function(data){
   self.description = ko.observable();
   self.order = ko.observable();
   self.stage_forms = ko.observable();
+  self.em = ko.observable();
 
   self.editable = ko.observable(false);
 
@@ -203,13 +204,67 @@ var SubStage = function(data){
     
   }
 
+  if(!self.em()){
+    self.em({});
+  }
+
   self.edit = function(){
     self.editable(true);
   }
   self.edit_done = function(){
     self.editable(false);
   }
+self.education_material = function(sub_stage){
+  console.log(sub_stage.id());
+    self.em_form_modal_visibility = ko.observable(false);
+  self.current_education = ko.observable();
+  vm.stagesVm().em_form_modal_visibility(true);
+  vm.stagesVm().current_education(sub_stage.em());
 
+}
+// self.save_site_async = function(){
+//     App.showProcessing();
+//     var url = '/forms/api/save_educational_material/';
+
+//     var success =  function (response) {
+//     self.site_add_visibility(false);
+//     self.current_site("");
+//       self.loadSites();
+//                 App.hideProcessing();
+                
+//                 App.notifyUser(
+//                         'Site Creation Sucess',
+//                         'success'
+//                     );
+
+//             };
+//     var failure =  function (errorThrown) {
+//       var err_message = errorThrown.responseJSON.error;
+//                 App.hideProcessing();
+//                 App.notifyUser(
+//                         err_message,
+//                         'error'
+//                     );
+
+//             };
+
+//             var formdata = new FormData();
+//             formdata.append('id', self.current_site().id());
+//             formdata.append('logo', self.current_site().logo());
+//             formdata.append('identifier', self.current_site().identifier());
+//             formdata.append('name', self.current_site().name());
+//             formdata.append('address', self.current_site().address());
+//             formdata.append('phone', self.current_site().phone());
+//             formdata.append('is_active', self.current_site().is_active());
+//             formdata.append('public_desc', self.current_site().public_desc());
+//             formdata.append('additional_desc', self.current_site().additional_desc());
+//             formdata.append('type', self.current_site().type().id());
+//             formdata.append('project', self.project);
+//             formdata.append('Latitude', self.current_site().mapOne().lat());
+//             formdata.append('Longitude', self.current_site().mapOne().lng());
+//     App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+//   };
 
 
 }
@@ -750,6 +805,8 @@ var StageVM = function(is_project, pk){
   // self.search_key = ko.observable();
   self.addStageMode = ko.observable(true);
   self.stage_form_modal_visibility = ko.observable(false);
+  self.em_form_modal_visibility = ko.observable(false);
+  self.current_education = ko.observable();
 
   self.getStages = function(){
     App.showProcessing();
