@@ -184,6 +184,29 @@ self.deploy = function(){
   };
 }  
 
+var EducationMaterial = function(data){
+  var self = this;
+  self.id = ko.observable();
+  self.title = ko.observable();
+  self.text = ko.observable();
+  self.is_pdf = ko.observable();
+  self.pdf = ko.observable();
+  self.image_file = ko.observable();
+  self.em_images = ko.observableArray();
+  self.multiFileData = ko.observable({
+    dataURLArray: ko.observableArray(),
+  });
+
+  for (var i in data){
+      self[i] = ko.observable(data[i]);
+    }
+  self.onClear = function(fileData){
+    if(confirm('Are you sure To clear files ?')){
+      fileData.clear && fileData.clear();
+    }        
+    }
+  }
+
 var SubStage = function(data){
   var self = this;
   self.id = ko.observable();
@@ -194,6 +217,7 @@ var SubStage = function(data){
   self.em = ko.observable();
 
   self.editable = ko.observable(false);
+  self.em_form_modal_visibility = ko.observable(false);
 
    for (var i in data){
       self[i] = ko.observable(data[i]);
@@ -203,10 +227,16 @@ var SubStage = function(data){
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
     
   }
+  
+  if(self.em()){
 
-  if(!self.em()){
-    self.em({});
+  self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
   }
+  if(!self.em()){
+    self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
+
+  }
+
 
   self.edit = function(){
     self.editable(true);
@@ -215,56 +245,57 @@ var SubStage = function(data){
     self.editable(false);
   }
 self.education_material = function(sub_stage){
-  console.log(sub_stage.id());
-    self.em_form_modal_visibility = ko.observable(false);
-  self.current_education = ko.observable();
-  vm.stagesVm().em_form_modal_visibility(true);
-  vm.stagesVm().current_education(sub_stage.em());
+  self.em_form_modal_visibility(true);
 
 }
-// self.save_site_async = function(){
-//     App.showProcessing();
-//     var url = '/forms/api/save_educational_material/';
+self.save_em = function(){
+  console.log("called save");
+    App.showProcessing();
+    var url = '/forms/api/save_educational_material/';
 
-//     var success =  function (response) {
-//     self.site_add_visibility(false);
-//     self.current_site("");
-//       self.loadSites();
-//                 App.hideProcessing();
+    var success =  function (response) {
+      self.em_form_modal_visibility(false);
+
+    self.em(new EducationMaterial(response.data));
+                App.hideProcessing();
                 
-//                 App.notifyUser(
-//                         'Site Creation Sucess',
-//                         'success'
-//                     );
+                App.notifyUser(
+                        'Education Material Saved',
+                        'success'
+                    );
 
-//             };
-//     var failure =  function (errorThrown) {
-//       var err_message = errorThrown.responseJSON.error;
-//                 App.hideProcessing();
-//                 App.notifyUser(
-//                         err_message,
-//                         'error'
-//                     );
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
 
-//             };
+            };
 
-//             var formdata = new FormData();
-//             formdata.append('id', self.current_site().id());
-//             formdata.append('logo', self.current_site().logo());
-//             formdata.append('identifier', self.current_site().identifier());
-//             formdata.append('name', self.current_site().name());
-//             formdata.append('address', self.current_site().address());
-//             formdata.append('phone', self.current_site().phone());
-//             formdata.append('is_active', self.current_site().is_active());
-//             formdata.append('public_desc', self.current_site().public_desc());
-//             formdata.append('additional_desc', self.current_site().additional_desc());
-//             formdata.append('type', self.current_site().type().id());
-//             formdata.append('project', self.project);
-//             formdata.append('Latitude', self.current_site().mapOne().lat());
-//             formdata.append('Longitude', self.current_site().mapOne().lng());
-//     App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+            var formdata = new FormData();
+            formdata.append('stage', self.id());
+            if(self.em().id()){
+
+            formdata.append('id', self.em().id());
+            }
+            if(self.em().pdf()){
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', self.em().pdf());
+            }else{
+            formdata.append('title', self.em().title());
+            formdata.append('text', self.em().text());
+            for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
+            }
+
+            }
+            
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
   
-//   };
+  };
 
 
 }
@@ -805,8 +836,6 @@ var StageVM = function(is_project, pk){
   // self.search_key = ko.observable();
   self.addStageMode = ko.observable(true);
   self.stage_form_modal_visibility = ko.observable(false);
-  self.em_form_modal_visibility = ko.observable(false);
-  self.current_education = ko.observable();
 
   self.getStages = function(){
     App.showProcessing();
