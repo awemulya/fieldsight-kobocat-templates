@@ -78,8 +78,8 @@
 
 $( document ).ready(function() {
 // Chart.defaults.global.defaultFontColor = '#FFF';
-height_max = Math.max.apply(Math, cummulative_data) || 10;
-height_max = Math.ceil(height_max / 10) * 10;
+bar_height_max = Math.max.apply(Math, progress_data) || 10;
+bar_height_max = Math.ceil(height_max / 10) * 10;
 
 var ctx = document.getElementById("myBar");
 var myChart = new Chart(ctx, {
@@ -109,7 +109,7 @@ var myChart = new Chart(ctx, {
                             },
                              min: 0,
                     sepSize: 1,
-                    max: height_max
+                    max: bar_height_max
                         },
                         scaleLabel:{
                             display: true,
