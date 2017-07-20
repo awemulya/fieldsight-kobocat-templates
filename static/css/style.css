@@ -8159,3 +8159,19 @@ a:active{
 .person-div a {
     color: rgba(0, 0, 0, 0.66);
 }
+
+
+input.switch{
+    width: auto;
+}
+
+.radio-div{
+    position: absolute;
+    z-index: 1;
+    background: rgb(255, 255, 255);
+    color: #191818;
+    padding: 5px;
+    border-radius: 0px;
+    top: 46px;
+    right: 0px;
+}
