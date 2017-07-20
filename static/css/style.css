@@ -8175,3 +8175,8 @@ input.switch{
     top: 46px;
     right: 0px;
 }
+
+.list-img{
+    height: 250px;
+    width: 250px;
+}
