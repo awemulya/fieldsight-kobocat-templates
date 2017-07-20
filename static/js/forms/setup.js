@@ -47,7 +47,6 @@ function formatDate(date) {
             }
         });
         return title;
-        console.log(self.title());
     }, self);
 
     //   self.label = ko.computed(function() {
@@ -205,6 +204,12 @@ var EducationMaterial = function(data){
       fileData.clear && fileData.clear();
     }        
     }
+
+    this.addPdf = function () {
+      var pdf_link = vm.base_url+self.pdf();
+        var html = "<object data-docType=\"pdf\" data=\"" + pdf_link + "\" type=\"application/pdf\" width=\"100%\" />";
+        $('.documentviewerpdf').append(html);
+    };
   }
 
 var SubStage = function(data){
@@ -1152,10 +1157,11 @@ self.orderChanged = function(){
  }
 
 
-function SetUpViewModel(is_project, pk) {
+function SetUpViewModel(is_project, pk, base_url) {
   var self = this;
   self.is_project = is_project;
   self.pk = pk;
+  self.base_url = base_url;
   self.currentVm = ko.observable("general");
   self.generalVm = ko.observable();
   self.scheduleVm = ko.observable();
