@@ -6581,7 +6581,7 @@ textarea{
     outline: none !important;
     /*border: 1px solid #e2e2e4;*/
     box-shadow: none;
-    color: #323232;
+    color: #323232 !important;
     height: auto;
 }
 /*----------all inputs csss-------------*/
@@ -7842,6 +7842,11 @@ li.sub-menu>a:target {
     left: 3%;
 }
 
+.marg10{
+    position: relative;
+    left: 10%;
+}
+
 .top3{
     margin-top: 5px;
 }
@@ -8179,4 +8184,8 @@ input.switch{
 .list-img{
     height: 250px;
     width: 250px;
+}
+
+.input-group .input-group-addon{
+    background: #cccccc;
 }
