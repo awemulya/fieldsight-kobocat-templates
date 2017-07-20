@@ -66,6 +66,14 @@ markers = new L.geoJson(data, {
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/orange-small.png'
                     });
+                }else if(feature.status == 4){
+                    // pending
+                    icon = L.icon({
+                                //iconSize: [27, 27],
+                                iconAnchor: [13, 27],
+                                popupAnchor:  [1, -24],
+                                iconUrl: static_url+'images/blue-small.png'
+                    });
                 }
         //console.log(icon.options);
         var marker = L.marker(latlng, {icon: icon});
