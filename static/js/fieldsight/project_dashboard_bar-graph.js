@@ -79,7 +79,7 @@
 $( document ).ready(function() {
 // Chart.defaults.global.defaultFontColor = '#FFF';
 bar_height_max = Math.max.apply(Math, progress_data) || 10;
-bar_height_max = Math.ceil(height_max / 10) * 10;
+bar_height_max = Math.ceil(bar_height_max / 10) * 10;
 
 var ctx = document.getElementById("myBar");
 var myChart = new Chart(ctx, {
