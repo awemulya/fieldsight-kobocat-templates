@@ -4676,7 +4676,6 @@ div.tagsinput span.tag {
     color:black;
     font-size:16px;
     text-transform:uppercase;
-    margin:23px 0px 10px 0px;
     text-align:center;
 }
 .gauge-canvas {
@@ -8177,7 +8176,6 @@ input.switch{
     color: #191818;
     padding: 5px;
     border-radius: 0px;
-    top: 46px;
     right: 0px;
 }
 
@@ -8188,4 +8186,8 @@ input.switch{
 
 .input-group .input-group-addon{
     background: #cccccc;
+}
+
+.man-drop .dropdown-menu{
+    z-index: 2;
 }
