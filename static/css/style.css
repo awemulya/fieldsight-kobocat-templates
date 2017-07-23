@@ -4676,7 +4676,6 @@ div.tagsinput span.tag {
     color:black;
     font-size:16px;
     text-transform:uppercase;
-    margin:23px 0px 10px 0px;
     text-align:center;
 }
 .gauge-canvas {
@@ -6581,7 +6580,7 @@ textarea{
     outline: none !important;
     /*border: 1px solid #e2e2e4;*/
     box-shadow: none;
-    color: #323232;
+    color: #323232 !important;
     height: auto;
 }
 /*----------all inputs csss-------------*/
@@ -6673,9 +6672,6 @@ a.setting-btn {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-input[type="radio"] {
-  display: none;
 }
 
 input[type="radio"] + label {
@@ -7291,6 +7287,12 @@ i.fa.fa-edit.edit1 {
     padding: 7px;
 }
 
+.card_inside{
+    margin: 10px 0px !important;
+    box-shadow: 1px 1px 7px #c9cbce;
+    padding: 9px;
+}
+
 .brand-side{
     height: 80px !important;
     
@@ -7839,6 +7841,11 @@ li.sub-menu>a:target {
     left: 3%;
 }
 
+.marg10{
+    position: relative;
+    left: 10%;
+}
+
 .top3{
     margin-top: 5px;
 }
@@ -8076,6 +8083,11 @@ li.sub-menu>a:target {
     border-top: 1px solid rgba(165, 170, 176, 0.55);
 }
 
+.gap_border_danger{
+    margin: 5px 0px;
+    border-top: 1px solid red;
+}
+
 .hundred{
     width: 100%;
 }
@@ -8085,7 +8097,7 @@ li.sub-menu>a:target {
  width: 100%;
 }
 
-.move_up{
+.move_up1{
     position: relative;
     bottom: 75px;
  }
@@ -8134,6 +8146,11 @@ a:active{
 }
 
 
+.notice-danger{
+    border-left:7px solid #e84747;
+    
+}
+
 @media(max-width: 500px){
  .profile-user-pic-blur {
  
@@ -8145,4 +8162,32 @@ a:active{
 
 .person-div a {
     color: rgba(0, 0, 0, 0.66);
+}
+
+
+input.switch{
+    width: auto;
+}
+
+.radio-div{
+    position: absolute;
+    z-index: 1;
+    background: rgb(255, 255, 255);
+    color: #191818;
+    padding: 5px;
+    border-radius: 0px;
+    right: 0px;
+}
+
+.list-img{
+    height: 250px;
+    width: 250px;
+}
+
+.input-group .input-group-addon{
+    background: #cccccc;
+}
+
+.man-drop .dropdown-menu{
+    z-index: 2;
 }

@@ -87,6 +87,7 @@ var ChangeStatus = function(instance, status, message){
                         'Status Saved',
                         'success'
                     );
+                        location.reload();
 
             };
     var failure =  function (errorThrown) {

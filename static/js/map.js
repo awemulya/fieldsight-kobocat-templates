@@ -66,6 +66,14 @@ markers = new L.geoJson(data, {
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/orange-small.png'
                     });
+                }else if(feature.status == 4){
+                    // pending
+                    icon = L.icon({
+                                //iconSize: [27, 27],
+                                iconAnchor: [13, 27],
+                                popupAnchor:  [1, -24],
+                                iconUrl: static_url+'images/blue-small.png'
+                    });
                 }
         //console.log(icon.options);
         var marker = L.marker(latlng, {icon: icon});
@@ -149,9 +157,11 @@ markers = new L.geoJson(data, {
                 
             }, 
             onEachFeature: function(feature, layer) {
-                layer.bindPopup(feature.properties.public_desc+'<br/>'+feature.properties.name+'<br/>'+feature.properties.address);
-                
-            }
+        var address = feature.properties.address || "";
+        var url = "<a href=/fieldsight/site-dashboard/"+feature.id+">"+feature.properties.name+"</a>";
+        layer.bindPopup(url+'<br/>'+address);
+        
+    }
         });
         
         

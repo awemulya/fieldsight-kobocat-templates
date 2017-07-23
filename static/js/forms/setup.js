@@ -47,7 +47,6 @@ function formatDate(date) {
             }
         });
         return title;
-        console.log(self.title());
     }, self);
 
     //   self.label = ko.computed(function() {
@@ -184,6 +183,35 @@ self.deploy = function(){
   };
 }  
 
+var EducationMaterial = function(data){
+  var self = this;
+  self.id = ko.observable();
+  self.title = ko.observable();
+  self.text = ko.observable();
+  self.is_pdf = ko.observable();
+  self.pdf = ko.observable();
+  self.image_file = ko.observable();
+  self.em_images = ko.observableArray();
+  self.multiFileData = ko.observable({
+    dataURLArray: ko.observableArray(),
+  });
+
+  for (var i in data){
+      self[i] = ko.observable(data[i]);
+    }
+  self.onClear = function(fileData){
+    if(confirm('Are you sure To clear files ?')){
+      fileData.clear && fileData.clear();
+    }        
+    }
+
+    this.addPdf = function () {
+      var pdf_link = vm.base_url+self.pdf();
+        var html = "<object data-docType=\"pdf\" data=\"" + pdf_link + "\" type=\"application/pdf\" width=\"100%\" />";
+        $('.documentviewerpdf').append(html);
+    };
+  }
+
 var SubStage = function(data){
   var self = this;
   self.id = ko.observable();
@@ -191,8 +219,10 @@ var SubStage = function(data){
   self.description = ko.observable();
   self.order = ko.observable();
   self.stage_forms = ko.observable();
+  self.em = ko.observable();
 
   self.editable = ko.observable(false);
+  self.em_form_modal_visibility = ko.observable(false);
 
    for (var i in data){
       self[i] = ko.observable(data[i]);
@@ -202,6 +232,16 @@ var SubStage = function(data){
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
     
   }
+  
+  if(self.em()){
+
+  self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
+  }
+  if(!self.em()){
+    self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
+
+  }
+
 
   self.edit = function(){
     self.editable(true);
@@ -209,7 +249,58 @@ var SubStage = function(data){
   self.edit_done = function(){
     self.editable(false);
   }
+self.education_material = function(sub_stage){
+  self.em_form_modal_visibility(true);
 
+}
+self.save_em = function(){
+  console.log("called save");
+    App.showProcessing();
+    var url = '/forms/api/save_educational_material/';
+
+    var success =  function (response) {
+      self.em_form_modal_visibility(false);
+
+    self.em(new EducationMaterial(response.data));
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Education Material Saved',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+            formdata.append('stage', self.id());
+            if(self.em().id()){
+
+            formdata.append('id', self.em().id());
+            }
+            if(self.em().pdf()){
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', self.em().pdf());
+            }else{
+            formdata.append('title', self.em().title());
+            formdata.append('text', self.em().text());
+            for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
+            }
+
+            }
+            
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
 
 
 }
@@ -242,6 +333,11 @@ var Stage = function(data){
 
   self.edit = function(){
     vm.stagesVm().editSage(self);
+
+  };
+
+  self.delete_stage = function(){
+    vm.stagesVm().delete_stage(self);
 
   };
 
@@ -860,6 +956,37 @@ self.editSage = function(stage){
   // self.addSubStageMode(true);
 
 }
+  self.delete_stage = function(del_stage){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/delete-mainstage/' + String(del_stage.id()) + '/',
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                self.allStages.remove(function(stage) {
+              return stage.id() == del_stage.id();
+            });
+                self.stages(self.allStages());
+                App.notifyUser(
+                        'Stage Data Deleted',
+                        'success'
+                    );
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+                App.notifyUser(
+                        'Stage Data Deletion Fail',
+                        'error'
+                    );
+            }
+        });
+  };
+
 
 self.saveStage = function(stage){
   App.showProcessing();
@@ -891,7 +1018,6 @@ var success =  function (response) {
                 stage.stageChanged(false);
                 
                 if(stage.id()){
-                  console.log("edit");
                   responseStage = new Stage(response);
                   stage.parent(responseStage.parent());
                   stage.name(responseStage.name());
@@ -902,7 +1028,6 @@ var success =  function (response) {
                   stage.project(responseStage.project());
                 }else{
 
-                  console.log("new stage saved");
                    self.allStages().push(new Stage(response));
                     self.stages(self.allStages());
                     self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
@@ -1032,10 +1157,11 @@ self.orderChanged = function(){
  }
 
 
-function SetUpViewModel(is_project, pk) {
+function SetUpViewModel(is_project, pk, base_url) {
   var self = this;
   self.is_project = is_project;
   self.pk = pk;
+  self.base_url = base_url;
   self.currentVm = ko.observable("general");
   self.generalVm = ko.observable();
   self.scheduleVm = ko.observable();
