@@ -289,14 +289,13 @@ self.save_em = function(){
             if(self.em().pdf()){
               formdata.append('is_pdf', true);
               formdata.append('pdf', self.em().pdf());
-            }else{
+            }
             formdata.append('title', self.em().title());
             formdata.append('text', self.em().text());
             for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
               formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
             }
 
-            }
             
     App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
   
