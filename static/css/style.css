@@ -3879,17 +3879,8 @@ span.customSelect.changed {
 .bg-terques {
     background:#8fd6d6 !important;
 }
-.bg-red {
-    background:#ffa991 !important;
-}
 .bg-purple {
     background:#bda4ec !important;
-}
-.bg-green {
-    background:#aec785 !important;
-}
-.bg-yellow {
-    background:#fed65a !important;
 }
 .bg-blue {
     background: #99cce3 !important;
@@ -8181,7 +8172,7 @@ input.switch{
 
 .list-img{
     height: 250px;
-    width: 250px;
+    width: 100%;
 }
 
 .input-group .input-group-addon{
