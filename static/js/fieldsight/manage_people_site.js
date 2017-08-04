@@ -34,6 +34,15 @@ var User = function(data){
    
 }
 
+function usernameIsValid(username) {
+    return /^[0-9a-zA-Z]+$/.test(username);
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
 var NewUser = function(){
   var self = this;
 
@@ -52,6 +61,9 @@ var NewUser = function(){
     if (!self.username()){
       self.error("Username Required.")
       return false;
+    }else if(!usernameIsValid(self.username())){
+      self.error( "Username Invalid Characters.")
+      return false;
     }
     self.error("");
     
@@ -69,15 +81,10 @@ var NewUser = function(){
     if (!self.email()){
       self.error("Email Required.")
       return false;
-    }
-    self.error("");
-    
-    if (self.email().length <6){
-      self.error("Email Incorrect.")
+    }else if(!validateEmail(self.email())){
+      self.error("Email Invalid.")
       return false;
     }
- 
-    
     self.error("");
      if (self.password().length <6){
       self.error("Password Must be at Least 6 Character long.")
@@ -563,7 +570,15 @@ self.unAssignUserROle = function(role_id){
   };
 
   self.saveUser = function(){
+    if(self.new_user().valid()){
     self.saveUserData();
+      
+    }else{
+      App.notifyUser(
+                        "Please Correct form Data First",
+                        'error'
+                    );
+    }
    };
 
   self.showDetail = function(role){
