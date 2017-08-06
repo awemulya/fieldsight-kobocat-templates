@@ -340,8 +340,9 @@ var ins = location.hash.split("#/")[1];
 
 function locationHashChanged() {
   var new_ins = location.hash.split("#/")[1];
-   vm.model(new ChangeStatus(new_ins, 0, ""));
-   
+  if (typeof vm !== 'undefined') {
+    vm.model(new ChangeStatus(new_ins, 0, ""));
+}
 }
 
 window.onhashchange = locationHashChanged;
