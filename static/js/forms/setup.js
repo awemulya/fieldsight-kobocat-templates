@@ -89,6 +89,36 @@ var GXform = function (data){
     }
 }
 
+var EducationMaterial = function(data){
+  var self = this;
+  self.id = ko.observable();
+  self.title = ko.observable();
+  self.text = ko.observable();
+  self.is_pdf = ko.observable();
+  self.pdf = ko.observable();
+  self.image_file = ko.observable();
+  self.em_images = ko.observableArray();
+  self.multiFileData = ko.observable({
+    dataURLArray: ko.observableArray(),
+  });
+
+  for (var i in data){
+      self[i] = ko.observable(data[i]);
+    }
+  self.onClear = function(fileData){
+    if(confirm('Are you sure To clear files ?')){
+      fileData.clear && fileData.clear();
+    }        
+    }
+
+    this.addPdf = function () {
+      var pdf_link = vm.base_url+self.pdf();
+        var html = "<object data-docType=\"pdf\" data=\"" + pdf_link + "\" type=\"application/pdf\" width=\"100%\" />";
+        $('.documentviewerpdf').append(html);
+    };
+  }
+
+
 var FieldSightXF = function (data){
   var self = this;
   self.id = ko.observable();
@@ -155,15 +185,84 @@ var Schedule = function (data){
   self.is_deployed = ko.observable(false);
   self.site = ko.observable();
   self.project = ko.observable();
+  self.em = ko.observable();
+  self.em_form_modal_visibility = ko.observable(false);
+
+
+for (var i in data){
+    self[i] = ko.observable(data[i]);
+}
+  
+  if(self.em()){
+
+  self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
+  }
+  if(!self.em()){
+    self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
+
+  }
+
+
+self.education_material = function(){
+  self.em_form_modal_visibility(true);
+
+}
+self.save_em = function(){
+  console.log("called save");
+    App.showProcessing();
+    var url = '/forms/api/save_educational_material/';
+
+    var success =  function (response) {
+      self.em_form_modal_visibility(false);
+
+    self.em(new EducationMaterial(response.data));
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Education Material Saved',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+            formdata.append('stage', self.id());
+            if(self.em().id()){
+
+            formdata.append('id', self.em().id());
+            }
+            if(self.em().pdf()){
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', self.em().pdf());
+            }
+            formdata.append('title', self.em().title());
+            formdata.append('text', self.em().text());
+            for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
+            }
+
+            
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
+
+
+
+
 
   self.save = function(){
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
   };
-  
-  for (var i in data){
-    self[i] = ko.observable(data[i]);
-}
 
 self.deploy = function(){
 
@@ -183,34 +282,6 @@ self.deploy = function(){
   };
 }  
 
-var EducationMaterial = function(data){
-  var self = this;
-  self.id = ko.observable();
-  self.title = ko.observable();
-  self.text = ko.observable();
-  self.is_pdf = ko.observable();
-  self.pdf = ko.observable();
-  self.image_file = ko.observable();
-  self.em_images = ko.observableArray();
-  self.multiFileData = ko.observable({
-    dataURLArray: ko.observableArray(),
-  });
-
-  for (var i in data){
-      self[i] = ko.observable(data[i]);
-    }
-  self.onClear = function(fileData){
-    if(confirm('Are you sure To clear files ?')){
-      fileData.clear && fileData.clear();
-    }        
-    }
-
-    this.addPdf = function () {
-      var pdf_link = vm.base_url+self.pdf();
-        var html = "<object data-docType=\"pdf\" data=\"" + pdf_link + "\" type=\"application/pdf\" width=\"100%\" />";
-        $('.documentviewerpdf').append(html);
-    };
-  }
 
 var SubStage = function(data){
   var self = this;
