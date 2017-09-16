@@ -194,8 +194,15 @@ for (var i in data){
 }
   
   if(self.em()){
+    if(self.em().em_images){
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
 
-  self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
+    }else{
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':[]}));
+
+    }
   }
   if(!self.em()){
     self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
@@ -235,7 +242,7 @@ self.save_em = function(){
             };
 
             var formdata = new FormData();
-            formdata.append('stage', self.id());
+            formdata.append('fsxf', self.form());
             if(self.em().id()){
 
             formdata.append('id', self.em().id());
