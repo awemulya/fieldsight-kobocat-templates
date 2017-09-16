@@ -132,6 +132,9 @@ var FieldSightXF = function (data){
   self.fsform = ko.observable();
   self.is_deployed = ko.observable(false);
   self.date_created = ko.observable();
+  self.em = ko.observable();
+  self.em_form_modal_visibility = ko.observable(false);
+
 
   self.save = function(){
     vm.generalVm().saveGeneralForm(self.xf())
@@ -141,8 +144,25 @@ var FieldSightXF = function (data){
 
   for (var i in data){
     self[i] = ko.observable(data[i]);
-              }
+              } 
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
+
+    if(self.em()){
+    if(self.em().em_images){
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
+
+    }else{
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':[]}));
+
+    }
+  }
+  if(!self.em()){
+    self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
+
+  }
+
 
 self.deploy = function(){
 
@@ -170,6 +190,59 @@ self.deploy_to_remaining = function(){
     vm.generalVm().deploy_to_remaining(self.id(), self.is_deployed());
   }
 };
+
+self.education_material = function(){
+  self.em_form_modal_visibility(true);
+
+}
+self.save_em = function(){
+  console.log("called save");
+    App.showProcessing();
+    var url = '/forms/api/save_educational_material/';
+
+    var success =  function (response) {
+      self.em_form_modal_visibility(false);
+
+    self.em(new EducationMaterial(response.data));
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Education Material Saved',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+            formdata.append('fsxf', self.id());
+            if(self.em().id()){
+
+            formdata.append('id', self.em().id());
+            }
+            if(self.em().pdf()){
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', self.em().pdf());
+            }
+            formdata.append('title', self.em().title());
+            formdata.append('text', self.em().text());
+            for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
+            }
+
+            
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
+
 
 }
 
