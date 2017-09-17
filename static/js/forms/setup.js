@@ -141,6 +141,11 @@ var FieldSightXF = function (data){
     vm.generalVm().general_form_modal_visibility(false);
   };
  
+  self.save_survey = function(){
+    vm.surveyVm().saveGeneralForm(self.xf())
+    vm.surveyVm().general_form_modal_visibility(false);
+  };
+ 
 
   for (var i in data){
     self[i] = ko.observable(data[i]);
@@ -643,6 +648,107 @@ for (var i in data){
     }
   }
 }
+
+
+var SurveyVM = function(is_project, pk){
+  var self = this;
+  self.pk = pk;
+  self.is_project = is_project;
+  self.label = "Survey";
+  self.allSurveyForms = ko.observableArray();
+  self.surveyForms = ko.observableArray();
+  self.current_form = ko.observable();
+  self.general_form_modal_visibility = ko.observable(false);
+  self.search_key = ko.observable();
+
+  self.add_form = function(){
+    self.current_form(new FieldSightXF());
+    self.general_form_modal_visibility(true);
+  };
+
+  self.getGeneralForms = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/survey/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                var mappedData = ko.utils.arrayMap(response, function(item) {
+                  var date_created = item.date_created.slice(0,10);
+                  item.date_created = date_created;
+                        return new FieldSightXF(item);
+                    });
+                self.surveyForms(mappedData);
+
+                self.allSurveyForms(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+
+  self.saveGeneralForm = function(xf){
+    App.showProcessing();
+    var url = '/forms/api/fxf/';
+    var fxf = new FieldSightXF();
+    fxf.xf = xf;
+    if (self.is_project == "1"){
+      fxf.project = self.pk;
+    }else {
+      fxf.site = self.pk;
+    }
+    fxf.is_survey = true;
+
+    var success =  function (response) {
+                App.hideProcessing();
+                var date_created = response.date_created.slice(0,10);
+                response.date_created = date_created;
+                self.allSurveyForms().unshift(new FieldSightXF(response));
+                self.surveyForms(self.allSurveyForms());
+
+                App.notifyUser(
+                        'Survey Form'+response.name +'Created',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.non_field_errors;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, fxf, success, failure);                                                                                                                    
+  
+  };
+
+
+
+  self.getGeneralForms();
+
+    self.search_key.subscribe(function (newValue) {
+    if (!newValue) {
+        self.surveyForms(self.allSurveyForms());
+    } else {
+        filter_forms = ko.utils.arrayFilter(self.allSurveyForms(), function(item) {
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
+        });
+        self.surveyForms(filter_forms);
+    }
+    });
+}
+
 
 var GeneralVM = function(is_project, pk){
   var self = this;
@@ -1313,6 +1419,7 @@ function SetUpViewModel(is_project, pk, base_url) {
   self.pk = pk;
   self.base_url = base_url;
   self.currentVm = ko.observable("general");
+  self.surveyVm = ko.observable();
   self.generalVm = ko.observable();
   self.scheduleVm = ko.observable();
   self.stagesVm = ko.observable();
@@ -1327,6 +1434,11 @@ function SetUpViewModel(is_project, pk, base_url) {
     if(newValue == "general" ) {
       if (ko.utils.unwrapObservable(self.generalVm()) == null){
         self.generalVm(new GeneralVM(is_project, pk));
+      }
+        
+    }else if(newValue == "survey" ) {
+      if (ko.utils.unwrapObservable(self.surveyVm()) == null){
+        self.surveyVm(new SurveyVM(is_project, pk));
       }
         
     } else if (newValue == "schedules") {
