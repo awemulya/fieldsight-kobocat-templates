@@ -234,13 +234,18 @@ textarea.form-control{
                       <a href="#">
                         <span data-bind="text:user"></span>
                       </a>
-                        changed status from <span data-bind="text:old_status"></span> to <span data-bind="text:new_status"></span><!-- <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#comment" style="background: none !important; color: blue;border: none;">view-comment</button> -->
+                        changed status from <span data-bind="text:old_status"></span> to <span data-bind="text:new_status"></span>
                      <span style="float:right;"><i class="fa fa-clock-o" aria-hidden="true" ></i>
                           <span data-bind="fieldsightFormatDate: date"></span></span></span>
                   </div>
                   <div id="comment" class="collapse1">
                     <i class="fa fa-comments" aria-hidden="true" style="font-size: 16px;
     margin-right: 12px;"></i><td><span data-bind="text:message"></span></td> 
+                  </div>
+                  <div data-bind="visible:images.length">
+                      <div data-bind="foreach:images">
+                          <img style="height: 100px; margin: 5px;" class="img-rounded  thumb" data-bind="attr: { src: image }, visible: image">
+                      </div>
                   </div>
                   <hr class="color:black;">
             </div>
@@ -260,11 +265,33 @@ textarea.form-control{
 </div>
 </div>
 
-  <h3>{% trans 'Submission  Status' %} </h3>
+  <h3>{% trans 'Change Submission  Status' %} </h3>
+  {% csrf_token %}
   
     <div class="form-group">
       <textarea class="form-control" rows="7" type="text" data-bind="value:message" placeholder="comment"></textarea>
     </div>
+
+    <h4>Screenshorts OF Responses</h4>
+          <div class="well" data-bind="fileDrag: multiFileData">
+              <div class="form-group row">
+                  <div class="col-md-6">
+                            <!-- ko foreach: {data: multiFileData().dataURLArray, as: 'dataURL'} -->
+                            <img style="height: 100px; margin: 5px;" class="img-rounded  thumb" data-bind="attr: { src: dataURL }, visible: dataURL">
+                            <!-- /ko -->
+                      <div data-bind="ifnot: multiFileData().fileArray">
+                          <label class="drag-label">Drag files here</label>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <input type="file" multiple data-bind="fileInput: multiFileData, customFileInput: {
+                        buttonClass: 'btn btn-success',
+                        fileNameClass: 'disabled form-control',
+                        onClear: onClear,
+                      }" accept="image/*">
+                  </div>
+              </div>
+          </div>
 
     <div class="gap"></div>
 
@@ -303,6 +330,7 @@ textarea.form-control{
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/fieldsight/App.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/forms/alter_status.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/fieldsight/knockout-file-bindings.js"></script>
 
 
 <script>
@@ -322,8 +350,9 @@ var ins = location.hash.split("#/")[1];
 
 function locationHashChanged() {
   var new_ins = location.hash.split("#/")[1];
-   vm.model(new ChangeStatus(new_ins, 0, ""));
-   
+  if (typeof vm !== 'undefined') {
+    vm.model(new ChangeStatus(new_ins, 0, ""));
+}
 }
 
 window.onhashchange = locationHashChanged;

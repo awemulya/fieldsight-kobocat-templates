@@ -10,6 +10,16 @@ var ChangeStatus = function(instance, status, message){
   self.historyList = ko.observableArray();
   self.modal_visibility = ko.observable(false);
   self.current_history = ko.observable();
+  self.em_images = ko.observableArray();
+  self.multiFileData = ko.observable({
+    dataURLArray: ko.observableArray(),
+  });
+
+  self.onClear = function(fileData){
+    if(confirm('Are you sure To clear files ?')){
+      fileData.clear && fileData.clear();
+    }        
+    }
 
   self.getStatus= function(){
       var url = '/forms/instance/status/'+ String(self.instance());
@@ -80,6 +90,15 @@ var ChangeStatus = function(instance, status, message){
     changeStatus.status = new_status;
     changeStatus.message = self.message();
 
+            var formdata = new FormData();
+            formdata.append('status', new_status);
+            formdata.append('message', self.message());
+            for (var i = 0; i < self.multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.multiFileData().fileArray()[i]);
+            }
+
+            
+
     var success =  function (response) {
                 App.hideProcessing();
 
@@ -99,7 +118,7 @@ var ChangeStatus = function(instance, status, message){
 
             };
 
-    App.remotePost(url, changeStatus, success, failure);                                                                                                                    
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
   
   };
 
