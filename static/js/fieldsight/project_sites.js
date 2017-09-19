@@ -152,7 +152,7 @@ self.save_file_acync = function(){
 
 self.save_site_async = function(){
     App.showProcessing();
-    var url = '/fieldsight/api/async_save_site/'+self.project+'/';
+    var url = '/fieldsight/api/async_save_site/';
 
     var success =  function (response) {
     self.site_add_visibility(false);

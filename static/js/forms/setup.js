@@ -89,100 +89,6 @@ var GXform = function (data){
     }
 }
 
-var FieldSightXF = function (data){
-  var self = this;
-  self.id = ko.observable();
-  self.xf = ko.observable();
-  self.is_staged = ko.observable(false);
-  self.type = ko.observable();
-  self.is_scheduled = ko.observable(false);
-  self.schedule = ko.observable();
-  self.stage = ko.observable();
-  self.form_status = ko.observable();
-  self.fsform = ko.observable();
-  self.is_deployed = ko.observable(false);
-  self.date_created = ko.observable();
-
-  self.save = function(){
-    vm.generalVm().saveGeneralForm(self.xf())
-    vm.generalVm().general_form_modal_visibility(false);
-  };
- 
-
-  for (var i in data){
-    self[i] = ko.observable(data[i]);
-              }
-  self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
-
-self.deploy = function(){
-
-      if(vm.is_project =="1" && self.is_deployed() ==true){
-      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
-      return false;
-    }else{
-
-    vm.generalVm().deploy(self.id(), self.is_deployed());
-    
-    if(self.is_deployed() == true){
-      self.is_deployed(false);
-    }else{
-      self.is_deployed(true);
-    }
-  }
-};
-
-self.deploy_to_remaining = function(){
-    if(self.is_deployed() == false){
-      alert("You Cannot Deploy To Remaining; Form is Not Deployed");
-      return false;
-    }else{
-
-    vm.generalVm().deploy_to_remaining(self.id(), self.is_deployed());
-  }
-};
-
-}
-
-var Schedule = function (data){
-  var self = this;
-  self.id = ko.observable();
-  self.name = ko.observable();
-  self.form = ko.observable();
-  self.date_range_start = ko.observable(new Date())
-  self.date_range_end = ko.observable(new Date())
-  self.selected_days = ko.observableArray();
-  self.form_status = ko.observable();
-  self.is_deployed = ko.observable(false);
-  self.site = ko.observable();
-  self.project = ko.observable();
-
-  self.save = function(){
-    vm.scheduleVm().saveSchedule();
-    vm.scheduleVm().schedule_form_modal_visibility(false);
-  };
-  
-  for (var i in data){
-    self[i] = ko.observable(data[i]);
-}
-
-self.deploy = function(){
-
-      if(vm.is_project =="1" && self.is_deployed() ==true){
-      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
-      return false;
-    }else{
-
-    vm.scheduleVm().deploy(self.id(), self.is_deployed());
-    
-    if(self.is_deployed() == true){
-      self.is_deployed(false);
-    }else{
-      self.is_deployed(true);
-    }
-  }
-  };
-}  
-
 var EducationMaterial = function(data){
   var self = this;
   self.id = ko.observable();
@@ -211,6 +117,256 @@ var EducationMaterial = function(data){
         $('.documentviewerpdf').append(html);
     };
   }
+
+
+var FieldSightXF = function (data){
+  var self = this;
+  self.id = ko.observable();
+  self.xf = ko.observable();
+  self.is_staged = ko.observable(false);
+  self.type = ko.observable();
+  self.is_scheduled = ko.observable(false);
+  self.schedule = ko.observable();
+  self.stage = ko.observable();
+  self.form_status = ko.observable();
+  self.fsform = ko.observable();
+  self.is_deployed = ko.observable(false);
+  self.date_created = ko.observable();
+  self.em = ko.observable();
+  self.em_form_modal_visibility = ko.observable(false);
+
+
+  self.save = function(){
+    vm.generalVm().saveGeneralForm(self.xf())
+    vm.generalVm().general_form_modal_visibility(false);
+  };
+ 
+  self.save_survey = function(){
+    vm.surveyVm().saveGeneralForm(self.xf())
+    vm.surveyVm().general_form_modal_visibility(false);
+  };
+ 
+
+  for (var i in data){
+    self[i] = ko.observable(data[i]);
+              } 
+  self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
+
+    if(self.em()){
+    if(self.em().em_images){
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
+
+    }else{
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':[]}));
+
+    }
+  }
+  if(!self.em()){
+    self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
+
+  }
+
+
+self.deploy = function(){
+
+      if(vm.is_project =="1" && self.is_deployed() ==true){
+      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
+      return false;
+    }else{
+
+    vm.generalVm().deploy(self.id(), self.is_deployed());
+    
+    if(self.is_deployed() == true){
+      self.is_deployed(false);
+    }else{
+      self.is_deployed(true);
+    }
+  }
+};
+
+self.deploy_to_remaining = function(){
+    if(self.is_deployed() == false){
+      alert("You Cannot Deploy To Remaining; Form is Not Deployed");
+      return false;
+    }else{
+
+    vm.generalVm().deploy_to_remaining(self.id(), self.is_deployed());
+  }
+};
+
+self.education_material = function(){
+  self.em_form_modal_visibility(true);
+
+}
+self.save_em = function(){
+  console.log("called save");
+    App.showProcessing();
+    var url = '/forms/api/save_educational_material/';
+
+    var success =  function (response) {
+      self.em_form_modal_visibility(false);
+
+    self.em(new EducationMaterial(response.data));
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Education Material Saved',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+            formdata.append('fsxf', self.id());
+            if(self.em().id()){
+
+            formdata.append('id', self.em().id());
+            }
+            if(self.em().pdf()){
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', self.em().pdf());
+            }
+            formdata.append('title', self.em().title());
+            formdata.append('text', self.em().text());
+            for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
+            }
+
+            
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
+
+
+}
+
+var Schedule = function (data){
+  var self = this;
+  self.id = ko.observable();
+  self.name = ko.observable();
+  self.form = ko.observable();
+  self.date_range_start = ko.observable(new Date())
+  self.date_range_end = ko.observable(new Date())
+  self.selected_days = ko.observableArray();
+  self.form_status = ko.observable();
+  self.is_deployed = ko.observable(false);
+  self.site = ko.observable();
+  self.project = ko.observable();
+  self.em = ko.observable();
+  self.em_form_modal_visibility = ko.observable(false);
+
+
+for (var i in data){
+    self[i] = ko.observable(data[i]);
+}
+  
+  if(self.em()){
+    if(self.em().em_images){
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':self.em().em_images}));
+
+    }else{
+      self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
+    'text':self.em().text,'is_pdf':self.em().is_pdf, 'pdf':self.em().pdf, 'em_images':[]}));
+
+    }
+  }
+  if(!self.em()){
+    self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
+
+  }
+
+
+self.education_material = function(){
+  self.em_form_modal_visibility(true);
+
+}
+self.save_em = function(){
+  console.log("called save");
+    App.showProcessing();
+    var url = '/forms/api/save_educational_material/';
+
+    var success =  function (response) {
+      self.em_form_modal_visibility(false);
+
+    self.em(new EducationMaterial(response.data));
+                App.hideProcessing();
+                
+                App.notifyUser(
+                        'Education Material Saved',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.error;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+            var formdata = new FormData();
+            formdata.append('fsxf', self.form());
+            if(self.em().id()){
+
+            formdata.append('id', self.em().id());
+            }
+            if(self.em().pdf()){
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', self.em().pdf());
+            }
+            formdata.append('title', self.em().title());
+            formdata.append('text', self.em().text());
+            for (var i = 0; i < self.em().multiFileData().fileArray().length; i++) {
+              formdata.append('new_images_'+String(i), self.em().multiFileData().fileArray()[i]);
+            }
+
+            
+    App.remoteMultipartPost(url, formdata, success, failure);                                                                                                                    
+  
+  };
+
+
+
+
+
+  self.save = function(){
+    vm.scheduleVm().saveSchedule();
+    vm.scheduleVm().schedule_form_modal_visibility(false);
+  };
+
+self.deploy = function(){
+
+      if(vm.is_project =="1" && self.is_deployed() ==true){
+      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
+      return false;
+    }else{
+
+    vm.scheduleVm().deploy(self.id(), self.is_deployed());
+    
+    if(self.is_deployed() == true){
+      self.is_deployed(false);
+    }else{
+      self.is_deployed(true);
+    }
+  }
+  };
+}  
+
 
 var SubStage = function(data){
   var self = this;
@@ -492,6 +648,107 @@ for (var i in data){
     }
   }
 }
+
+
+var SurveyVM = function(is_project, pk){
+  var self = this;
+  self.pk = pk;
+  self.is_project = is_project;
+  self.label = "Survey";
+  self.allSurveyForms = ko.observableArray();
+  self.surveyForms = ko.observableArray();
+  self.current_form = ko.observable();
+  self.general_form_modal_visibility = ko.observable(false);
+  self.search_key = ko.observable();
+
+  self.add_form = function(){
+    self.current_form(new FieldSightXF());
+    self.general_form_modal_visibility(true);
+  };
+
+  self.getGeneralForms = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/forms/api/survey/' + String(self.is_project) + '/' + String(self.pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+                var mappedData = ko.utils.arrayMap(response, function(item) {
+                  var date_created = item.date_created.slice(0,10);
+                  item.date_created = date_created;
+                        return new FieldSightXF(item);
+                    });
+                self.surveyForms(mappedData);
+
+                self.allSurveyForms(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+
+  self.saveGeneralForm = function(xf){
+    App.showProcessing();
+    var url = '/forms/api/fxf/';
+    var fxf = new FieldSightXF();
+    fxf.xf = xf;
+    if (self.is_project == "1"){
+      fxf.project = self.pk;
+    }else {
+      fxf.site = self.pk;
+    }
+    fxf.is_survey = true;
+
+    var success =  function (response) {
+                App.hideProcessing();
+                var date_created = response.date_created.slice(0,10);
+                response.date_created = date_created;
+                self.allSurveyForms().unshift(new FieldSightXF(response));
+                self.surveyForms(self.allSurveyForms());
+
+                App.notifyUser(
+                        'Survey Form'+response.name +'Created',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON.non_field_errors;
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+    App.remotePost(url, fxf, success, failure);                                                                                                                    
+  
+  };
+
+
+
+  self.getGeneralForms();
+
+    self.search_key.subscribe(function (newValue) {
+    if (!newValue) {
+        self.surveyForms(self.allSurveyForms());
+    } else {
+        filter_forms = ko.utils.arrayFilter(self.allSurveyForms(), function(item) {
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
+        });
+        self.surveyForms(filter_forms);
+    }
+    });
+}
+
 
 var GeneralVM = function(is_project, pk){
   var self = this;
@@ -1162,6 +1419,7 @@ function SetUpViewModel(is_project, pk, base_url) {
   self.pk = pk;
   self.base_url = base_url;
   self.currentVm = ko.observable("general");
+  self.surveyVm = ko.observable();
   self.generalVm = ko.observable();
   self.scheduleVm = ko.observable();
   self.stagesVm = ko.observable();
@@ -1176,6 +1434,11 @@ function SetUpViewModel(is_project, pk, base_url) {
     if(newValue == "general" ) {
       if (ko.utils.unwrapObservable(self.generalVm()) == null){
         self.generalVm(new GeneralVM(is_project, pk));
+      }
+        
+    }else if(newValue == "survey" ) {
+      if (ko.utils.unwrapObservable(self.surveyVm()) == null){
+        self.surveyVm(new SurveyVM(is_project, pk));
       }
         
     } else if (newValue == "schedules") {
