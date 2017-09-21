@@ -29,7 +29,7 @@ var baseLayers = {
 
 //arrays for legend
 statusIconList = ['marker-red','marker-yellow','marker-green','marker-blue','marker-grey'];
-statusText = ['rejected','flagged','approved','pending','not received'];
+statusText = ['Rejected submission','Flagged submission','Approved submission','Pending submission','No submission'];
 progressIconList = ['marker-red','marker10-20','marker30-40','marker50-60','marker70-80','marker80-90','marker90-100'];
 progressText = ['0%','0-20%','20-40%','40-60%','60-80%','80-100%', '100%'];
 //end array legend
@@ -102,7 +102,7 @@ markers = new L.geoJson(data, {
         }
         
         //map.addLayer(osm);
-        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true, position: "topleft"}).addTo(map);
+        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: false}).addTo(map);
 
         map.addLayer(markers);
 
@@ -111,7 +111,7 @@ markers = new L.geoJson(data, {
 
 // map.fitBounds(markers.getBounds());
 
-        // layerswitcher.addOverlay(markers, "Schools");
+        layerswitcher.addOverlay(markers, "Form Status");
 
 
 
@@ -190,7 +190,7 @@ markers = new L.geoJson(data, {
         });
         
         
-        //layerswitcher.addOverlay(progressLayer, "Progress");
+        layerswitcher.addOverlay(progressLayer, "Site Progress");
         //legend start
        function addLegend(type){
 
@@ -201,24 +201,24 @@ markers = new L.geoJson(data, {
                             labels = [''];
                             //console.log(div);
                         if(type == 'form_status'){
-		                labels.push('<strong>Form Status</strong>');
+		                labels.push('<strong>Submission Status</strong>');
 		                for (var i = 0; i < statusIconList.length; i++) {
 		                    
 		                //console.log(icons[i]);
 		                labels.push(
-		                    '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:15px; height: 20px;" src = "'+static_url+'images/'+statusIconList[i]+'.png"></img></div> &ndash; '+ statusText[i]);
+		                    '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:25px; height: 25px;" src = "'+static_url+'images/'+statusIconList[i]+'.png"></img></div> &ndash; '+ statusText[i]);
 		                    }
 		                    div.innerHTML = labels.join('<br/>');
 		                    return div;
 		                
                         }
                         else {
-                                labels.push('<strong>Site Progress</strong>');
+                                labels.push('<strong>Progress Status</strong>');
 		                for (var i = 0; i < progressIconList.length; i++) {
 		                    
 		                //console.log(icons[i]);
 		                labels.push(
-		                    '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:15px; height: 20px;" src = "'+static_url+'images/'+progressIconList[i]+'.png"></img></div> &ndash; '+ progressText[i]);
+		                    '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:25px; height: 25px;" src = "'+static_url+'images/'+progressIconList[i]+'.png"></img></div> &ndash; '+ progressText[i]);
 		                    }
 		                    div.innerHTML = labels.join('<br/>');
 		                    return div;
@@ -240,10 +240,10 @@ markers = new L.geoJson(data, {
             else{
                 $(this).is(':checked') = false;
             } */
-            $('.switch').not(this).prop('checked', false);
+            //$('.switch').not(this).prop('checked', false);
             if($(this)[0].id == "form_status"){
                 addLegend('form_status');
-                if(map.hasLayer(progressLayer)){
+                /*if(map.hasLayer(progressLayer)){
                     console.log('here');
                     map.removeLayer(progressLayer);
                 }
@@ -251,17 +251,17 @@ markers = new L.geoJson(data, {
                 if(!map.hasLayer(markers)){
                     console.log('not geojson layer');
                     map.addLayer(markers);
-                }
+                }*/
             }
             else if($(this)[0].id == "project_progress"){
                 addLegend('project_progress');
-                if(map.hasLayer(markers)){
+                /*if(map.hasLayer(markers)){
                     
                     map.removeLayer(markers);
                 }
                 if(!map.hasLayer(progressLayer)){
                     map.addLayer(progressLayer);
-            }
+            }*/
             }
         });
 
