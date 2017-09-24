@@ -112,7 +112,9 @@ markers = new L.geoJson(data, {
 // map.fitBounds(markers.getBounds());
 
 
-        //layerswitcher.addOverlay(markers, "Schools");
+
+        // layerswitcher.addOverlay(markers, "Schools");
+
 
 
 
@@ -192,7 +194,11 @@ markers = new L.geoJson(data, {
         });
         
         
+<<<<<<< HEAD
         layerswitcher.addOverlay(progressLayer, "Site Progress");
+=======
+        //layerswitcher.addOverlay(progressLayer, "Site Progress");
+>>>>>>> mapfinal
         //legend start
        function addLegend(type){
 
@@ -236,7 +242,7 @@ markers = new L.geoJson(data, {
 
 
         $(".switch").on('change',function(){
-            /* if($(this).is(':checked') == false){
+            /*if($(this).is(':checked') == false){
                 $(this).is(':checked') = true;
             }
             else{
