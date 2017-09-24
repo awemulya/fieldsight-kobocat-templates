@@ -111,7 +111,7 @@ markers = new L.geoJson(data, {
 
 // map.fitBounds(markers.getBounds());
 
-        // layerswitcher.addOverlay(markers, "Schools");
+        //layerswitcher.addOverlay(markers, "Schools");
 
 
 
@@ -196,7 +196,7 @@ markers = new L.geoJson(data, {
 
        var legend = L.control({position: 'bottomright'});  
                         legend.onAdd = function (map) {
-                        $('.leaflet-control').remove();
+                        $('.legend').remove();
                         var div = L.DomUtil.create('div', 'info legend'),
                             labels = [''];
                             //console.log(div);
