@@ -1,3 +1,7 @@
+var site_id = ""
+function assignsite_id(siteid){
+  site_id = siteid;
+}
 var Site =function (data){
   self = this;
   self.id = ko.observable();
@@ -37,7 +41,7 @@ function SitesViewModel() {
   self.loadSites = function(){
     App.showProcessing();
         $.ajax({
-            url: '/fieldsight/api/sites/',
+            url: '/fieldsight/api/project-sites/'+site_id+'/',
             method: 'GET',
             dataType: 'json',
             // data: post_data,
