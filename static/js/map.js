@@ -29,7 +29,7 @@ var baseLayers = {
 
 //arrays for legend
 statusIconList = ['marker-red','marker-yellow','marker-green','marker-blue','marker-grey'];
-statusText = ['rejected','flagged','approved','pending','not received'];
+statusText = ['Rejected submission','Flagged submission','Approved submission','Pending submission','No submission'];
 progressIconList = ['marker-red','marker10-20','marker30-40','marker50-60','marker70-80','marker80-90','marker90-100'];
 progressText = ['0%','0-20%','20-40%','40-60%','60-80%','80-100%', '100%'];
 //end array legend
@@ -102,7 +102,7 @@ markers = new L.geoJson(data, {
         }
         
         //map.addLayer(osm);
-        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true, position: "topleft"}).addTo(map);
+        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: false}).addTo(map);
 
         map.addLayer(markers);
 
@@ -111,7 +111,9 @@ markers = new L.geoJson(data, {
 
 // map.fitBounds(markers.getBounds());
 
+
         // layerswitcher.addOverlay(markers, "Schools");
+
 
 
 
@@ -190,39 +192,39 @@ markers = new L.geoJson(data, {
         });
         
         
-        //layerswitcher.addOverlay(progressLayer, "Progress");
+        //layerswitcher.addOverlay(progressLayer, "Site Progress");
         //legend start
        function addLegend(type){
 
        var legend = L.control({position: 'bottomright'});  
                         legend.onAdd = function (map) {
-                        $('.leaflet-control').remove();
+                        $('.legend').remove();
                         var div = L.DomUtil.create('div', 'info legend'),
                             labels = [''];
                             //console.log(div);
                         if(type == 'form_status'){
-		                labels.push('<strong>Form Status</strong>');
-		                for (var i = 0; i < statusIconList.length; i++) {
-		                    
-		                //console.log(icons[i]);
-		                labels.push(
-		                    '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:15px; height: 20px;" src = "'+static_url+'images/'+statusIconList[i]+'.png"></img></div> &ndash; '+ statusText[i]);
-		                    }
-		                    div.innerHTML = labels.join('<br/>');
-		                    return div;
-		                
+                        labels.push('<strong>Submission Status</strong>');
+                        for (var i = 0; i < statusIconList.length; i++) {
+                            
+                        //console.log(icons[i]);
+                        labels.push(
+                            '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:25px; height: 25px;" src = "'+static_url+'images/'+statusIconList[i]+'.png"></img></div> &ndash; '+ statusText[i]);
+                            }
+                            div.innerHTML = labels.join('<br/>');
+                            return div;
+                        
                         }
                         else {
-                                labels.push('<strong>Site Progress</strong>');
-		                for (var i = 0; i < progressIconList.length; i++) {
-		                    
-		                //console.log(icons[i]);
-		                labels.push(
-		                    '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:15px; height: 20px;" src = "'+static_url+'images/'+progressIconList[i]+'.png"></img></div> &ndash; '+ progressText[i]);
-		                    }
-		                    div.innerHTML = labels.join('<br/>');
-		                    return div;
-		                
+                                labels.push('<strong>Progress Status</strong>');
+                        for (var i = 0; i < progressIconList.length; i++) {
+                            
+                        //console.log(icons[i]);
+                        labels.push(
+                            '<div style="display: inline-block; width:25px; height: 25px; "><img style="display: inline-block; width:25px; height: 25px;" src = "'+static_url+'images/'+progressIconList[i]+'.png"></img></div> &ndash; '+ progressText[i]);
+                            }
+                            div.innerHTML = labels.join('<br/>');
+                            return div;
+                        
                         }
                         };
                         legend.addTo(map);
@@ -234,7 +236,7 @@ markers = new L.geoJson(data, {
 
 
         $(".switch").on('change',function(){
-            /* if($(this).is(':checked') == false){
+            /*if($(this).is(':checked') == false){
                 $(this).is(':checked') = true;
             }
             else{
