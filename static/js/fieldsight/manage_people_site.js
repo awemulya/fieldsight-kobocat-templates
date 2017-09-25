@@ -1,3 +1,12 @@
+var csrf_token ="";
+
+function assigntoken(csrf){
+  csrf_token=csrf;
+
+}
+var all_selected_users = ko.observableArray();
+
+
 function notFound(id, array){
 var notFOund  = true;
   ko.utils.arrayFilter(array, function(item) {
@@ -22,7 +31,7 @@ var User = function(data){
   self.password =  ko.observable();
   self.cpassword =  ko.observable();
   self.profile_picture = ko.observable();
-
+  self.selected = ko.observable(false);
 
   for (var i in data){
     self[i] = ko.observable(data[i]);
@@ -125,7 +134,9 @@ var Role = function (data){
   
   self.rmrole = function(){
    vm.unAssignUserROle(self.id());
+   alert(self.id());
   };
+
 
   self.detail = function(){
     vm.showDetail(self);
@@ -134,6 +145,37 @@ var Role = function (data){
 
 }
 
+
+
+var Project = function(data){
+  var self = this;
+
+    
+  self.id = ko.observable();
+  self.type_label = ko.observable();
+  self.organization_label = ko.observable();
+  self.latitude = ko.observable();
+  self.longitude = ko.observable();
+  self.name = ko.observable();
+  self.phone = ko.observable();
+  self.fax = ko.observable();
+  self.email = ko.observable();
+  self.address = ko.observable();
+  self.website = ko.observable();
+  self.donor = ko.observable();
+  self.public_desc = ko.observable();
+  self.additional_desc = ko.observable();
+  self.logo = ko.observable();
+  self.is_active = ko.observable();
+  self.location = ko.observable();
+  self.date_created = ko.observable();
+  self.type = ko.observable();
+  self.organization = ko.observable();
+
+  for (var i in data){
+    self[i] = ko.observable(data[i]);
+      }   
+}
 
 var SiteVM = function(level, pk){
   var self=this;
@@ -282,14 +324,13 @@ var OrgVM = function(level, pk){
   var self=this;
   self.group = ko.observable("Organization Admin");
 
-  self.search_key = ko.observable();
+ 
   self.admins = ko.observableArray();
   self.allAdmins = ko.observableArray();
-
-  
+  self.projects = ko.observableArray();
+  self.allprojects = ko.observableArray();
+ 
   self.available_admins = ko.observableArray(); 
-
-
   self.add = function(){
     vm.addRole(self.group());  
   };
@@ -321,20 +362,49 @@ var OrgVM = function(level, pk){
         });
   };
 
-  self.search_key.subscribe(function (newValue) {
-    if (!newValue) {
-        self.admins(self.allAdmins());
-    } else {
-        filter_data = ko.utils.arrayFilter(self.allAdmins(), function(item) {
-            return ko.utils.stringStartsWith(item.user().first_name().toLowerCase(), newValue);
-        });
-        self.admins(filter_data);
-    }
-    });
 
+
+
+   
   
-  self.loadAdmins();
+    
+    self.loadAdmins();
 
+
+    self.loadAllProjects = function(){
+    App.showProcessing();
+        $.ajax({
+
+            url: project_site_url,
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        
+                        user = new Project(item);
+                        // self.alluserid.push(user);
+                        
+                        // console.log(user.id());
+                        return project;
+
+                    });
+
+                self.projects(mappedData);
+                self.allprojects(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+  // 
+  // self.loadAllProjects();
 };
 
 
@@ -345,17 +415,20 @@ function ManagePeopleViewModel(pk, level, organization) {
   self.level = level;
   self.users = ko.observableArray();
   self.available_users = ko.observableArray();
-  self.selected_users = ko.observableArray();
+  
   self.add_people_form_visibility = ko.observable(false);
   self.add_user_form_visibility = ko.observable(false);
   
   self.detail_people_form_visibility = ko.observable(false);
-
   self.user = ko.observable();
   self.role = ko.observable();
   self.new_role = ko.observable();
   self.new_user = ko.observable();
-  
+  self.users = ko.observableArray();
+  self.allusers = ko.observableArray();
+  self.alluserid = ko.observableArray();
+  self.alluserid([]);
+   self.search_key = ko.observable();
   self.currentVm = ko.observable();
   
   self.siteVm = ko.observable();
@@ -363,7 +436,8 @@ function ManagePeopleViewModel(pk, level, organization) {
   self.orgVm = ko.observable();
 
   self.addRole = function(group){
-    self.selected_users([]);
+    
+
     var mapped_available_users = [];
 
     if(group == "Site Supervisor"){
@@ -422,7 +496,7 @@ function ManagePeopleViewModel(pk, level, organization) {
     
     
 
-    self.new_role(new Role({'group':group, 'user':{}}));
+   
     self.add_people_form_visibility(true);
     if(self.available_users().length<1){
       self.addUser();
@@ -439,26 +513,19 @@ function ManagePeopleViewModel(pk, level, organization) {
     self.add_user_form_visibility(false);
     };
 
-
-self.setSelected = function(user){
- if (self.selected_users.indexOf(user) < 0) {
-  self.selected_users.push(user);
-  self.available_users.remove(user);
-}else{
-
-  self.selected_users.remove(user);
-  self.available_users.push(user);
-}
-};
+    
+   
+ 
 
 self.unAssignUserROle = function(role_id){
 
     var url = '/userrole/api/people/deactivate/';
 
-    
+    alert(level);
 
     var success =  function (response) {
       var level = response.role_name;
+      alert(level);
       if (level == "Site Supervisor"){
 
          var rm_roles = ko.utils.arrayFilter(self.siteVm().allSupervisors(), function(item) {
@@ -506,7 +573,8 @@ self.unAssignUserROle = function(role_id){
 
             };
     var failure =  function (errorThrown) {
-      var err_message = errorThrown.responseJSON.error;
+      var err_message = errorThrown.responseJSON;
+      alert(err_message);
                 App.hideProcessing();
                 App.notifyUser(
                         err_message,
@@ -514,32 +582,34 @@ self.unAssignUserROle = function(role_id){
                     );
 
             };
-
-    App.remotePost(url, {'id':role_id,'level':self.level,'dashboard_pk':self.pk}, success, failure);  
+    // alert(csrf_token);
+    App.remotePost(url, {'id':role_id,'level':self.level,'dashboard_pk':self.pk,}, success, failure);  
 
 };
 
   self.doAssign = function(){
+     self.new_role(({'group':'Organization Admin', 'users':[]}));
     
-    ko.utils.arrayMap(self.selected_users(), function(item) {
-                    self.new_role().users.push(item.id());
+    ko.utils.arrayMap(all_selected_users(), function(item) {
+                    console.log(item.user().id);
+                    self.new_role().users.push(item.user().id);
                     });
-       App.showProcessing();
-    
+       // App.showProcessing();
+     
     var url = '/userrole/api/people/'+ String(level) + '/' + String(pk);
 
     
 
     var success =  function (response) {
                 App.hideProcessing();
-                if ((self.new_role().group() =='Site Supervisor') || self.new_role().group() =='Reviewer' ){
-                  vm.siteVm().loadSupervisor();
+                // if ((self.new_role().group() =='Site Supervisor') || self.new_role().group() =='Reviewer' ){
+                //   vm.siteVm().loadSupervisor();
 
-                }else if(self.new_role().group() =='Project Manager'){
-                  vm.projectVm().loadProjectManagers();
-                }else if(self.new_role().group() =='Organization Admin'){
-                  vm.orgVm().loadAdmins();
-                }
+                // }else if(self.new_role().group() =='Project Manager'){
+                //   vm.projectVm().loadProjectManagers();
+                // }else if(self.new_role().group() =='Organization Admin'){
+                //   vm.orgVm().loadAdmins();
+                // }
 
                 App.notifyUser(
                         'People Assigned Sucess',
@@ -556,9 +626,48 @@ self.unAssignUserROle = function(role_id){
                     );
 
             };
+// console.log(self.new_role());
+// console.log(CSRF_TOKEN);   
+       App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
+    
+// alert(JSON.stringify(self.new_role()));
+//         $.ajax({
 
-    App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
-    self.selected_users([]);                                                                                                                  
+//             url: url,
+//             type: 'POST',
+//             contentType:"application/json; charset=utf-8",
+//             dataType:"json",
+//             data:JSON.stringify(self.new_role()),
+//             // async: true,
+//              beforeSend: function(request) {
+//         return request.setRequestHeader('X-CSRFToken', CSRF_TOKEN);
+//     },     
+//             success: function (response) {
+//                 App.hideProcessing();
+//                App.notifyUser(
+//                         'People Assigned Sucess',
+//                         'success'
+//                     );
+
+
+//             },
+//             error: function (errorThrown) {
+//                var err_message = errorThrown.responseJSON[0];
+//                 App.hideProcessing();
+//                 App.notifyUser(
+//                         err_message,
+//                         'error'
+//                     );
+//             }
+//         });
+
+
+
+
+
+
+
+    // self.selected_users([]);                                                                                                                  
   
     self.add_people_form_visibility(false);
     };
@@ -627,39 +736,120 @@ if (self.level == "0"){
         });
   };
 
-    self.saveUserData = function(){
-    App.showProcessing();
-    var url = '/users/list/'+ String(self.organization)+'/';
+  //   self.saveUserData = function(){
+  //   App.showProcessing();
+  //   var url = '/users/list/'+ String(self.organization)+'/';
     
 
-    var success =  function (response) {
-                App.hideProcessing();
-                self.users.push(new User(response));
-                self.selected_users.push(new User(response));
-                self.add_user_form_visibility(false);
+  //   var success =  function (response) {
+  //               App.hideProcessing();
+  //               self.users.push(new User(response));
+  //               self.selected_users.push(new User(response));
+  //               self.add_user_form_visibility(false);
 
-                App.notifyUser(
-                        'User '+response.username +'Created',
-                        'success'
-                    );
+  //               App.notifyUser(
+  //                       'User '+response.username +'Created',
+  //                       'success'
+  //                   );
 
-            };
-    var failure =  function (errorThrown) {
-      var err_message = errorThrown.responseJSON[0];
-                App.hideProcessing();
-                App.notifyUser(
-                        err_message,
-                        'error'
-                    );
+  //           };
+  //   var failure =  function (errorThrown) {
+  //     var err_message = errorThrown.responseJSON[0];
+  //               App.hideProcessing();
+  //               App.notifyUser(
+  //                       err_message,
+  //                       'error'
+  //                   );
 
-            };
+  //           };
 
-    App.remotePost(url, ko.toJS(self.new_user()), success, failure);                                                                                                                    
+  //   App.remotePost(url, ko.toJS(self.new_user()), success, failure);                                                                                                                    
   
+  // };
+
+  // self.loadUsers();
+
+
+
+    self.loadAllUsers = function(){
+    App.showProcessing();
+        $.ajax({
+
+            url: '/userrole/api/multiuserlist/'+ String(level) + '/' + String(pk),
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        user = new User(item);
+                        self.alluserid.push(user);
+                        console.log(user.id());
+                        return user;
+
+                    });
+                self.users(mappedData);
+                self.allusers(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
   };
 
-  self.loadUsers();
+  self.setAllAssignAsSelected = function(user){
+   // console.log(self.alluserid());
+   all_selected_users([]);
+   console.log(all_selected_users());
+   console.log(self.allusers());
+   ko.utils.arrayForEach(self.users(), function(user) {
 
+   user.selected(true);
+   // console.log(user.selected());
+   
+   
+    });  
+   all_selected_users(self.allusers().slice(0));
+    console.log(all_selected_users()); 
+  }; 
+
+  self.setAllUnSelected = function(user){
+   // console.log(self.alluserid());
+   ko.utils.arrayForEach(self.users(), function(user) {
+
+   user.selected(false);
+   // console.log(user.selected());
+   // console.log(all_selected_users());
+    });   
+    all_selected_users([]);
+   
+  }; 
+  self.search_key.subscribe(function (newValue) {
+    console.log(all_selected_users);
+    if (!newValue) {
+        self.users(self.allusers());
+    } else {
+        filter_data = ko.utils.arrayFilter(self.allusers(), function(item) {
+            return ko.utils.stringStartsWith(item.user().email.toLowerCase(), newValue.toLowerCase());
+        });
+        self.users(filter_data);
+    }
+    });
+  self.setSelected = function(user){
+   console.log(all_selected_users.indexOf(user));
+   if (all_selected_users.indexOf(user) < 0) {
+    all_selected_users.push(user);
+        
+  }else{
+    all_selected_users.remove(user);
+    
+  }
+  console.log(all_selected_users());
+        return true;
+  };                                                                
+
+  self.loadAllUsers();
 };
-
-
