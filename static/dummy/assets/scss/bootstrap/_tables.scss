@@ -18,8 +18,13 @@
   thead th {
     vertical-align: bottom;
     border-bottom: (2 * $table-border-width) solid $table-border-color;
+	font-weight: 600;
   }
-
+	tbody{
+		td{
+			font-weight: 100;
+		}
+	}
   tbody + tbody {
     border-top: (2 * $table-border-width) solid $table-border-color;
   }
