@@ -1,9 +1,13 @@
 var csrf_token ="";
+var group = "";
 
 function assigntoken(csrf){
   csrf_token=csrf;
 
 }
+
+
+
 var all_selected_users = ko.observableArray();
 
 
@@ -122,7 +126,6 @@ var Role = function (data){
   self.organization = ko.observable();
 
 
-
   for (var i in data){
     if(i == "user"){
       self.user(new User(data[i]));
@@ -149,8 +152,7 @@ var Role = function (data){
 
 var Project = function(data){
   var self = this;
-
-    
+   
   self.id = ko.observable();
   self.type_label = ko.observable();
   self.organization_label = ko.observable();
@@ -171,6 +173,41 @@ var Project = function(data){
   self.date_created = ko.observable();
   self.type = ko.observable();
   self.organization = ko.observable();
+  self.selected = ko.observable(false);
+
+  for (var i in data){
+    self[i] = ko.observable(data[i]);
+      }   
+}
+
+
+var Site = function(data){
+  var self = this;
+   
+  self.id = ko.observable();
+  self.type_label = ko.observable();
+  self.organization_label = ko.observable();
+  self.latitude = ko.observable();
+  self.longitude = ko.observable();
+  self.name = ko.observable();
+  self.phone = ko.observable();
+  self.fax = ko.observable();
+  self.email = ko.observable();
+  self.address = ko.observable();
+  self.website = ko.observable();
+  self.donor = ko.observable();
+  self.public_desc = ko.observable();
+  self.additional_desc = ko.observable();
+  self.logo = ko.observable();
+  self.is_active = ko.observable();
+  self.location = ko.observable();
+  self.date_created = ko.observable();
+  self.type = ko.observable();
+  self.organization = ko.observable();
+  self.selected = ko.observable(false);
+
+
+
 
   for (var i in data){
     self[i] = ko.observable(data[i]);
@@ -259,6 +296,8 @@ var SiteVM = function(level, pk){
     }
     });
 
+
+
   self.loadSupervisor();
 
 };
@@ -270,9 +309,23 @@ var ProjectVM = function(level, pk){
   self.search_key = ko.observable();
   self.projectManagers = ko.observableArray();
   self.allProjectManagers = ko.observableArray();
-
+ 
   
   self.available_projectManagers = ko.observableArray(); 
+
+
+
+  self.new_role = ko.observable();
+  self.new_invite = ko.observable();
+  self.sites = ko.observableArray();
+  self.site = ko.observableArray();
+  self.allsites = ko.observableArray();
+  self.search_key = ko.observable();
+  self.allsiteid = ko.observableArray();
+  self.allsiteid([]);
+  self.all_selected_sites = ko.observableArray();
+  self.all_selected_sites([]);
+  
 
 
   self.add = function(){
@@ -304,32 +357,274 @@ var ProjectVM = function(level, pk){
         });
   };
 
-  self.search_key.subscribe(function (newValue) {
-    if (!newValue) {
-        self.projectManagers(self.allProjectManagers());
-    } else {
-        filter_data = ko.utils.arrayFilter(self.allProjectManagers(), function(item) {
-            return ko.utils.stringStartsWith(item.user().first_name().toLowerCase(), newValue);
-        });
-        self.projectManagers(filter_data);
-    }
-    });
+
+  // self.search_key.subscribe(function (newValue) {
+  //   if (!newValue) {
+  //       self.projectManagers(self.allProjectManagers());
+  //   } else {
+  //       filter_data = ko.utils.arrayFilter(self.allProjectManagers(), function(item) {
+  //           return ko.utils.stringStartsWith(item.user().first_name().toLowerCase(), newValue.toLowerCase());
+  //       });
+  //       self.projectManagers(filter_data);
+  //   }
+  //   });
 
   
   self.loadProjectManagers();
 
+
+  self.loadAllSites = function(){
+    App.showProcessing();
+        $.ajax({
+            url: proj_site_url,
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        
+                        site = new Site(item);
+                        self.allsiteid.push(site);
+                        console.log(site.id());
+                        return site;
+
+
+                    });
+
+                self.sites(mappedData);
+                self.allsites(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+  self.setAllAssignAsSelected = function(site){
+   // console.log(self.alluserid());
+   self.all_selected_sites([]);
+  
+   ko.utils.arrayForEach(self.sites(), function(site) {
+
+   site.selected(true);
+   // console.log(site.selected());
+   
+   
+    });  
+   self.all_selected_sites(self.allsites().slice(0));
+    
+  }; 
+
+  self.setAllUnSelected = function(site){
+   // console.log(self.alluserid());
+   ko.utils.arrayForEach(self.sites(), function(site) {
+
+   site.selected(false);
+   // console.log(site.selected());
+   // console.log(all_selected_users());
+    });   
+    self.all_selected_sites([]);
+   
+  };
+
+  self.search_key.subscribe(function (newValue) {
+   
+    if (!newValue) {
+        self.sites(self.allsites());
+    } else {
+        filter_data = ko.utils.arrayFilter(self.allsites(), function(item) {
+            console.log(item.name());
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
+        });
+        self.sites(filter_data);
+    }
+    });
+  
+
+    var inviteurl = '/fieldsight/sendmultiusermultilevelinvite/';
+   
+    
+
+    var invitepssuccess =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'People Invited Sucess',
+                        'success'
+                    );
+
+            };
+
+    var invitepsfailure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+function validateemail(email){
+ 
+  var atherate = email.indexOf("@");
+  var dot = email.indexOf(".", atherate);
+    
+      if(atherate != -1 && dot != -1){
+        return {
+        multiemailstatus: true,
+        email: email
+        };
+      }
+      else{
+        // alert("Enter valid email address.");
+        return {
+        multiemailstatus: false,
+        email: email
+        };
+      }
+}
+
+function multiemailvalidate(entry) {
+  
+    email_res = validateemail(entry);
+    
+    if(email_res.multiemailstatus == false){
+      
+      var email_input = document.getElementById("multi_invite_email_ps");
+      email = email_input.value;
+      start = email.search(email_res.email);
+      end = email.indexOf(",", start);
+      // console.log(start +" "+ end);
+      email_input.setSelectionRange(start, end);
+      email_input.focus();
+      multiemailstatus=false;
+
+
+      }
+    }
+
+    self.invitereviewers = function(){
+          group = 'Reviewer';
+          self.inviteforemails();
+    }
+    self.invitesupervisors = function(){
+        group = 'Site Supervisor';
+        self.inviteforemails();
+    }
+
+  self.inviteforemails = (function () {
+    var email = document.getElementById("multi_invite_email_ps").value;
+    if (!email) {
+        alert("Please insert an email to invite.");
+    } else {
+          multiemailstatus=true;
+          emails = email.split(",");
+          emails.forEach(multiemailvalidate);
+      
+          if(multiemailstatus == true ){ 
+            self.new_invite({'group':group, 'emails':emails, 'levels':[], 'leveltype':'site'});
+             
+            ko.utils.arrayMap(self.all_selected_sites(), function(item) {
+                    self.new_invite().levels.push(item.id);
+                    });
+            console.log(ko.toJS(self.new_invite()));
+   
+             App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
+           }
+          else{ alert('faileded'); }
+    }
+    });
+  
+  
+  self.setSelected = function(site){
+  
+   if (self.all_selected_sites.indexOf(site) < 0) {
+    self.all_selected_sites.push(site);
+        
+  }else{
+    self.all_selected_sites.remove(site);
+    
+  }
+  console.log(self.all_selected_sites());
+        return true;
+  };                   
+
+  // 
+    self.loadAllSites();
+
+
+    self.assignselectedreviewer = function(){
+          group = 'Reviewer';
+          self.doAssign();
+    };
+    self.assignselectedsupervisor = function(){
+        group = 'Site Supervisor';
+        self.doAssign();
+    };
+
+    self.doAssign = function(){
+    self.new_role({'group':group, 'users':[], 'sites':[]});
+    
+    ko.utils.arrayMap(all_selected_users(), function(item) {
+                    console.log(item.user().id);
+                    self.new_role().users.push(item.user().id);
+                    });
+
+    ko.utils.arrayMap(self.all_selected_sites(), function(item) {
+                    console.log(item.id());
+                    self.new_role().sites.push(item.id);
+                    });
+       // App.showProcessing();
+     
+    var url = assignurl;
+    console.log(ko.toJS(self.new_role()))
+    
+
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'People Assigned Sucess',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+       App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
 };
+
+
+}
 
 var OrgVM = function(level, pk){
   var self=this;
   self.group = ko.observable("Organization Admin");
-
- 
+  self.new_role = ko.observable();
+  self.new_invite = ko.observable();
   self.admins = ko.observableArray();
   self.allAdmins = ko.observableArray();
   self.projects = ko.observableArray();
+  self.project = ko.observableArray();
   self.allprojects = ko.observableArray();
- 
+  self.search_key = ko.observable();
+  self.allprojectid = ko.observableArray();
+  self.allprojectid([]);
+  self.all_selected_projects = ko.observableArray();
+  self.all_selected_projects([]);
   self.available_admins = ko.observableArray(); 
   self.add = function(){
     vm.addRole(self.group());  
@@ -374,8 +669,7 @@ var OrgVM = function(level, pk){
     self.loadAllProjects = function(){
     App.showProcessing();
         $.ajax({
-
-            url: project_site_url,
+            url: proj_site_url,
             method: 'GET',
             dataType: 'json',
             // data: post_data,
@@ -384,11 +678,11 @@ var OrgVM = function(level, pk){
                 App.hideProcessing();
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         
-                        user = new Project(item);
-                        // self.alluserid.push(user);
-                        
-                        // console.log(user.id());
+                        project = new Project(item);
+                        self.allprojectid.push(project);
+                        console.log(project.id());
                         return project;
+
 
                     });
 
@@ -403,10 +697,190 @@ var OrgVM = function(level, pk){
         });
   };
 
-  // 
-  // self.loadAllProjects();
-};
+  self.setSelected = function(project){
+  alert();
+   if (self.all_selected_projects.indexOf(project) < 0) {
+    self.all_selected_projects.push(project);
+        
+  }else{
+    self.all_selected_projects.remove(project);
+    
+  }
+  console.log(self.all_selected_projects());
+        return true;
+  };    
 
+  self.setAllAssignAsSelected = function(project){
+    console.log(self.allprojectid());
+
+   self.all_selected_projects([]);
+  
+   ko.utils.arrayForEach(self.projects(), function(project) {
+
+   project.selected(true);
+   // console.log(project.selected());
+   
+   
+    });  
+   self.all_selected_projects(self.allprojects().slice(0));
+    
+  }; 
+
+  self.setAllUnSelected = function(project){
+   // console.log(self.alluserid());
+   ko.utils.arrayForEach(self.projects(), function(project) {
+
+   project.selected(false);
+   // console.log(project.selected());
+   // console.log(all_selected_users());
+    });   
+    self.all_selected_projects([]);
+   
+  };
+
+  self.search_key.subscribe(function (newValue) {
+   
+    if (!newValue) {
+        self.projects(self.allprojects());
+    } else {
+        filter_data = ko.utils.arrayFilter(self.allprojects(), function(item) {
+            console.log(item.name());
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
+        });
+        self.projects(filter_data);
+    }
+    });
+  
+
+    var inviteurl = '/fieldsight/sendmultiusermultilevelinvite/';
+   
+    
+
+    var invitepssuccess =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'People Invited Sucess',
+                        'success'
+                    );
+
+            };
+
+    var invitepsfailure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+function validateemail(email){
+ 
+  var atherate = email.indexOf("@");
+  var dot = email.indexOf(".", atherate);
+    
+      if(atherate != -1 && dot != -1){
+        return {
+        multiemailstatus: true,
+        email: email
+        };
+      }
+      else{
+        // alert("Enter valid email address.");
+        return {
+        multiemailstatus: false,
+        email: email
+        };
+      }
+}
+
+function multiemailvalidate(entry) {
+  
+    email_res = validateemail(entry);
+    
+    if(email_res.multiemailstatus == false){
+      
+      var email_input = document.getElementById("multi_invite_email_ps");
+      email = email_input.value;
+      start = email.search(email_res.email);
+      end = email.indexOf(",", start);
+      // console.log(start +" "+ end);
+      email_input.setSelectionRange(start, end);
+      email_input.focus();
+      multiemailstatus=false;
+
+
+      }
+    }
+  self.inviteforemails = (function (newValue) {
+    var email = document.getElementById("multi_invite_email_ps").value;
+    if (!email) {
+        alert("Please insert an email to invite.");
+    } else {
+          multiemailstatus=true;
+          emails = email.split(",");
+          emails.forEach(multiemailvalidate);
+      
+          if(multiemailstatus == true ){ 
+            self.new_invite({'group':'Project Manager', 'emails':emails, 'levels':[], 'leveltype':'project'});
+             
+            ko.utils.arrayMap(self.all_selected_projects(), function(item) {
+                    self.new_invite().levels.push(item.id);
+                    });
+            console.log(ko.toJS(self.new_invite()));
+   
+             App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
+           }
+          else{ alert('faileded'); }
+    }
+    });
+  
+               
+
+  // 
+    self.loadAllProjects();
+    self.doAssign = function(){
+    self.new_role({'group':'Organization Admin', 'users':[], 'projects':[]});
+    
+    ko.utils.arrayMap(all_selected_users(), function(item) {
+                    console.log(item.user().id);
+                    self.new_role().users.push(item.user().id);
+                    });
+
+    ko.utils.arrayMap(self.all_selected_projects(), function(item) {
+                    console.log(item.id());
+                    self.new_role().projects.push(item.id);
+                    });
+       // App.showProcessing();
+     
+    var url = assignurl;
+    console.log(ko.toJS(self.new_role()))
+    
+
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'People Assigned Sucess',
+                        'success'
+                    );
+
+            };
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.hideProcessing();
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+
+       App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
+};
+}
 
 function ManagePeopleViewModel(pk, level, organization) {
   var self=this;
@@ -428,7 +902,7 @@ function ManagePeopleViewModel(pk, level, organization) {
   self.allusers = ko.observableArray();
   self.alluserid = ko.observableArray();
   self.alluserid([]);
-   self.search_key = ko.observable();
+  self.search_key = ko.observable();
   self.currentVm = ko.observable();
   
   self.siteVm = ko.observable();
@@ -521,11 +995,10 @@ self.unAssignUserROle = function(role_id){
 
     var url = '/userrole/api/people/deactivate/';
 
-    alert(level);
+   
 
     var success =  function (response) {
       var level = response.role_name;
-      alert(level);
       if (level == "Site Supervisor"){
 
          var rm_roles = ko.utils.arrayFilter(self.siteVm().allSupervisors(), function(item) {
@@ -587,8 +1060,27 @@ self.unAssignUserROle = function(role_id){
 
 };
 
+
+    self.assignreviewers = function(){
+          group = 'Reviewer';
+          self.doAssign();
+    }
+    self.assignsupervisors = function(){
+        group = 'Site Supervisor';
+        self.doAssign();
+    }
+
+    self.assignPM = function(){
+        group = 'Project Manager';
+        self.doAssign();
+    }
+    self.assignOadmin = function(){
+        group = 'Organization Admin';
+        self.doAssign();
+    }
+
   self.doAssign = function(){
-     self.new_role(({'group':'Organization Admin', 'users':[]}));
+     self.new_role(({'group':group, 'users':[]}));
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
                     console.log(item.user().id);
@@ -724,7 +1216,8 @@ if (self.level == "0"){
                 App.hideProcessing();
                 var mappedData = ko.utils.arrayMap(response, function(item) {
                       return new User(item);
-                    });                  
+                    });
+
                 self.users(mappedData);
 
 
