@@ -137,7 +137,7 @@ var Role = function (data){
   
   self.rmrole = function(){
    vm.unAssignUserROle(self.id());
-   alert(self.id());
+   
   };
 
 
@@ -178,6 +178,8 @@ var Project = function(data){
   for (var i in data){
     self[i] = ko.observable(data[i]);
       }   
+
+ 
 }
 
 
@@ -404,6 +406,20 @@ var ProjectVM = function(level, pk){
         });
   };
 
+self.setSelected = function(site){
+ 
+   if (self.all_selected_sites.indexOf(site) < 0) {
+    self.all_selected_sites.push(site);
+        
+  }else{
+    self.all_selected_sites.remove(site);
+    
+  }
+  console.log(self.all_selected_sites());
+        return true;
+  };    
+
+
   self.setAllAssignAsSelected = function(site){
    // console.log(self.alluserid());
    self.all_selected_sites([]);
@@ -541,18 +557,7 @@ function multiemailvalidate(entry) {
     });
   
   
-  self.setSelected = function(site){
-  
-   if (self.all_selected_sites.indexOf(site) < 0) {
-    self.all_selected_sites.push(site);
-        
-  }else{
-    self.all_selected_sites.remove(site);
-    
-  }
-  console.log(self.all_selected_sites());
-        return true;
-  };                   
+                 
 
   // 
     self.loadAllSites();
@@ -698,7 +703,6 @@ var OrgVM = function(level, pk){
   };
 
   self.setSelected = function(project){
-  alert();
    if (self.all_selected_projects.indexOf(project) < 0) {
     self.all_selected_projects.push(project);
         
