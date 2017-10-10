@@ -102,7 +102,7 @@ markers = new L.geoJson(data, {
         }
         
         //map.addLayer(osm);
-        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: false}).addTo(map);
+        layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
 
         map.addLayer(markers);
 
