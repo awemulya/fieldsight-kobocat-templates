@@ -1,6 +1,7 @@
-var site_id = ""
-function assignsite_id(siteid){
-  site_id = siteid;
+var url1 = ""
+function assignsite_id(url){
+
+  url1 = url;
 }
 var Site =function (data){
   self = this;
@@ -39,9 +40,11 @@ function SitesViewModel() {
 
 
   self.loadSites = function(){
+
     App.showProcessing();
+
         $.ajax({
-            url: '/fieldsight/api/project-sites/'+site_id+'/',
+            url: url1,
             method: 'GET',
             dataType: 'json',
             // data: post_data,
