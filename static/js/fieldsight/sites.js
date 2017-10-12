@@ -43,6 +43,7 @@ function SitesViewModel() {
 
     App.showProcessing();
 
+
         $.ajax({
             url: url1,
             method: 'GET',
