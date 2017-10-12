@@ -85,7 +85,7 @@ function SitesViewModel() {
         self.sites(self.allSites());
     } else {
         filter_sites = ko.utils.arrayFilter(self.allSites(), function(item) {
-            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
         });
         self.sites(filter_sites);
     }
