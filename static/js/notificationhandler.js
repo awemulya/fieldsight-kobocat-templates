@@ -107,28 +107,28 @@
         }   
 
     function type16(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> submitted a response for '+ data.extra_message +' <b><a href="' +  data.get_event_url + '">' + data.event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> submitted a response for '+ data.extra_message +' <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
                   return content;
         }   
 
     function type17(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response '+ data.extra_message +' <b><a href="' +  data.get_event_url + '">' + data.event_name + '</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_eventobj_url+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response '+ data.extra_message +' <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_eventobj_url+'</a></b>';
                   return content;
         }   
 
     function type18(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new form'+ data.extra_message +' in project <b><a href="' + data.get_event_url+ '">' + data.event_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new form '+ data.extra_message +' in project <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b>';
                   return content;
         }   
 
     function type19(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ data.extra_message +' in site <b><a href="' + data.get_event_url+ '">' + data.event_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ data.extra_message +' in site <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b>';
                   return content;
         }   
 
 
     function type20(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> edited <b><a href="' +  data.get_event_url + '">' + data.event_name + '</a></b> form.';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> edited <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> form.';
                   return content;
         }
 
