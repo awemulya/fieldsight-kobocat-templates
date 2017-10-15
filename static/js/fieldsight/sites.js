@@ -6,6 +6,7 @@ function assignsite_id(url){
 var Site =function (data){
   self = this;
   self.id = ko.observable();
+  self.prog = ko.observable();
   self.identifier = ko.observable();
   self.name = ko.observable();
   self.type = ko.observable();
