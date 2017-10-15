@@ -112,7 +112,7 @@
         }   
 
     function type17(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response for '+ data.extra_message +' in site <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response for <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
                   return content;
         }   
 
