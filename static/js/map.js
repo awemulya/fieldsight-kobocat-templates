@@ -192,6 +192,10 @@ markers = new L.geoJson(data, {
         });
         
         
+        progressLayer.on('click',function(){
+            console.log("progresslayer clicked");
+        });
+
         //layerswitcher.addOverlay(progressLayer, "Site Progress");
         //legend start
        function addLegend(type){
