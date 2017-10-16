@@ -6,6 +6,7 @@ function assignsite_id(url){
 var Site =function (data){
   self = this;
   self.id = ko.observable();
+  self.prog = ko.observable();
   self.identifier = ko.observable();
   self.name = ko.observable();
   self.type = ko.observable();
@@ -17,7 +18,7 @@ var Site =function (data){
   self.logo = ko.observable();
   self.is_active = ko.observable();
   self.location = ko.observable();
-
+  self.get_site_submission_count = ko.observable();
   self.save = function(){
     vm.site_modal_visibility(false);
   };
@@ -53,7 +54,11 @@ function SitesViewModel() {
             success: function (response) {
                 App.hideProcessing();
                var mappedData = ko.utils.arrayMap(response, function(item) {
-                        return new Site(item);
+                        response = JSON.parse(item.get_site_submission_count);
+                        item.get_site_submission_count = response
+                        console.log(item);
+                        
+                        return new Site(item);;
                     });
                 self.allSites(mappedData);
 
