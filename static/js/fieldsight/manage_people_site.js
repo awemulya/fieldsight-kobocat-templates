@@ -584,7 +584,7 @@ function multiemailvalidate(entry) {
                     console.log(item.id());
                     self.new_role().sites.push(item.id);
                     });
-       // App.showProcessing();
+        App.showProcessing();
      
     var url = assignurl;
     console.log(ko.toJS(self.new_role()))
