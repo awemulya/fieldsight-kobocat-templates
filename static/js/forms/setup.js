@@ -1097,6 +1097,7 @@ var StageVM = function(is_project, pk){
   // self.search_key = ko.observable();
   self.addStageMode = ko.observable(true);
   self.stage_form_modal_visibility = ko.observable(false);
+  self.stage_order_modal_visibility = ko.observable(false);
 
   self.getStages = function(){
     App.showProcessing();
@@ -1176,6 +1177,9 @@ self.add_stage = function(){
   self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
   self.current_stage().setShowSubstages();
   self.stage_form_modal_visibility(true);
+}
+self.reorder_stage = function(){
+  self.stage_order_modal_visibility(true);
 }
 
 self.deployStages = function (){
