@@ -4477,9 +4477,9 @@ tbody.collapse.show {
 .card {
     position: absolute;
     padding: 5px;
-    z-index: 9999;
-    margin-top: 25px;
-    right: 40px;
+    z-index: 500;
+    margin-top: 64px;
+    right: 30px;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -13231,7 +13231,7 @@ a.mini-stat:hover {
 }
 
 .widget-scolling-list .widget-body {
-    height: 181px;
+    height: 450px;
     overflow: hidden
 }
 
