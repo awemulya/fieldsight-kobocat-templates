@@ -453,7 +453,6 @@ self.setSelected = function(site){
         self.sites(self.allsites());
     } else {
         filter_data = ko.utils.arrayFilter(self.allsites(), function(item) {
-            console.log(item.name());
             return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
         });
         self.sites(filter_data);
@@ -534,6 +533,7 @@ function multiemailvalidate(entry) {
     }
 
   self.inviteforemails = (function () {
+    App.showProcessing();
     var email = document.getElementById("multi_invite_email_ps").value;
     if (!email) {
         alert("Please insert an email to invite.");
@@ -552,7 +552,8 @@ function multiemailvalidate(entry) {
    
              App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
            }
-          else{ alert('faileded'); }
+          else{ App.hideProcessing(); 
+            alert('failed'); }
     }
     });
   
@@ -573,6 +574,7 @@ function multiemailvalidate(entry) {
     };
 
     self.doAssign = function(){
+    App.showProcessing();
     self.new_role({'group':group, 'users':[], 'sites':[]});
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
@@ -584,8 +586,6 @@ function multiemailvalidate(entry) {
                     console.log(item.id());
                     self.new_role().sites.push(item.id);
                     });
-        App.showProcessing();
-     
     var url = assignurl;
     console.log(ko.toJS(self.new_role()))
     
@@ -710,12 +710,12 @@ var OrgVM = function(level, pk){
     self.all_selected_projects.remove(project);
     
   }
-  console.log(self.all_selected_projects());
+ 
         return true;
   };    
 
   self.setAllAssignAsSelected = function(project){
-    console.log(self.allprojectid());
+
 
    self.all_selected_projects([]);
   
@@ -819,6 +819,7 @@ function multiemailvalidate(entry) {
       }
     }
   self.inviteforemails = (function (newValue) {
+    App.showProcessing();
     var email = document.getElementById("multi_invite_email_ps").value;
     if (!email) {
         alert("Please insert an email to invite.");
@@ -837,7 +838,8 @@ function multiemailvalidate(entry) {
    
              App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
            }
-          else{ alert('faileded'); }
+          else{ App.hideProcessing();
+            alert('faileded'); }
     }
     });
   
@@ -846,6 +848,7 @@ function multiemailvalidate(entry) {
   // 
     self.loadAllProjects();
     self.doAssign = function(){
+    App.showProcessing();
     self.new_role({'group':'Organization Admin', 'users':[], 'projects':[]});
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
@@ -1084,7 +1087,8 @@ self.unAssignUserROle = function(role_id){
     }
 
   self.doAssign = function(){
-     self.new_role(({'group':group, 'users':[]}));
+    App.showProcessing();
+    self.new_role(({'group':group, 'users':[]}));
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
                     console.log(item.user().id);
@@ -1228,7 +1232,7 @@ if (self.level == "0"){
             },
             error: function (errorThrown) {
                 App.hideProcessing();
-                console.log(errorThrown);
+                //console.log(errorThrown);
             }
         });
   };
@@ -1310,7 +1314,7 @@ if (self.level == "0"){
    
     });  
    all_selected_users(self.allusers().slice(0));
-    console.log(all_selected_users()); 
+    // console.log(all_selected_users()); 
   }; 
 
   self.setAllUnSelected = function(user){
@@ -1325,7 +1329,7 @@ if (self.level == "0"){
    
   }; 
   self.search_key.subscribe(function (newValue) {
-    console.log(all_selected_users);
+    // console.log(all_selected_users);
     if (!newValue) {
         self.users(self.allusers());
     } else {
@@ -1336,7 +1340,7 @@ if (self.level == "0"){
     }
     });
   self.setSelected = function(user){
-   console.log(all_selected_users.indexOf(user));
+   // console.log(all_selected_users.indexOf(user));
    if (all_selected_users.indexOf(user) < 0) {
     all_selected_users.push(user);
         
@@ -1344,7 +1348,7 @@ if (self.level == "0"){
     all_selected_users.remove(user);
     
   }
-  console.log(all_selected_users());
+  // console.log(all_selected_users());
         return true;
   };                                                                
 

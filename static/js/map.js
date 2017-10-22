@@ -37,6 +37,9 @@ progressText = ['0%','0-20%','20-40%','40-60%','60-80%','80-100%', '100%'];
 markers = new L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
         // rejected
+        
+
+
         if(feature.status == 1){
                     icon = L.icon({
                                 iconSize: [40, 40],
@@ -78,6 +81,14 @@ markers = new L.geoJson(data, {
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-grey.png'
+                    });
+                }
+                else{
+                            icon = L.icon({
+                                iconSize: [40, 40],
+                                iconAnchor: [13, 27],
+                                popupAnchor:  [1, -24],
+                                iconUrl: static_url+'images/marker-red.png'
                     });
                 }
         //console.log(icon.options);
