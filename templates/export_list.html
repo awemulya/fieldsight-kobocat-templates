@@ -24,7 +24,7 @@
 <section id="export-downloads">
 
     {% if user.is_authenticated %}
-    <form action="{% url "onadata.apps.viewer.views.create_export" username xform.id_string export_type %}" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="{% url "onadata.apps.viewer.views.create_export" username xform.id_string export_type is_project id %}" method="post" enctype="application/x-www-form-urlencoded">
         {% csrf_token %}
             <span style='float:middle;'>
               <div>
