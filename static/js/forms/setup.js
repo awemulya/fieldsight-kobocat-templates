@@ -73,7 +73,6 @@ var GXform = function (data){
 
 
   var FSXform = function (data){
-    console.log(data);
     
    var self = this;
    self.id = ko.observable();
@@ -83,11 +82,9 @@ var GXform = function (data){
         self[i] = ko.observable(data[i]);
     }
     if(!self.xf()){
-      console.log("not");
       self.xf(vm.stagesVm().xforms()[0]);
       // self.xf(new Xform({'id':'', 'title':''}));
     }else{
-      console.log("yes");
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
     }
 }
@@ -1400,9 +1397,10 @@ self.orderChanged = function(){
 //     });
   
   self.getGlobalXforms();
-  // setTimeout(myFunction, 1000);
-  self.getXforms();
-  self.getStages();
+  setTimeout(self.getXforms(), 10000);
+  setTimeout(self.getStages(), 10000);
+  // self.getXforms();
+  // self.getStages();
   // self.form_name_display = function (xf_id){
   //   if (xf_id() =="") return ""
   //   if (xf_id() == undefined) return ""
