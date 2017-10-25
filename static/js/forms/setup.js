@@ -38,15 +38,22 @@ function formatDate(date) {
     //   self.id(vm.stagesVm().xforms()[0].id());
     //   self.title(vm.stagesVm().xforms()[0].title());
     // }
-     self.label = ko.computed(function() {
-        var title = "";
-        ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
-            if(gxg.id() == self.id()){
+   
+   // self.label = ko.computed(function() {
+   //      var title = "";
+   //      ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
+   //          if(gxg.id() == self.id()){
 
-              title =  gxg.title();
-            }
-        });
-        return title;
+   //            title =  gxg.title();
+   //          }
+   //      });
+   //      return title;
+   //  }, self);
+
+
+self.label = ko.computed(function() {
+        
+        return self.title();
     }, self);
 
     //   self.label = ko.computed(function() {
