@@ -38,15 +38,22 @@ function formatDate(date) {
     //   self.id(vm.stagesVm().xforms()[0].id());
     //   self.title(vm.stagesVm().xforms()[0].title());
     // }
-     self.label = ko.computed(function() {
-        var title = "";
-        ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
-            if(gxg.id() == self.id()){
+   
+   // self.label = ko.computed(function() {
+   //      var title = "";
+   //      ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
+   //          if(gxg.id() == self.id()){
 
-              title =  gxg.title();
-            }
-        });
-        return title;
+   //            title =  gxg.title();
+   //          }
+   //      });
+   //      return title;
+   //  }, self);
+
+
+self.label = ko.computed(function() {
+        
+        return self.title();
     }, self);
 
     //   self.label = ko.computed(function() {
@@ -1397,9 +1404,10 @@ self.orderChanged = function(){
 //     });
   
   self.getGlobalXforms();
-  // setTimeout(myFunction, 1000);
-  self.getXforms();
-  self.getStages();
+  setTimeout(self.getXforms(), 10000);
+  setTimeout(self.getStages(), 10000);
+  // self.getXforms();
+  // self.getStages();
   // self.form_name_display = function (xf_id){
   //   if (xf_id() =="") return ""
   //   if (xf_id() == undefined) return ""
