@@ -85,10 +85,10 @@ markers = new L.geoJson(data, {
                 }
                 else{
                             icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/marker-red.png'
+                                iconUrl: static_url+'images/marker-blue.png'
                     });
                 }
         //console.log(icon.options);
