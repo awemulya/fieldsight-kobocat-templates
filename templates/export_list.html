@@ -6,7 +6,7 @@
 
 <div class="sub-header-bar">
   <div class="container__wide">
-    <a class="sub-header__back" href="{% url "onadata.apps.main.views.show" xform.user.username xform.id_string %}"><i class="fa fa-chevron-left"></i> {% trans "Return to" %} {{ xform.title }}</a>
+    <!-- <a class="sub-header__back" href="{% url "onadata.apps.main.views.show" xform.user.username xform.id_string %}"><i class="fa fa-chevron-left"></i> {% trans "Return to" %} {{ xform.title }}</a> -->
   </div>
 </div>
 
@@ -29,9 +29,9 @@
             <span style='float:middle;'>
               <div>
                 <input type="submit" class="btn btn-primary" value="{% trans 'New Export' %}" />
-                {% if export_type == 'xls' or export_type == 'csv' %}
+                <!-- {% if export_type == 'xls' or export_type == 'csv' %}
                   <a href="#advanced-export-modal" role="button" class="btn" data-toggle="modal">{% trans "Advanced Export" %}</a>
-                {% endif %}
+                {% endif %} -->
             </div>
             </span>
     </form>
