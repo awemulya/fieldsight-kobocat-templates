@@ -107,22 +107,23 @@
         }   
 
     function type16(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> submitted a response for <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>' + '</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               var formdetail = data.get_event_name.split("form");
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> submitted a response for '+ formdetail[0] +'form <b><a href="' +  data.get_event_url + '">' + formdetail[1] + '</a></b>' + '</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
                   return content;
         }   
 
     function type17(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response for <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response for '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
                   return content;
         }   
 
     function type18(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b> in project <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in project <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
                   return content;
         }   
 
     function type19(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new <b><a href="' + data.get_event_url+ '">' + data.get_event_name+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
                   return content;
         }   
 
