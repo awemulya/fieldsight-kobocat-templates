@@ -29,16 +29,16 @@
             <span style='float:middle;'>
               <div>
                 <input type="submit" class="btn btn-primary" value="{% trans 'New Export' %}" />
-                <!-- {% if export_type == 'xls' or export_type == 'csv' %}
+                {% if export_type == 'xls' or export_type == 'csv' %}
                   <a href="#advanced-export-modal" role="button" class="btn" data-toggle="modal">{% trans "Advanced Export" %}</a>
-                {% endif %} -->
+                {% endif %}
             </div>
             </span>
     </form>
     {% endif %}
 
     <div id="advanced-export-modal" class="modal hide fade">
-      <form action="{% url "onadata.apps.viewer.views.create_export" username xform.id_string export_type %}" method="post" enctype="application/x-www-form-urlencoded">
+      <form action="{% url "onadata.apps.viewer.views.create_export" username xform.id_string export_type is_project id %}" method="post" enctype="application/x-www-form-urlencoded">
         {% csrf_token %}
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -100,7 +100,7 @@
         </td>
         <td>{{ export.created_on }}</td>
         <td>
-            <form action="{% url "onadata.apps.viewer.views.delete_export" username xform.id_string export_type %}" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="{% url "onadata.apps.viewer.views.delete_export" username xform.id_string export_type is_project id %}" method="post" enctype="application/x-www-form-urlencoded">
               {% csrf_token %}
                 <div id="delete-{{ export.id|stringformat:"d" }}" class="modal hide fade">
                     <div class="modal-header">

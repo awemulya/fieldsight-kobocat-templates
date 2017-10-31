@@ -139,6 +139,7 @@ var FieldSightXF = function (data){
   self.fsform = ko.observable();
   self.is_deployed = ko.observable(false);
   self.date_created = ko.observable();
+  self.responses_count = ko.observable();
   self.em = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
 
