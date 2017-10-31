@@ -42,7 +42,7 @@ markers = new L.geoJson(data, {
 
         if(feature.status == 1){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-red.png'
@@ -51,7 +51,7 @@ markers = new L.geoJson(data, {
                 else if(feature.status == 2){
                     // flagged
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-yellow.png'
@@ -60,7 +60,7 @@ markers = new L.geoJson(data, {
                 else if(feature.status == 3){
                     // approved
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-green.png'
@@ -69,7 +69,7 @@ markers = new L.geoJson(data, {
                 else if(feature.status == 0){
                     // pending
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-blue.png'
@@ -77,7 +77,7 @@ markers = new L.geoJson(data, {
                 }else if(feature.status == 4){
                     // pending ( No Data )
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-grey.png'
@@ -134,7 +134,7 @@ markers = new L.geoJson(data, {
                 // console.log(feature);
                 if(feature.progress == 0){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker-red.png'
@@ -142,7 +142,7 @@ markers = new L.geoJson(data, {
                 }
                 else if(feature.progress >= 1 && feature.progress <= 20){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker10-20.png'
@@ -151,7 +151,7 @@ markers = new L.geoJson(data, {
                 
                 else if(feature.progress > 20 && feature.progress <= 40){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker30-40.png'
@@ -159,7 +159,7 @@ markers = new L.geoJson(data, {
                 }
                 else if(feature.progress > 40 && feature.progress <= 60){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker50-60.png'
@@ -167,7 +167,7 @@ markers = new L.geoJson(data, {
                 }
                 else if(feature.progress > 60 && feature.progress <= 80){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker70-80.png'
@@ -175,7 +175,7 @@ markers = new L.geoJson(data, {
                 }
                 else if(feature.progress > 80 && feature.progress < 100){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker80-90.png'
@@ -183,7 +183,7 @@ markers = new L.geoJson(data, {
                 }
                 else if(feature.progress == 100){
                     icon = L.icon({
-                                iconSize: [40, 40],
+                                iconSize: [25, 25],
                                 iconAnchor: [13, 27],
                                 popupAnchor:  [1, -24],
                                 iconUrl: static_url+'images/marker90-100.png'
