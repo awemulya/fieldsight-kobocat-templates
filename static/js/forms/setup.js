@@ -29,39 +29,26 @@ function formatDate(date) {
    var self = this;
    self.id = ko.observable();
    self.title = ko.observable();
+   self.label = ko.observable();
 
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
 
-    // if(!self.id()){
-    //   self.id(vm.stagesVm().xforms()[0].id());
-    //   self.title(vm.stagesVm().xforms()[0].title());
-    // }
+ 
    
-   // self.label = ko.computed(function() {
-   //      var title = "";
-   //      ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
-   //          if(gxg.id() == self.id()){
-
-   //            title =  gxg.title();
-   //          }
-   //      });
-   //      return title;
-   //  }, self);
-
-
-self.label = ko.computed(function() {
-        
-        return self.title();
+   self.label = ko.computed(function() {
+         var match = ko.utils.arrayFilter(vm.stagesVm().xforms(), function(gxg){
+            return gxg.id() == self.id()
+        });
+         if(match.length){
+          return match[0].title();
+          
+         }else{
+          return "";
+         }
     }, self);
 
-    //   self.label = ko.computed(function() {
-
-    //     var selectemItem = ko.utils.arrayFirst(vm.stagesVm().gxforms(), function(gxform) {
-    //       return gxform.id() == self.id()
-    //     }
-    // }, self);
 
    }
 
@@ -1305,22 +1292,6 @@ var success =  function (response) {
                 }
 
 
-
-              //    ko.utils.arrayForEach(self.allStages(), function(item) {
-              //     if (item.id() == response.id) {
-              //         save_mode =  false;
-              //         return;
-              //     }
-              // }); 
-              //     if(save_mode == true){
-              //       self.allStages().push(new Stage(response));
-              //       self.stages(self.allStages());
-              //       self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
-              //       self.current_stage().setShowSubstages();
-              //       // self.addStageMode(true);
-
-              //     }
-
                 App.notifyUser(
                         'Stage Form'+response.name +'Saved',
                         'success'
@@ -1389,40 +1360,10 @@ self.orderChanged = function(){
   self.saveStagesOrder();
 };
 
-// self.search_key.subscribe(function (newValue) {
-//     if (!newValue) {
-//         self.stages(self.allStages());
-//     } else {
-//         filter_stages = ko.utils.arrayFilter(self.allStages(), function(item) {
-//           if (item.name()){
-//             return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
-//           }else{
-//             return true;
-//           }
-//         });
-//         self.stages(filter_stages);
-//     }
-//     });
   
-  self.getGlobalXforms();
-  setTimeout(self.getXforms(), 10000);
-  setTimeout(self.getStages(), 10000);
-  // self.getXforms();
-  // self.getStages();
-  // self.form_name_display = function (xf_id){
-  //   if (xf_id() =="") return ""
-  //   if (xf_id() == undefined) return ""
-  //     alert(xf_id());
-  //     var title = "";
-  //     ko.utils.arrayForEach(self.xforms(), function(item) {
-  //                 if (item.id() == xf_id) {
-  //                     title = item.title();
-  //                     return;
-  //                 }
-  //             });
-  //   alert(title);
-  //   return title;
-  // }
+  self.getXforms();
+  self.getStages();
+
  }
 
 
