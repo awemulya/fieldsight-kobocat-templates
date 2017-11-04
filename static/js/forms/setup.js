@@ -339,9 +339,19 @@ self.save_em = function(){
 
 
 
-  self.save = function(){
+  self.edit_form = function(){
+    vm.scheduleVm().getDays();
+    vm.scheduleVm().current_schedule(self);
+    vm.scheduleVm().schedule_form_edit_modal_visibility(true);
+  };
+
+    self.save = function(){
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
+  };
+  self.save_edit = function(){
+    vm.scheduleVm().saveSchedule();
+    vm.scheduleVm().schedule_form_edit_modal_visibility(false);
   };
 
 self.deploy = function(){
@@ -917,7 +927,9 @@ var ScheduleVM = function(is_project, pk){
   self.allForms = ko.observableArray();
   self.forms = ko.observableArray();
   self.current_form = ko.observable();
+  self.current_schedule = ko.observable();
   self.schedule_form_modal_visibility = ko.observable(false);
+  self.schedule_form_edit_modal_visibility = ko.observable(false);
   self.is_deployed = ko.observable(false);
   self.search_key = ko.observable();
   self.days = ko.observableArray();
@@ -983,7 +995,7 @@ self.deploy = function (df_id, is_deployed){
 
 self.saveSchedule = function(){
   App.showProcessing();
-    var url = '/forms/api/schedule/';
+    var url = '/forms/api/schedulerrr/';
     var schedule = new Schedule();
     if (self.is_project == "1"){
       schedule.project = self.pk;
@@ -1055,6 +1067,13 @@ self.saveSchedule = function(){
   self.add_form = function(){
     self.getDays();
     self.current_form(new Schedule());
+    self.schedule_form_modal_visibility(true);
+  };
+
+  self.edit_form = function(schedule){
+    alert("aa");
+    self.getDays();
+    self.current_form(schedule);
     self.schedule_form_modal_visibility(true);
   };
 
