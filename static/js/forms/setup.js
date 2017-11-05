@@ -29,27 +29,10 @@ function formatDate(date) {
    var self = this;
    self.id = ko.observable();
    self.title = ko.observable();
-   self.label = ko.observable();
 
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
-
- 
-   
-   self.label = ko.computed(function() {
-         var match = ko.utils.arrayFilter(vm.stagesVm().xforms(), function(gxg){
-            return gxg.id() == self.id()
-        });
-         if(match.length){
-          return match[0].title();
-          
-         }else{
-          return "";
-         }
-    }, self);
-
-
    }
 
 var GXform = function (data){
@@ -1148,35 +1131,22 @@ var StageVM = function(is_project, pk){
             // async: true,
             success: function (response) {
                 App.hideProcessing();
+                //   var mappedData1 = ko.utils.arrayMap(response, function(item) {
+                //       return new GXform(item);
+                //     });
+                
+                // self.gxforms(mappedData1);
+
+                setTimeout(function () {
                   var mappedData = ko.utils.arrayMap(response, function(item) {
                       return new Xform(item);
                     });
                 
                 self.xforms(mappedData);
+            
+                }, 100);
 
-            },
-            error: function (errorThrown) {
-                App.hideProcessing();
-                console.log(errorThrown);
-            }
-        });
-  };
-
-self.getGlobalXforms = function(){
-     App.showProcessing();
-        $.ajax({
-            url: '/forms/api/xf/' + String(self.is_project) + '/' + String(self.pk),
-            method: 'GET',
-            dataType: 'json',
-            // data: post_data,
-            // async: true,
-            success: function (response) {
-                App.hideProcessing();
-                  var mappedData = ko.utils.arrayMap(response, function(item) {
-                      return new GXform(item);
-                    });
                 
-                self.gxforms(mappedData);
 
             },
             error: function (errorThrown) {
@@ -1185,6 +1155,7 @@ self.getGlobalXforms = function(){
             }
         });
   };
+
 
 self.add_stage = function(){
   self.addStageMode(false);
@@ -1276,7 +1247,7 @@ self.saveStage = function(stage){
                           sub_st.id = item.id();
                           sub_st.name = item.name();
                           sub_st.description = item.description();
-                          sub_st.stage_forms = {"xf": {"title": item.stage_forms().xf().label(),
+                          sub_st.stage_forms = {"xf": {"title": "",
                                                   "id": item.stage_forms().xf().id()},
                                                  "id": item.stage_forms().id() };
                           return sub_st;
