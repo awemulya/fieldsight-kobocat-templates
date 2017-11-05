@@ -58,12 +58,14 @@ var GXform = function (data){
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
+
     if(!self.xf()){
       self.xf(vm.stagesVm().xforms()[0]);
       // self.xf(new Xform({'id':'', 'title':''}));
     }else{
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
     }
+    console.log(self.xf().id());
 }
 
 var EducationMaterial = function(data){
@@ -371,9 +373,11 @@ var SubStage = function(data){
    for (var i in data){
       self[i] = ko.observable(data[i]);
     }
+
   if(self.stage_forms()){
 
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
+  // console.log(self.stage_forms().xf().id());
     
   }
   
@@ -1108,6 +1112,7 @@ var StageVM = function(is_project, pk){
                 App.hideProcessing();
                   var mappedData = ko.utils.arrayMap(response, function(item) {
                       return new Stage(item);
+
                     });
                 
                 self.stages(mappedData);
@@ -1131,22 +1136,12 @@ var StageVM = function(is_project, pk){
             // async: true,
             success: function (response) {
                 App.hideProcessing();
-                //   var mappedData1 = ko.utils.arrayMap(response, function(item) {
-                //       return new GXform(item);
-                //     });
                 
-                // self.gxforms(mappedData1);
-
-                setTimeout(function () {
                   var mappedData = ko.utils.arrayMap(response, function(item) {
                       return new Xform(item);
                     });
                 
                 self.xforms(mappedData);
-            
-                }, 100);
-
-                
 
             },
             error: function (errorThrown) {
