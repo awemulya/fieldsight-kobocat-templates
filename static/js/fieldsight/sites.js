@@ -3,6 +3,8 @@ function assignsite_id(url){
 
   url1 = url;
 }
+
+
 var Site =function (data){
   self = this;
   self.id = ko.observable();
@@ -56,7 +58,7 @@ function SitesViewModel() {
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         response = JSON.parse(item.get_site_submission_count);
                         item.get_site_submission_count = response
-                        console.log(item);
+                        // console.log(item);
                         
                         return new Site(item);;
                     });
@@ -95,6 +97,85 @@ function SitesViewModel() {
         self.sites(filter_sites);
     }
     });
+// for sorting mechanicm
+// self.sort_byflagged = function(){
+    
+//     sorted_sites = self.allSites().sort(
+//       function(a,b) {
+//             var x = a.name.toLowerCase();
+//             var y = b.name.toLowerCase();
+//             return x < y ? 1 : x > y ? -1 : 0;
+//           })
+//     self.sites(sorted_sites); 
+
+//   };    
+
+
+// self.sort_byrejected = function(){
+    
+//     sorted_sites = self.allSites().sort(
+//       function(a,b) {
+//             var x = a.name.toLowerCase();
+//             var y = b.name.toLowerCase();
+//             return x < y ? 1 : x > y ? -1 : 0;
+//           })
+//     self.sites(sorted_sites); 
+
+//   };    
+
+// self.sort_byoutstanding = function(){
+    
+//     sorted_sites = self.allSites().sort(
+//       function(a,b) {
+//             var x = a.name.toLowerCase();
+//             var y = b.name.toLowerCase();
+//             return x < y ? 1 : x > y ? -1 : 0;
+//           })
+//     self.sites(sorted_sites); 
+
+//   };    
+
+// self.sort_bypending = function(){
+    
+//     sorted_sites = self.allSites().sort(
+//       function(a,b) {
+//             var x = a.name.toLowerCase();
+//             var y = b.name.toLowerCase();
+//             return x < y ? 1 : x > y ? -1 : 0;
+//           })
+//     self.sites(sorted_sites); 
+
+//   };    
+
+
+
+    // self.search_key.subscribe(function (newValue) {
+    // if (!newValue) {
+       
+    //     // function(a,b) {
+    //     //     var x = a.name.toLowerCase();
+    //     //     var y = b.name.toLowerCase();
+    //     //     return x < y ? 1 : x > y ? -1 : 0;
+    //     //   }
+
+    //     filter_sites1 = self.allSites().sort(function(a,b) {
+    //       var x = a.name.toLowerCase();
+    //       var y = b.name.toLowerCase();
+    //       return x < y ? 1 : x > y ? -1 : 0;
+    //     });
+    //     self.sites(filter_sites1);
+
+    // } else {
+    //    filter_sites1 = self.allSites().sort(function(a,b) {
+    //       var x = a.name().toLowerCase();
+    //       var y = b.name().toLowerCase();
+    //       return x < y ? 1 : x > y ? -1 : 0;
+    //     });
+    //     self.sites(filter_sites1);
+
+    //         }
+    // });
+
 
 };
 

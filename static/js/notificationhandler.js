@@ -23,6 +23,7 @@
         18 : type18,
         19 : type19,
         20 : type20,
+        412: type412,
     }
 
 //notification message list builder with ahref links
@@ -62,7 +63,6 @@
            content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Reviewer in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
               return content;
     }
-
     function type8(data){
                content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Site Supervisor in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
                   return content;
@@ -81,13 +81,17 @@
 
 
     function type11(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new site named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> in  <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new site named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> in Project named <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
                   return content;
         }
 
     function type12(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ title +' in <a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
-                  return content;
+              if(data.source_uid == user_id){
+              content = data.extra_message + ' has successfully been created in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+              }else{
+              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ data.extra_message +' in <a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+              }
+               return content;
         }
 
 
@@ -135,6 +139,11 @@
                content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> edited <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> form.';
                   return content;
         }
+
+    function type412(data){
+          content = 'Bulk upload of ' + data.extra_message + ' has <b>failed</b> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          return content;
+    }
 
 function redirect(url){
   window.location = url;
