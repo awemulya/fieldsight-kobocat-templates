@@ -33,6 +33,17 @@ function formatDate(date) {
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
+
+    self.id.subscribe(function (newValue) {
+    if (!newValue) {
+        console.log("not new value");
+    } else {
+        var match = ko.utils.arrayFirst(vm.stagesVm().xforms(), function(item) {
+        return newValue === item.id();
+});
+        self.title(match.title());
+    }
+    });
    }
 
 var GXform = function (data){
@@ -65,7 +76,8 @@ var GXform = function (data){
     }else{
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
     }
-    console.log(self.xf().id());
+
+
 }
 
 var EducationMaterial = function(data){
@@ -181,7 +193,7 @@ self.education_material = function(){
 
 }
 self.save_em = function(){
-  console.log("called save");
+  // console.log("called save");
     App.showProcessing();
     var url = '/forms/api/save_educational_material/';
 
@@ -273,7 +285,7 @@ self.education_material = function(){
 
 }
 self.save_em = function(){
-  console.log("called save");
+  // console.log("called save");
     App.showProcessing();
     var url = '/forms/api/save_educational_material/';
 
@@ -402,7 +414,7 @@ self.education_material = function(sub_stage){
 
 }
 self.save_em = function(){
-  console.log("called save");
+  // console.log("called save");
     App.showProcessing();
     var url = '/forms/api/save_educational_material/';
 
