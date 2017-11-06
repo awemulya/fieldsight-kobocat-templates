@@ -33,29 +33,6 @@ function formatDate(date) {
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
-
-    // if(!self.id()){
-    //   self.id(vm.stagesVm().xforms()[0].id());
-    //   self.title(vm.stagesVm().xforms()[0].title());
-    // }
-     self.label = ko.computed(function() {
-        var title = "";
-        ko.utils.arrayForEach(vm.stagesVm().gxforms(), function(gxg) {
-            if(gxg.id() == self.id()){
-
-              title =  gxg.title();
-            }
-        });
-        return title;
-    }, self);
-
-    //   self.label = ko.computed(function() {
-
-    //     var selectemItem = ko.utils.arrayFirst(vm.stagesVm().gxforms(), function(gxform) {
-    //       return gxform.id() == self.id()
-    //     }
-    // }, self);
-
    }
 
 var GXform = function (data){
@@ -81,12 +58,14 @@ var GXform = function (data){
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
+
     if(!self.xf()){
       self.xf(vm.stagesVm().xforms()[0]);
       // self.xf(new Xform({'id':'', 'title':''}));
     }else{
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
     }
+    console.log(self.xf().id());
 }
 
 var EducationMaterial = function(data){
@@ -132,6 +111,7 @@ var FieldSightXF = function (data){
   self.fsform = ko.observable();
   self.is_deployed = ko.observable(false);
   self.date_created = ko.observable();
+  self.responses_count = ko.observable();
   self.em = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
 
@@ -344,9 +324,19 @@ self.save_em = function(){
 
 
 
-  self.save = function(){
+  self.edit_form = function(){
+    vm.scheduleVm().getDays();
+    vm.scheduleVm().current_schedule(self);
+    vm.scheduleVm().schedule_form_edit_modal_visibility(true);
+  };
+
+    self.save = function(){
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
+  };
+  self.save_edit = function(){
+    vm.scheduleVm().saveSchedule();
+    vm.scheduleVm().schedule_form_edit_modal_visibility(false);
   };
 
 self.deploy = function(){
@@ -383,9 +373,11 @@ var SubStage = function(data){
    for (var i in data){
       self[i] = ko.observable(data[i]);
     }
+
   if(self.stage_forms()){
 
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
+  // console.log(self.stage_forms().xf().id());
     
   }
   
@@ -922,7 +914,9 @@ var ScheduleVM = function(is_project, pk){
   self.allForms = ko.observableArray();
   self.forms = ko.observableArray();
   self.current_form = ko.observable();
+  self.current_schedule = ko.observable();
   self.schedule_form_modal_visibility = ko.observable(false);
+  self.schedule_form_edit_modal_visibility = ko.observable(false);
   self.is_deployed = ko.observable(false);
   self.search_key = ko.observable();
   self.days = ko.observableArray();
@@ -988,7 +982,7 @@ self.deploy = function (df_id, is_deployed){
 
 self.saveSchedule = function(){
   App.showProcessing();
-    var url = '/forms/api/schedule/';
+    var url = '/forms/api/schedulerrr/';
     var schedule = new Schedule();
     if (self.is_project == "1"){
       schedule.project = self.pk;
@@ -1063,6 +1057,13 @@ self.saveSchedule = function(){
     self.schedule_form_modal_visibility(true);
   };
 
+  self.edit_form = function(schedule){
+    alert("aa");
+    self.getDays();
+    self.current_form(schedule);
+    self.schedule_form_modal_visibility(true);
+  };
+
 
 
 self.search_key.subscribe(function (newValue) {
@@ -1111,6 +1112,7 @@ var StageVM = function(is_project, pk){
                 App.hideProcessing();
                   var mappedData = ko.utils.arrayMap(response, function(item) {
                       return new Stage(item);
+
                     });
                 
                 self.stages(mappedData);
@@ -1134,6 +1136,7 @@ var StageVM = function(is_project, pk){
             // async: true,
             success: function (response) {
                 App.hideProcessing();
+                
                   var mappedData = ko.utils.arrayMap(response, function(item) {
                       return new Xform(item);
                     });
@@ -1148,29 +1151,6 @@ var StageVM = function(is_project, pk){
         });
   };
 
-self.getGlobalXforms = function(){
-     App.showProcessing();
-        $.ajax({
-            url: '/forms/api/xf/' + String(self.is_project) + '/' + String(self.pk),
-            method: 'GET',
-            dataType: 'json',
-            // data: post_data,
-            // async: true,
-            success: function (response) {
-                App.hideProcessing();
-                  var mappedData = ko.utils.arrayMap(response, function(item) {
-                      return new GXform(item);
-                    });
-                
-                self.gxforms(mappedData);
-
-            },
-            error: function (errorThrown) {
-                App.hideProcessing();
-                console.log(errorThrown);
-            }
-        });
-  };
 
 self.add_stage = function(){
   self.addStageMode(false);
@@ -1262,7 +1242,7 @@ self.saveStage = function(stage){
                           sub_st.id = item.id();
                           sub_st.name = item.name();
                           sub_st.description = item.description();
-                          sub_st.stage_forms = {"xf": {"title": item.stage_forms().xf().label(),
+                          sub_st.stage_forms = {"xf": {"title": "",
                                                   "id": item.stage_forms().xf().id()},
                                                  "id": item.stage_forms().id() };
                           return sub_st;
@@ -1296,22 +1276,6 @@ var success =  function (response) {
 
                 }
 
-
-
-              //    ko.utils.arrayForEach(self.allStages(), function(item) {
-              //     if (item.id() == response.id) {
-              //         save_mode =  false;
-              //         return;
-              //     }
-              // }); 
-              //     if(save_mode == true){
-              //       self.allStages().push(new Stage(response));
-              //       self.stages(self.allStages());
-              //       self.current_stage(new Stage({'order':self.allStages().length+1 || 1,'parent':[]}));
-              //       self.current_stage().setShowSubstages();
-              //       // self.addStageMode(true);
-
-              //     }
 
                 App.notifyUser(
                         'Stage Form'+response.name +'Saved',
@@ -1381,39 +1345,10 @@ self.orderChanged = function(){
   self.saveStagesOrder();
 };
 
-// self.search_key.subscribe(function (newValue) {
-//     if (!newValue) {
-//         self.stages(self.allStages());
-//     } else {
-//         filter_stages = ko.utils.arrayFilter(self.allStages(), function(item) {
-//           if (item.name()){
-//             return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue);
-//           }else{
-//             return true;
-//           }
-//         });
-//         self.stages(filter_stages);
-//     }
-//     });
   
-  self.getGlobalXforms();
-  // setTimeout(myFunction, 1000);
   self.getXforms();
   self.getStages();
-  // self.form_name_display = function (xf_id){
-  //   if (xf_id() =="") return ""
-  //   if (xf_id() == undefined) return ""
-  //     alert(xf_id());
-  //     var title = "";
-  //     ko.utils.arrayForEach(self.xforms(), function(item) {
-  //                 if (item.id() == xf_id) {
-  //                     title = item.title();
-  //                     return;
-  //                 }
-  //             });
-  //   alert(title);
-  //   return title;
-  // }
+
  }
 
 
