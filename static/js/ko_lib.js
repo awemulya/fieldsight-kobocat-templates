@@ -535,7 +535,7 @@ ko.bindingHandlers.datePicker = {
     // Update the control whenever the view model changes
     update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var value =  valueAccessor();        
-        element.value = value().toISOString().slice(0,10);;
+        element.value = value().toISOString().slice(0,10);
     }
 };
 
