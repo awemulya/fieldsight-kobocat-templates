@@ -23,7 +23,12 @@
         18 : type18,
         19 : type19,
         20 : type20,
+        21 : type21,
+        22 : type22,
+        23 : type23,
         412: type412,
+        421: type421,
+        422: type422,
     }
 
 //notification message list builder with ahref links
@@ -140,10 +145,51 @@
                   return content;
         }
 
+    function type21(data){
+              if(data.source_uid == user_id){
+              content = "<b>TASK INFO : </b>"+data.extra_message + ' of organization <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b> were created.';
+              }else{
+              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created '+ data.extra_message +' of organization <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+              }
+               return content;
+        }
+
+    function type22(data){
+              if(data.source_uid == user_id){
+              content = "<b>TASK INFO : </b>"+data.extra_message + ' of project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b> were created.';
+              }else{
+              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ data.extra_message +' of project <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+              }
+               return content;
+        }
+
+    function type23(data){
+              content = "<b>TASK INFO : </b>"+data.extra_message + ' in <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+               return content;
+        }
+
+
+
+
+
+    // ----------------Errors -------------------
+
     function type412(data){
-          content = 'Bulk upload of ' + data.extra_message + ' has <b>failed</b> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          content = 'Bulk upload of ' + data.extra_message + ' has <span style="color:maroon;"><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
           return content;
-    }
+        }
+    
+    function type421(data){
+          content = 'Multi Role assign for ' + data.extra_message + ' has <span style="color:maroon;"><b>failed</b></span> in organization <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          return content;
+        }
+
+    function type422(data){
+          content = data.extra_message + ' has <span style="color:maroon;"><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          return content;
+        }
+
+
 
 function redirect(url){
   window.location = url;
