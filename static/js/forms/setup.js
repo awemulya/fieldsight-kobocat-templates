@@ -72,7 +72,7 @@ var GXform = function (data){
 
     if(!self.xf()){
       self.xf(vm.stagesVm().xforms()[0]);
-      // self.xf(new Xform({'id':'', 'title':''}));
+      console.log("First form loaded");
     }else{
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
     }
@@ -381,6 +381,7 @@ var SubStage = function(data){
 
   self.editable = ko.observable(false);
   self.em_form_modal_visibility = ko.observable(false);
+  self.edit_modal_visibility = ko.observable(false);
 
    for (var i in data){
       self[i] = ko.observable(data[i]);
@@ -389,7 +390,7 @@ var SubStage = function(data){
   if(self.stage_forms()){
 
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
-  // console.log(self.stage_forms().xf().id());
+  console.log(self.stage_forms().xf().id());
     
   }
   
@@ -404,10 +405,12 @@ var SubStage = function(data){
 
 
   self.edit = function(){
-    self.editable(true);
+    // self.editable(true);
+    self.edit_modal_visibility(true);
   }
   self.edit_done = function(){
-    self.editable(false);
+    self.edit_modal_visibility(false);
+    // self.editable(false);
   }
 self.education_material = function(sub_stage){
   self.em_form_modal_visibility(true);
