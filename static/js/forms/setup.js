@@ -997,7 +997,7 @@ self.deploy = function (df_id, is_deployed){
 
 self.saveSchedule = function(){
   App.showProcessing();
-    var url = '/forms/api/schedulerrr/';
+    var url = '/forms/api/schedule/';
     var schedule = new Schedule();
     if (self.is_project == "1"){
       schedule.project = self.pk;
