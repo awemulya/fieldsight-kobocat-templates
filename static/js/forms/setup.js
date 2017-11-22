@@ -1172,12 +1172,10 @@ self.reorder_stage = function(){
 }
 
 self.deployStages = function (){
-      if(is_deployed==true){
-    if (confirm('Are you sure you want to deploy this Stages?')) {
+    if (confirm('Are you sure you want to deploy Stages?')) {
     // Save it!
     } else {
     return false;
-    }
     }
   App.showProcessing();
     var url = '/forms/set-deploy-stages/'+ String(vm.is_project) + '/' + String(vm.pk);
