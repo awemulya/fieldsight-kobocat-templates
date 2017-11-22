@@ -265,14 +265,14 @@ textarea.form-control{
 </div>
 </div>
 
-  <h3>{% trans 'Change Submission  Status' %} </h3>
+  <h3>{% trans 'Review submission' %} </h3>
   {% csrf_token %}
   
     <div class="form-group">
       <textarea class="form-control" rows="7" type="text" data-bind="value:message" placeholder="comment"></textarea>
     </div>
 
-    <h4>Screenshorts OF Responses</h4>
+    <h4>Attach images</h4>
           <div class="well" data-bind="fileDrag: multiFileData">
               <div class="form-group row">
                   <div class="col-md-6">
