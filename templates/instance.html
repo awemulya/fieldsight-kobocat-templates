@@ -151,6 +151,7 @@ var canEdit = {% if can_edit %}true;{% else %}false;{% endif %}
   /// load form structure
   $.getJSON(formJSONUrl)
       .success(function(data){
+              console.log(data);
               parseQuestions(data.children);
               parseLanguages(data.children);
               // load count
