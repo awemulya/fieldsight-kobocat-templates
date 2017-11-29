@@ -5,7 +5,7 @@ Author URI: https://bikrantgiri.com.np
 Description: Dashboard for Field Sight
 Version: 1.0
 */
-
+/*breadcumb*/
 html,
 body,
 div,
@@ -13455,3 +13455,33 @@ ul.contact-info-list li i {
     float: left
 }
 
+ul.breadcrumbb {
+    padding: 1px 50px;
+    list-style: none;
+    background-color: none;
+    margin-top: -16px;
+
+}
+ul.breadcrumbb li {
+    display: inline;
+    font-size: 14px;
+}
+ul.breadcrumbb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+ul.breadcrumbb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+ul.breadcrumbb li a:hover {
+    color: #00628e;
+    text-decoration: underline;
+}
+
+.title {
+    margin-top: 61px;
+    margin-left: -332px;
+    margin-bottom: -86px;
+}
