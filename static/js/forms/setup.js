@@ -163,11 +163,6 @@ var FieldSightXF = function (data){
 
 self.deploy = function(){
 
-      if(vm.is_project =="1" && self.is_deployed() ==true){
-      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
-      return false;
-    }else{
-
     vm.generalVm().deploy(self.id(), self.is_deployed());
     
     if(self.is_deployed() == true){
@@ -175,7 +170,6 @@ self.deploy = function(){
     }else{
       self.is_deployed(true);
     }
-  }
 };
 
 self.deploy_to_remaining = function(){
@@ -353,10 +347,6 @@ self.save_em = function(){
 
 self.deploy = function(){
 
-      if(vm.is_project =="1" && self.is_deployed() ==true){
-      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
-      return false;
-    }else{
 
     vm.scheduleVm().deploy(self.id(), self.is_deployed());
     
@@ -365,7 +355,7 @@ self.deploy = function(){
     }else{
       self.is_deployed(true);
     }
-  }
+
   };
 }  
 
@@ -840,6 +830,13 @@ var GeneralVM = function(is_project, pk){
   };
 
 self.deploy = function (df_id, is_deployed){
+  if(is_deployed==true){
+    if (confirm('Are you sure you want to undeploy this form?')) {
+    // Save it!
+    } else {
+    return false;
+    }
+    }
     var fsxf = new FieldSightXF();
     fsxf.id = df_id;
     fsxf.is_deployed = is_deployed;
@@ -864,16 +861,9 @@ self.deploy = function (df_id, is_deployed){
                     );
 
             };
-    if(vm.is_project =="1" && is_deployed == true){
-      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
-      return false;
-    }else{
-
+  
     App.remotePost(url, fsxf, success, failure);                                                                                                                    
       
-    }
-
-  
   };
 self.deploy_to_remaining = function (df_id, is_deployed){
     var fsxf = new FieldSightXF();
@@ -958,6 +948,13 @@ var ScheduleVM = function(is_project, pk){
   };
 
 self.deploy = function (df_id, is_deployed){
+  if(is_deployed==true){
+    if (confirm('Are you sure you want to undeploy this Schedule?')) {
+    // Save it!
+    } else {
+    return false;
+    }
+    }
     var s = new Schedule();
     s.id = df_id;
     s.is_deployed = is_deployed;
@@ -982,14 +979,11 @@ self.deploy = function (df_id, is_deployed){
                     );
 
             };
-    if(vm.is_project =="1" && is_deployed ==true){
-      alert("You Cannot Undeploy Project level Forms. Preform Undeploy from Sites")
-      return false;
-    }else{
+  
 
     App.remotePost(url, s, success, failure);                                                                                                                    
       
-    }
+    
 
   
   };
@@ -997,7 +991,7 @@ self.deploy = function (df_id, is_deployed){
 
 self.saveSchedule = function(){
   App.showProcessing();
-    var url = '/forms/api/schedulerrr/';
+    var url = '/forms/api/schedule/';
     var schedule = new Schedule();
     if (self.is_project == "1"){
       schedule.project = self.pk;
@@ -1178,6 +1172,11 @@ self.reorder_stage = function(){
 }
 
 self.deployStages = function (){
+    if (confirm('Are you sure you want to deploy Stages?')) {
+    // Save it!
+    } else {
+    return false;
+    }
   App.showProcessing();
     var url = '/forms/set-deploy-stages/'+ String(vm.is_project) + '/' + String(vm.pk);
     

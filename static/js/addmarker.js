@@ -84,12 +84,16 @@ map.on('click',function(e){
 
 });
 
-$(".LatLon").on('input',function(){
+
+console.log($(".LatLon"));
+$(".LatLon").on('input',function(){console.log($(this)[0].id);
 	if($(this)[0].id == "Latitude"){ 
 		lat = $(this)[0].value;
+		console.log(lat);
 	}
 	else {
 		lon = $(this)[0].value;
+		console.log(lon);
 	}
 	//console.log($(this)[0].value);
 	
