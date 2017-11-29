@@ -1,11 +1,12 @@
-var Region =function (data){
+var Region =function (data, project){
   self = this;
   self.id = ko.observable();
   self.name = ko.observable();
-  self.url= ko.observable("/fieldsight/regional-site-list/"+self.id()+"/");
+  
   for (var i in data){
     self[i] = ko.observable(data[i]);
       }
+  self.url= ko.observable("/fieldsight/project/"+ project +"/regional-sites/"+self.id()+"/");
 }
 
 
@@ -27,7 +28,7 @@ function RegionViewModel(project) {
             success: function (response) {
                 App.hideProcessing();
                var mappedData = ko.utils.arrayMap(response, function(item) {
-                        datas = new Region(item);
+                        datas = new Region(item, project);
                         console.log(datas);
                         return datas;
                     });
