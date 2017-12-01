@@ -182,6 +182,18 @@ var Project = function(data){
  
 }
 
+var Region =function (data, project){
+  self = this;
+  self.id = ko.observable();
+  self.name = ko.observable();
+  self.selected = ko.observable(false);
+  
+  for (var i in data){
+    self[i] = ko.observable(data[i]);
+      }
+  self.url= ko.observable("/fieldsight/project/"+ project +"/regional-sites/"+self.id()+"/");
+}
+
 
 var Site = function(data){
   var self = this;
@@ -561,7 +573,97 @@ function multiemailvalidate(entry) {
                  
 
   // 
-    self.loadAllSites();
+    
+    
+
+    self.allRegions = ko.observableArray();
+    self.regions = ko.observableArray();
+    self.all_selected_regions = ko.observableArray();
+    self.all_selected_regions([]);
+
+      self.loadAllRegions = function(){
+      App.showProcessing();
+        $.ajax({
+            url: proj_region_url,
+            method: 'GET',
+            dataType: 'json',
+            // data: post_data,
+            // async: true,
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        
+                        site = new Region(item);
+                        return site;
+
+
+                    });
+
+                self.regions(mappedData);
+                self.allRegions(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
+self.setSelected = function(region){
+ 
+   if (self.all_selected_regions.indexOf(region) < 0) {
+    self.all_selected_regions.push(region);
+        
+  }else{
+    self.all_selected_regions.remove(region);
+    
+  }
+  console.log(self.all_selected_regions());
+        return true;
+  };    
+
+
+  self.setAllAssignAsSelected = function(region){
+    console.log('test');
+   self.all_selected_regions([]);
+  
+   ko.utils.arrayForEach(self.regions(), function(region) {
+
+   region.selected(true);
+    console.log(region.selected());
+   
+   
+    });  
+   self.all_selected_regions(self.allRegions().slice(0));
+    
+  }; 
+
+  self.setAllUnSelected = function(region){
+   // console.log(self.alluserid());
+   ko.utils.arrayForEach(self.regions(), function(region) {
+
+   region.selected(false);
+   // console.log(region.selected());
+   // console.log(all_selected_users());
+    });   
+    self.all_selected_regions([]);
+   
+  };
+
+  self.search_key.subscribe(function (newValue) {
+   
+    if (!newValue) {
+        self.regions(self.allRegions());
+    } else {
+        filter_data = ko.utils.arrayFilter(self.allRegions(), function(item) {
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
+        });
+        self.regions(filter_data);
+    }
+    });
+
+
 
 
     self.assignselectedreviewer = function(){
@@ -575,17 +677,34 @@ function multiemailvalidate(entry) {
 
     self.doAssign = function(){
     App.showProcessing();
+    
+    if(type == "region"){
+    self.new_role({'group':group, 'users':[], 'regions':[]});
+    
+    
+
+    ko.utils.arrayMap(self.all_selected_regions(), function(item) {
+                    console.log(item.id());
+                    self.new_role().regions.push(item.id);
+                    });
+    }
+    else{
     self.new_role({'group':group, 'users':[], 'sites':[]});
+    
+    
+
+    ko.utils.arrayMap(self.all_selected_sites(), function(item) {
+                    console.log(item.id());
+                    self.new_role().sites.push(item.id);
+                    });
+    }
+
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
                     console.log(item.user().id);
                     self.new_role().users.push(item.user().id);
                     });
 
-    ko.utils.arrayMap(self.all_selected_sites(), function(item) {
-                    console.log(item.id());
-                    self.new_role().sites.push(item.id);
-                    });
     var url = assignurl;
     console.log(ko.toJS(self.new_role()))
     
@@ -611,6 +730,14 @@ function multiemailvalidate(entry) {
 
        App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
 };
+
+    if(type == "region"){
+      self.loadAllRegions();
+    }
+    else{
+      self.loadAllSites();
+  
+    }
 
 
 }

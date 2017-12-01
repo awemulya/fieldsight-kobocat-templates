@@ -1,4 +1,4 @@
-  var SiteType = function(data) {
+var SiteType = function(data) {
     var self = this;
         this.id = ko.observable();
         this.name = ko.observable();
