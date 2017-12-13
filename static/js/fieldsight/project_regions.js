@@ -2,6 +2,7 @@ var Region =function (data, project){
   self = this;
   self.id = ko.observable();
   self.name = ko.observable();
+  self.identifier = ko.observable();
   
   for (var i in data){
     self[i] = ko.observable(data[i]);
@@ -58,7 +59,7 @@ function RegionViewModel(project) {
       newValue = newValue.toLowerCase();
         filter_regions = ko.utils.arrayFilter(self.allRegions(), function(item) {
             return (ko.utils.stringStartsWith(item.name().toLowerCase(), newValue) || 
-              ko.utils.stringStartsWith(item.address().toLowerCase(), newValue));
+              ko.utils.stringStartsWith(item.identifier().toLowerCase(), newValue));
         });
         self.regions(filter_regions);
     }
