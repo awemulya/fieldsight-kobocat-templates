@@ -201,6 +201,7 @@ function dateparser(date){
    let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
  
     var d = new Date(date);
+    console.log(d);
 
     if (offSetTime.length > 3){
 
@@ -216,11 +217,11 @@ function dateparser(date){
           d.setMinutes(d.getMinutes() - parseInt(offset_minutes));
        }
      }
-
+     console.log("LLLLL"+d);
     month = d.getMonth();
     time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
-     console.log(date);
+     
      console.log('---->>'+clean_date);
     return clean_date;
 
