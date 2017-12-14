@@ -210,11 +210,11 @@ function dateparser(date){
       offset_type = offSetTime.slice(4, 5);
 
       if (offset_type == "+"){ 
-          d.setUTCHours(d.getHours() + parseInt(offset_hours));
-          d.setUTCMinutes(d.getMinutes() + parseInt(offset_minutes));
+          d.setUTCHours(d.getUTCHours() + parseInt(offset_hours));
+          d.setUTCMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
        }else{
-          d.setUTCHours(d.getHours() - parseInt(offset_hours));
-          d.setUTCMinutes(d.getMinutes() - parseInt(offset_minutes));
+          d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
+          d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
        }
      }
      console.log("LLLLL"+d);
