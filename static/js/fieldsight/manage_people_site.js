@@ -418,7 +418,7 @@ var ProjectVM = function(level, pk){
         });
   };
 
-self.setSelected = function(site){
+self.setSiteSelected = function(site){
  
    if (self.all_selected_sites.indexOf(site) < 0) {
     self.all_selected_sites.push(site);
@@ -427,12 +427,13 @@ self.setSelected = function(site){
     self.all_selected_sites.remove(site);
     
   }
+    console.log("site");
   console.log(self.all_selected_sites());
         return true;
   };    
 
 
-  self.setAllAssignAsSelected = function(site){
+  self.setAllAssignSiteAsSelected = function(site){
    // console.log(self.alluserid());
    self.all_selected_sites([]);
   
@@ -447,7 +448,7 @@ self.setSelected = function(site){
     
   }; 
 
-  self.setAllUnSelected = function(site){
+  self.setAllSiteUnSelected = function(site){
    // console.log(self.alluserid());
    ko.utils.arrayForEach(self.sites(), function(site) {
 
@@ -610,7 +611,7 @@ function multiemailvalidate(entry) {
         });
   };
 
-self.setSelected = function(region){
+self.setRegionSelected = function(region){
  
    if (self.all_selected_regions.indexOf(region) < 0) {
     self.all_selected_regions.push(region);
@@ -619,13 +620,13 @@ self.setSelected = function(region){
     self.all_selected_regions.remove(region);
     
   }
+  console.log("region");
   console.log(self.all_selected_regions());
         return true;
   };    
 
 
-  self.setAllAssignAsSelected = function(region){
-    console.log('test');
+  self.setAllAssignRegionAsSelected = function(region){
    self.all_selected_regions([]);
   
    ko.utils.arrayForEach(self.regions(), function(region) {
@@ -639,7 +640,7 @@ self.setSelected = function(region){
     
   }; 
 
-  self.setAllUnSelected = function(region){
+  self.setAllRegionUnSelected = function(region){
    // console.log(self.alluserid());
    ko.utils.arrayForEach(self.regions(), function(region) {
 
