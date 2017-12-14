@@ -220,6 +220,8 @@ function dateparser(date){
     month = d.getMonth();
     time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
+     console.log(date);
+     console.log('---->>'+clean_date);
     return clean_date;
 
 }
