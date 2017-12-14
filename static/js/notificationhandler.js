@@ -211,6 +211,7 @@ function dateparser(date){
 
       if (offset_type == "+"){ 
           d.setUTCHours(d.getUTCHours() + parseInt(offset_hours));
+          console.log(d.setUTCHours(d.getUTCHours() + parseInt(offset_hours)));
           d.setUTCMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
        }else{
           d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
