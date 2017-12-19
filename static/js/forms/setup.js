@@ -36,6 +36,7 @@ function formatDate(date) {
 
     self.id.subscribe(function (newValue) {
     if (!newValue) {
+      console.log(self.id());
         console.log("not new value");
     } else {
         var match = ko.utils.arrayFirst(vm.stagesVm().xforms(), function(item) {
@@ -74,7 +75,14 @@ var GXform = function (data){
       self.xf(vm.stagesVm().xforms()[0]);
       console.log("First form loaded");
     }else{
+      console.log("original");
+      console.log(self.xf());
+      console.log(self.xf().id);
+      console.log(self.xf().title);
     self.xf(new Xform({'id':self.xf().id, 'title':self.xf().title}));
+    console.log("inside Fsxf");
+    console.log(self.xf().id());
+    console.log(self.xf().title());
     }
 
 
@@ -383,7 +391,8 @@ console.log(self.stage_forms().xf);
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
   console.log("after");
   console.log(self.stage_forms().xf());
-  // console.log(self.stage_forms().xf().id());
+  console.log(self.stage_forms().xf().id());
+  console.log(self.stage_forms().xf().title());
     
   }
   
