@@ -378,9 +378,12 @@ var SubStage = function(data){
     }
 
   if(self.stage_forms()){
-
+    console.log("before");
+console.log(self.stage_forms().xf);
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
-  console.log(self.stage_forms().xf().id());
+  console.log("after");
+  console.log(self.stage_forms().xf());
+  // console.log(self.stage_forms().xf().id());
     
   }
   
