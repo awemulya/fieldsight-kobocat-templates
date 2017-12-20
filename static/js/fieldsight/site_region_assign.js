@@ -64,6 +64,7 @@ function loadRegion(url){
                 self.regions.push.apply(self.regions, mappedData);
                 self.next_page_region = response.next;
                 if (self.next_page_region != null){ self.show_next_page_region(true); }
+                else{ self.show_next_page_region(false); }
                 self.prev_page_region = response.previous;
               },
             error: function (errorThrown) {
@@ -166,6 +167,7 @@ function loadRegion(url){
                 self.prev_page_site = response.previous;
                 
                 if (self.next_page_site != null){ self.show_next_page_site(true); }
+                else{ self.show_next_page_site(false); }
                 self.prev_page_site = response.next;
                 
             },
