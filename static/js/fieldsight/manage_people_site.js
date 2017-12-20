@@ -448,6 +448,7 @@ self.setSiteSelected = function(site){
     
   }; 
 
+
   self.setAllSiteUnSelected = function(site){
    // console.log(self.alluserid());
    ko.utils.arrayForEach(self.sites(), function(site) {
@@ -594,15 +595,14 @@ function multiemailvalidate(entry) {
                 App.hideProcessing();
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         
-                        site = new Region(item);
-                        return site;
+                        region = new Region(item);
+                        return region;
 
 
                     });
 
                 self.regions(mappedData);
                 self.allRegions(mappedData);
-
             },
             error: function (errorThrown) {
                 App.hideProcessing();
