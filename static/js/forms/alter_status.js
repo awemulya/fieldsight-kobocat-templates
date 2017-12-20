@@ -72,15 +72,15 @@ var ChangeStatus = function(instance, status, message){
 
             },
             error: function (errorThrown) {
-              if (errorThrown.responseJSON){
-                console.log(errorThrown.responseJSON.error);
+              if (errorThrown){
+                console.log(errorThrown);
               }
-              var err_msg = "Failed to get submission status";
-                App.hideProcessing();
-                App.notifyUser(
-                        err_msg,
-                        'error'
-                    );
+              // var err_msg = "Failed to get submission status";
+              //   App.hideProcessing();
+              //   App.notifyUser(
+              //           err_msg,
+              //           'error'
+              //       );
 
             }
         });
