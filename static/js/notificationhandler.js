@@ -175,7 +175,26 @@
     // ----------------Errors -------------------
 
     function type412(data){
-          content = 'Bulk upload of ' + data.extra_message + ' has <span style="color:maroon;"><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          var errormsg=data.extra_message;
+          var messages = errormsg.split("@error");
+          
+          var readableerror = "sadsad";
+          if (messages.length > 1){
+           
+            errors = messages[1].split("DETAIL:");
+            if(errors.length > 1){
+            readableerror = errors[1];
+            }
+            else{
+            readableerror = errors[0];  
+            }
+            
+          }
+          else{
+            readableerror = messages[0];
+          }
+          console.log(readableerror);
+          content = 'Bulk upload of ' + messages[0] + ' has <span style="color:maroon;""><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>. <b>Error:  </b>'+readableerror;
           return content;
         }
     
