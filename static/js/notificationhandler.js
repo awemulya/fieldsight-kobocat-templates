@@ -30,6 +30,7 @@
         421: type421,
         422: type422,
     }
+// index starting from 4 are error notifications of equvalent notifications
 
 //notification message list builder with ahref links
     function type0(data){
