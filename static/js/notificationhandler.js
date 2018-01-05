@@ -43,51 +43,51 @@
     }
 
     function type2(data){
-          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as the Project Manager <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
+          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as the Project Manager <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
               return content;
     }
 
     function type3(data){
-           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as Reviewer of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
+           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as Reviewer of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
               return content;
 
     }
     function type4(data){
-          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as Site Supervisor of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
+          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as Site Supervisor of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
                 return content;
 
     }
     function type5(data){
-           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as an Organization Admin in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as an Organization Admin in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
               return content;
     }
     function type6(data){
-           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Project Manager in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
+           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Project Manager in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
               return content;
     }
     function type7(data){
-           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Reviewer in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Reviewer in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
               return content;
     }
     function type8(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Site Supervisor in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was assigned as a Site Supervisor in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
                   return content;
         }
 
     function type9(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new organization named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new organization named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
                   return content;
         }
 
 
     function type10(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new project named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new project named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
                   return content;
         }
 
 
     function type11(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new site named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> in Project named <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created a new site named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> in Project named <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
                   return content;
         }
 
@@ -95,48 +95,48 @@
               if(data.source_uid == user_id){
               content = data.extra_message + ' has successfully been created in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
               }else{
-              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ data.extra_message +' in <a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ data.extra_message +' in <a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
               }
                return content;
         }
 
 
     function type13(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> changed the details of organization named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> changed the details of organization named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
                   return content;
         }       
             
     function type14(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> changed the details of project named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> changed the details of project named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
                   return content;
         } 
 
     function type15(data){
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> changed the details of site named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> changed the details of site named <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
                   return content;
         }   
 
     function type16(data){
                var formdetail = data.get_event_name.split("form");
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> submitted a response for '+ formdetail[0] +'form <b><a href="' +  data.get_event_url + '">' + formdetail[1] + '</a></b>' + '</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> submitted a response for '+ formdetail[0] +'form <b><a href="' +  data.get_event_url + '">' + formdetail[1] + '</a></b>' + '</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>.';
                   return content;
         }   
 
     function type17(data){
                 var formdetail = data.get_event_name.split("form");
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response for '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> reviewed a response for '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>.';
                   return content;
         }   
 
     function type18(data){
               var formdetail = data.get_event_name.split("form");  
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in project <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in project <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>.';
                   return content;
         }   
 
     function type19(data){
               var formdetail = data.get_event_name.split("form");
-               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>';
+               content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> assigned a new '+ formdetail[0] +'form <b><a href="' + data.get_event_url+ '">' + formdetail[1]+'</a></b> in site <b><a href="' + data.get_extraobj_url+ '">' + data.get_extraobj_name+'</a></b>.';
                   return content;
         }   
 
@@ -150,7 +150,7 @@
               if(data.source_uid == user_id){
               content = "<b>TASK INFO : </b>"+data.extra_message + ' of organization <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b> were created.';
               }else{
-              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created '+ data.extra_message +' of organization <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created '+ data.extra_message +' of organization <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
               }
                return content;
         }
@@ -159,7 +159,7 @@
               if(data.source_uid == user_id){
               content = "<b>TASK INFO : </b>"+data.extra_message + ' of project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b> were created.';
               }else{
-              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ data.extra_message +' of project <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>';
+              content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> created <b>'+ data.extra_message +' of project <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b>.';
               }
                return content;
         }

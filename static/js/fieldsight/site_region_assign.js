@@ -2,6 +2,9 @@ function assigntoken(csrf){
   csrf_token=csrf;
   
 }
+is_siteselected=ko.observable(false);
+is_regionselected=ko.observable(false);
+
 all_selected_sites = ko.observableArray();
 var Region =function (data, project){
   self = this;
@@ -135,19 +138,30 @@ function loadRegion(url){
   self.show_search_region_button(false);
   loadRegion(url);
 
+
   };
 
   self.setRegionSelected = function(selected_region){
-    ko.utils.arrayForEach(self.allRegions(), function(region){
-      if(region.id() != selected_region.id()){ 
-      region.selected(false);}
-      console.log(region.selected());
-    });
-    self.all_selected_regions([]);
-    self.all_selected_regions.push(selected_region);
-    console.log(self.all_selected_regions()[0].identifier());
-    return true;
+      if (self.all_selected_regions.indexOf(selected_region) < 0){
+        self.all_selected_regions([]);
+        self.all_selected_regions.push(selected_region);
+      }else{
+        self.all_selected_regions([]);        
+      }
+
+      console.log(self.all_selected_regions());
+      if(self.all_selected_regions().length == 0){
+          is_regionselected(false);    
+      }else{
+        is_regionselected(true);
+      }
+               
+      return true;
+    
     };
+
+
+
    
 
 
@@ -175,17 +189,17 @@ function loadRegion(url){
     
  
 
-  self.setAllRegionUnSelected = function(region){
+  // self.setAllRegionUnSelected = function(region){
    
-   ko.utils.arrayForEach(self.regions(), function(region) {
+  //  ko.utils.arrayForEach(self.regions(), function(region) {
 
-   region.selected(false);
-   // console.log(regions.selected());
-   // console.log(all_selected_users());
-    });   
-    self.all_selected_regions([]);
+  //  region.selected(false);
+  //  // console.log(regions.selected());
+  //  // console.log(all_selected_users());
+  //   });   
+  //   self.all_selected_regions([]);
    
-  };    
+  // };    
    
 
   // self.search_key_region.subscribe(function (newValue) {
@@ -361,7 +375,14 @@ self.search_key_region.subscribe(function (newValue) {
     self.all_selected_sites.remove(site);
     
   }
-        console.log(self.all_selected_sites());
+        console.log(self.all_selected_sites().length);
+        if(self.all_selected_sites().length == 0){
+          is_siteselected(false);
+          
+        }else{
+          is_siteselected(true);
+        }
+                 
         return true;
   };
 
@@ -374,6 +395,7 @@ self.search_key_region.subscribe(function (newValue) {
    // console.log(all_selected_users());
     });   
     self.all_selected_sites([]);
+    is_siteselected(false);
    
   };    
 
