@@ -3,6 +3,7 @@ function assigntoken(csrf){
   
 }
 is_siteselected=ko.observable(false);
+
 is_regionselected=ko.observable(false);
 
 all_selected_sites = ko.observableArray();
