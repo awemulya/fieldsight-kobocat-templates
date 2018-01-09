@@ -17,6 +17,7 @@ function formatDate(date) {
  }
 
  availableoptions : ko.observableArray(['Outstanding', 'Rejected', 'Flagged', 'Approved']);
+ 
 
  function formStatus(flag){
   console.log(flag);
