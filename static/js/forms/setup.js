@@ -136,7 +136,7 @@ var FieldSightXF = function (data){
   self.default_submission_status = ko.observable();
   self.em = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
-  self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+  
 
   self.save = function(){
     vm.generalVm().saveGeneralForm(self.xf())
@@ -153,7 +153,7 @@ var FieldSightXF = function (data){
     self[i] = ko.observable(data[i]);
               } 
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
-
+self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
     if(self.em()){
     if(self.em().em_images){
       self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
