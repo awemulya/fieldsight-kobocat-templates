@@ -17,6 +17,7 @@ function formatDate(date) {
  }
 
  function formStatus(flag){
+  console.log(flag);
   if (flag == 0) return "Outstanding"
   if (flag == 1) return "Rejected"
   if (flag == 2) return "Flagged"
