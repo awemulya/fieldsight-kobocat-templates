@@ -16,7 +16,7 @@ function formatDate(date) {
   return (flag == true) ? "Undeploy" : "Deploy";
  }
 
- availableoptions = ko.observableArray(['Outstanding', 'Rejected', 'Flagged', 'Approved']);
+ var availableoptions = ko.observableArray(['Outstanding', 'Rejected', 'Flagged', 'Approved']);
 
 
  function formStatus(flag){
