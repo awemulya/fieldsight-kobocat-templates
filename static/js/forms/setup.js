@@ -135,7 +135,7 @@ var FieldSightXF = function (data){
   self.default_submission_status = ko.observable();
   self.em = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
-  self.default_submission_status_text = ko.observable("sd"+formStatus(self.default_submission_status));
+  self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
 
   self.save = function(){
     vm.generalVm().saveGeneralForm(self.xf())
