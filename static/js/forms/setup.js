@@ -124,18 +124,18 @@ var EducationMaterial = function(data){
   function doAssignDefaultFormStatus(fsxf_id, status){
     
     App.showProcessing();
-    
-    if (status == "Approved"){
-        status_id=;
+
+    if (status == "Rejected"){
+        status_id=1;
+    }
+    else if (status == "Flagged"){
+        status_id=2;
     }
     else if (status == "Approved"){
-        status_id=;
+        status_id=3;
     }
-    else if (status == "Approved"){
-        status_id=;
-    }
-    else (status == "Approved"){
-        status_id=;
+    else{
+        status_id=0;
     }
     
     url = ko.observable("/forms/"+ fsxf_id +"/"+status_id+"/");
