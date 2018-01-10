@@ -1,5 +1,8 @@
 var today = new Date().toISOString().slice(0,10);
-
+function assigntoken(csrf){
+  csrf_token=csrf;
+  
+}
 function formatDate(date) {
     var d = new Date(date || Date.now()),
     month = '' + (d.getMonth() + 1),
@@ -160,7 +163,7 @@ var EducationMaterial = function(data){
 
             };
           console.log(csrf_token);
-       App.remotePost(url, null, success, failure);  
+       App.remotePost(url, [], success, failure);  
 };
 
 
