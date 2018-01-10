@@ -142,7 +142,7 @@ var EducationMaterial = function(data){
     }
     
     url = "/forms/"+ fsxf_id +"/"+status_id+"/";
-    console.log(url;
+    console.log(url);
     var success =  function (response) {
                 App.hideProcessing();
 
