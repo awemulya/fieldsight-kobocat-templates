@@ -221,8 +221,10 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
   }
 
 self.default_submission_status_text.subscribe(function (newValue) { 
-console.log("bam bam bam");  
+console.log(newValue);
+console.log(self.id());  
     doAssignDefaultFormStatus(self.id(), newValue);
+
 });
 
 self.deploy = function(){
