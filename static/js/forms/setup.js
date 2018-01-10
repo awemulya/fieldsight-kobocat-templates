@@ -121,6 +121,50 @@ var EducationMaterial = function(data){
     };
   }
 
+  function doAssignDefaultFormStatus(fsxf_id, status){
+    
+    App.showProcessing();
+    
+    if (status == "Approved"){
+        status_id=;
+    }
+    else if (status == "Approved"){
+        status_id=;
+    }
+    else if (status == "Approved"){
+        status_id=;
+    }
+    else (status == "Approved"){
+        status_id=;
+    }
+    
+    url = ko.observable("/forms/"+ fsxf_id +"/"+status_id+"/");
+
+    var success =  function (response) {
+                App.hideProcessing();
+
+                App.notifyUser(
+                        'Default Form status Changed to '+ status +'.',
+                        'success'
+                    );
+
+            };
+                App.hideProcessing();
+   
+    var failure =  function (errorThrown) {
+      var err_message = errorThrown.responseJSON[0];
+                App.notifyUser(
+                        err_message,
+                        'error'
+                    );
+
+            };
+          console.log(csrf_token);
+       App.remotePost(url, null, success, failure);  
+};
+
+
+
 
 var FieldSightXF = function (data){
   var self = this;
@@ -173,6 +217,10 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
 
   }
 
+self.default_submission_status_text.subscribe(function (newValue) { 
+console.log(bam bam bam);  
+    doAssignDefaultFormStatus(self.id(), newValue);
+});
 
 self.deploy = function(){
 
