@@ -141,7 +141,7 @@ var EducationMaterial = function(data){
         status_id=0;
     }
     
-    url = "/assigndefaultformstatus/"+ fsxf_id +"/"+status_id+"/";
+    url = "/forms/assigndefaultformstatus/"+ fsxf_id +"/"+status_id+"/";
     console.log(url);
     var success =  function (response) {
                 App.hideProcessing();
