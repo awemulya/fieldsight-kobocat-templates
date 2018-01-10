@@ -141,7 +141,7 @@ var EducationMaterial = function(data){
         status_id=0;
     }
     
-    url = ko.observable("/forms/"+ fsxf_id +"/"+status_id+"/");
+    url = "/forms/"+ fsxf_id +"/"+status_id+"/";
     console.log(url());
     var success =  function (response) {
                 App.hideProcessing();
