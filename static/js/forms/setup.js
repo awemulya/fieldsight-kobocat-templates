@@ -676,7 +676,7 @@ self.mainStageClicked = function(){
                         "title": vm.stagesVm().xforms()[0].title(),
                         "id": vm.stagesVm().xforms()[0].id()
                     },
-                    "id": ""
+                    "id": "",
                     "default_submission_status":0
                 }
     var parentLength = self.parent().length || 0;
