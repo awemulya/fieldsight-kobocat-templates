@@ -471,11 +471,12 @@ console.log(self.stage_forms().xf);
 
   }
 
-self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status));
+self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
 
 self.default_submission_status_text.subscribe(function (newValue) { 
 console.log(newValue);
-console.log(self.stage_forms().id);  
+console.log(self.stage_forms().id());
+
     doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
 
 });
