@@ -19,12 +19,12 @@ function formatDate(date) {
   return (flag == true) ? "Undeploy" : "Deploy";
  }
 
- var availableoptions = ko.observableArray(['Outstanding', 'Rejected', 'Flagged', 'Approved']);
+ var availableoptions = ko.observableArray(['Pending', 'Approved']);
 
 
  function formStatus(flag){
   console.log(flag);
-  if (flag == 0) return "Outstanding"
+  if (flag == 0) return "Pending"
   if (flag == 1) return "Rejected"
   if (flag == 2) return "Flagged"
   if (flag == 3) return "Approved"
@@ -203,7 +203,7 @@ var FieldSightXF = function (data){
     self[i] = ko.observable(data[i]);
               } 
   self.url= ko.observable("/fieldsight/site-dashboard/"+self.id()+"/");
-self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+
     if(self.em()){
     if(self.em().em_images){
       self.em(new EducationMaterial({'id':self.em().id ,'title':self.em().title,
@@ -219,6 +219,7 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
     self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
 
   }
+self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
 
 self.default_submission_status_text.subscribe(function (newValue) { 
 console.log(newValue);
@@ -339,6 +340,14 @@ for (var i in data){
 
   }
 
+self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+
+self.default_submission_status_text.subscribe(function (newValue) { 
+console.log(newValue);
+console.log(self.form());  
+    doAssignDefaultFormStatus(self.form(), newValue);
+
+});
 
 self.education_material = function(){
   self.em_form_modal_visibility(true);
