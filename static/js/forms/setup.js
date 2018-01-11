@@ -471,15 +471,15 @@ console.log(self.stage_forms().xf);
 
   }
 
-// self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
+self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
 
-// self.default_submission_status_text.subscribe(function (newValue) { 
-// console.log(self.stage_forms().default_submission_status());
-// console.log(self.stage_forms().id());
+self.default_submission_status_text.subscribe(function (newValue) { 
+console.log(self.stage_forms().default_submission_status());
+console.log(self.stage_forms().id());
 
-//     doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
+    doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
 
-// });
+});
 
   self.edit = function(){
     // self.editable(true);
@@ -663,7 +663,8 @@ self.mainStageClicked = function(){
                         "title": vm.stagesVm().xforms()[0].title(),
                         "id": vm.stagesVm().xforms()[0].id()
                     },
-                    "id": ""
+                    "id": "",
+                    "default_submission_status":0
                 }
     self.newSubstage(new SubStage({'order':parentLength+1 || 1, 'name':"",'description':"", 'stage_forms':st_form}));
     // self.addSubStageMode(true);
@@ -676,6 +677,7 @@ self.mainStageClicked = function(){
                         "id": vm.stagesVm().xforms()[0].id()
                     },
                     "id": ""
+                    "default_submission_status":0
                 }
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
@@ -686,7 +688,8 @@ self.mainStageClicked = function(){
                         "title": "",
                         "id": self.newSubstage().stage_forms().xf().id()
                     },
-                    "id": ""
+                    "id": "",
+                    "default_submission_status":0
                 },
                 "name": self.newSubstage().name(),
                 "description": self.newSubstage().description(),
@@ -1345,7 +1348,7 @@ self.saveStage = function(stage){
                           sub_st.description = item.description();
                           sub_st.stage_forms = {"xf": {"title": "",
                                                   "id": item.stage_forms().xf().id()},
-                                                 "id": item.stage_forms().id() };
+                                                 "id": item.stage_forms().id(), "default_submission_status":item.stage_forms().default_submission_status() };
                           return sub_st;
 
                     });
