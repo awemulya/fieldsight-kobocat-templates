@@ -73,7 +73,7 @@ var GXform = function (data){
    var self = this;
    self.id = ko.observable();
    self.xf = ko.observable();
-   self.default_submission_status = ko.observable();
+   self.default_submission_status = ko.observable(0);
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
