@@ -451,7 +451,7 @@ var SubStage = function(data){
     }
 
   if(self.stage_forms()){
-self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
+self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status));
 
     console.log("before");
 console.log(self.stage_forms().xf);
