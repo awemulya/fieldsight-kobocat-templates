@@ -73,6 +73,7 @@ var GXform = function (data){
    var self = this;
    self.id = ko.observable();
    self.xf = ko.observable();
+   self.default_submission_status = ko.observable();
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
@@ -450,14 +451,10 @@ var SubStage = function(data){
       self[i] = ko.observable(data[i]);
     }
 
-self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status));
-
   if(self.stage_forms()){
-
     console.log("before");
 console.log(self.stage_forms().xf);
-
-  self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf}));
+  self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf, 'default_submission_status':self.stage_forms().default_submission_status}));
   console.log("after");
   console.log(self.stage_forms().xf());
   console.log(self.stage_forms().xf().id());
@@ -474,14 +471,15 @@ console.log(self.stage_forms().xf);
 
   }
 
+// self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
 
-self.default_submission_status_text.subscribe(function (newValue) { 
-console.log(self.stage_forms().default_submission_status());
-console.log(self.stage_forms().id());
+// self.default_submission_status_text.subscribe(function (newValue) { 
+// console.log(self.stage_forms().default_submission_status());
+// console.log(self.stage_forms().id());
 
-    doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
+//     doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
 
-});
+// });
 
   self.edit = function(){
     // self.editable(true);
