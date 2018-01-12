@@ -73,7 +73,7 @@ var GXform = function (data){
    var self = this;
    self.id = ko.observable();
    self.xf = ko.observable();
-   self.default_submission_status = ko.observable(0);
+   self.default_submission_status = ko.observable();
     for (var i in data){
         self[i] = ko.observable(data[i]);
     }
@@ -455,6 +455,11 @@ var SubStage = function(data){
     console.log("before");
 console.log(self.stage_forms().xf);
   self.stage_forms(new FSXform({'id':self.stage_forms().id ,'xf':self.stage_forms().xf, 'default_submission_status':self.stage_forms().default_submission_status}));
+  
+  self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
+
+  
+
   console.log("after");
   console.log(self.stage_forms().xf());
   console.log(self.stage_forms().xf().id());
@@ -470,16 +475,13 @@ console.log(self.stage_forms().xf);
     self.em(new EducationMaterial({'id':"" ,'title':"",'is_pdf':false, 'pdf':"", 'em_images':[]}));
 
   }
-
-self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
-
 self.default_submission_status_text.subscribe(function (newValue) { 
-console.log(self.stage_forms().default_submission_status());
-console.log(self.stage_forms().id());
+  console.log(self.stage_forms().default_submission_status());
+  console.log(self.stage_forms().id());
 
-    doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
+      doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
 
-});
+  });
 
   self.edit = function(){
     // self.editable(true);
