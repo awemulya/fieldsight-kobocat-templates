@@ -317,6 +317,7 @@ var Schedule = function (data){
   self.site = ko.observable();
   self.project = ko.observable();
   self.em = ko.observable();
+  self.default_submission_status = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
 
 
