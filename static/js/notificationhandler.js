@@ -228,11 +228,10 @@ function dateparser(date){
       offset_minutes = offSetTime.slice(8, 10);
       offset_type = offSetTime.slice(4, 5);
 
-      console.log("-----------------------------");
+
       if (offset_type == "+"){ 
           d.setUTCHours(d.getUTCHours() + parseInt(offset_hours));
           d.setUTCMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
-          console
        }else{
           d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
           d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
@@ -241,9 +240,7 @@ function dateparser(date){
     month = d.getUTCMonth();
     time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
     clean_date = months[month] +', '+ d.getUTCDate() +', '+ d.getUTCFullYear() +', '+ time.toLowerCase()+'.';
-    console.log(d.getUTCDate() +"/ "+ d.getUTCHours() +"/ "+d.getUTCMinutes())+"/ ";
     return clean_date;
-
 }
   
 
