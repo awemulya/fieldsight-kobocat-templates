@@ -232,8 +232,8 @@ function dateparser(date){
       console.log(d.getUTCDate() +"/"+ d.getUTCHours()+"/"+d.getUTCMinutes());
       console.log(d.getDate()+" "+d.getHours());
       if (offset_type == "+"){ 
-          d.setHours(d.getUTCHours() + parseInt(offset_hours));
-          d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
+          d.setUTCHours(d.getHours() + parseInt(offset_hours));
+          d.setUTCMinutes(d.getMinutes() + parseInt(offset_minutes));
        }else{
           d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
           d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
