@@ -227,6 +227,7 @@ function dateparser(date){
       offset_hours = offSetTime.slice(5, 7);
       offset_minutes = offSetTime.slice(8, 10);
       offset_type = offSetTime.slice(4, 5);
+      console.log(d);
       console.log("-----------------------------");
       if (offset_type == "+"){ 
           d.setHours(d.getUTCHours() + parseInt(offset_hours));
