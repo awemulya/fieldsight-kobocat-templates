@@ -239,7 +239,7 @@ function dateparser(date){
        }
      }
     month = d.getMonth();
-    time=d.toString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
+    time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
     clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
     console.log(d.getUTCDate() +"/ "+ d.getUTCHours() +"/ "+d.getUTCMinutes())+"/ ";
     return clean_date;
