@@ -232,10 +232,10 @@ function dateparser(date){
       console.log(d.getUTCDate() +"/"+ d.getUTCHours()+"/"+d.getUTCMinutes());
       console.log(d.getDate()+" "+d.getHours());
       if (offset_type == "+"){ 
-          console.log("Prev Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })+" Date "+d.getDate());
+          console.log("Prev"+d);
           d.setHours(d.getUTCHours() + parseInt(offset_hours));
           d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
-          console.log("final Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })+" Date "+d.getDate());
+          console.log("final"+d);
           console.log("adding"+offset_hours+"hrs and mints"+offset_minutes);
        }else{
           d.setHours(d.getUTCHours() - parseInt(offset_hours));
