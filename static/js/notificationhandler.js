@@ -227,20 +227,22 @@ function dateparser(date){
       offset_hours = offSetTime.slice(5, 7);
       offset_minutes = offSetTime.slice(8, 10);
       offset_type = offSetTime.slice(4, 5);
-
+      console.log("-----------------------------");
       if (offset_type == "+"){ 
           d.setHours(d.getUTCHours() + parseInt(offset_hours));
           d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
+          console.log("adding"+offset_hours+"hrs and mints"+offset_minutes);
        }else{
           d.setHours(d.getUTCHours() - parseInt(offset_hours));
           d.setMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
+                  console.log("subtracting"+offset_hours+"hrs and mints"+offset_minutes);
        }
      }
 
     month = d.getMonth();
     time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
-     
+    console.log(clean_date);
     return clean_date;
 
 }
