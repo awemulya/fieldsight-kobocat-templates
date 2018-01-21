@@ -229,20 +229,17 @@ function dateparser(date){
       offset_type = offSetTime.slice(4, 5);
 
       console.log("-----------------------------");
-      console.log(d.getUTCDate() +"/"+ d.getUTCHours()+"/"+d.getUTCMinutes());
-      console.log(d.getDate()+" "+d.getHours());
       if (offset_type == "+"){ 
-          d.setUTCHours(d.getHours() + parseInt(offset_hours));
-          d.setUTCMinutes(d.getMinutes() + parseInt(offset_minutes));
+          d.setUTCHours(d.getUTCHours() + parseInt(offset_hours));
+          d.setUTCMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
+          console
        }else{
           d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
           d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
-                  console.log("subtracting"+offset_hours+"hrs and mints"+offset_minutes);
        }
      }
-
     month = d.getMonth();
-    time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    time=d.toUTCString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
     console.log(clean_date);
     return clean_date;
