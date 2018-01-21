@@ -232,7 +232,7 @@ function dateparser(date){
       console.log(d.getUTCDate() +"/"+ d.getUTCHours()+"/"+d.getUTCMinutes());
       console.log(d.getDate()+" "+d.getHours());
       if (offset_type == "+"){ 
-          d.setUTCHours(d.getUTCHours());
+          d.Hours(d.getUTCHours());
           d.setUTCMinutes(d.getUTCMinutes());
        }else{
           d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
