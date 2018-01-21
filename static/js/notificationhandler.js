@@ -238,11 +238,10 @@ function dateparser(date){
           d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
        }
      }
-    month = d.getMonth();
-    time=d.toUTCString("hh:mm tt");
-    clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
+    month = d.getUTCMonth();
+    time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
+    clean_date = months[month] +', '+ d.getUTCDate() +', '+ d.getUTCFullYear() +', '+ time.toLowerCase()+'.';
     console.log(d.getUTCDate() +"/ "+ d.getUTCHours() +"/ "+d.getUTCMinutes())+"/ ";
-    console.log(time);
     return clean_date;
 
 }
