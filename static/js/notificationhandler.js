@@ -221,6 +221,7 @@ function dateparser(date){
    let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
  
     var d = new Date(date);
+    console.log(d);
 
     if (offSetTime.length > 3){
 
@@ -231,7 +232,7 @@ function dateparser(date){
       console.log("-----------------------------");
       console.log(d);
       if (offset_type == "+"){ 
-          console.log("Prev Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
+          console.log("Prev Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })+" Date "+d.getDate());
           d.setHours(d.getUTCHours() + parseInt(offset_hours));
           d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
           console.log("final Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })+" Date "+d.getDate());
