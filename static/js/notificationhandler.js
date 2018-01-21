@@ -231,10 +231,10 @@ function dateparser(date){
       console.log("-----------------------------");
       console.log(d);
       if (offset_type == "+"){ 
-          console.log("Prev Hour"+d.getUTCHours());
+          console.log("Prev Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
           d.setHours(d.getUTCHours() + parseInt(offset_hours));
           d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
-          console.log("final Hour"+d.getUTCHours());
+          console.log("final Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
           console.log("adding"+offset_hours+"hrs and mints"+offset_minutes);
        }else{
           d.setHours(d.getUTCHours() - parseInt(offset_hours));
