@@ -239,9 +239,10 @@ function dateparser(date){
        }
      }
     month = d.getMonth();
-    time=d.toString("hh:mm tt");
+    time=d.toUTCString("hh:mm tt");
     clean_date = months[month] +', '+ d.getDate() +', '+ d.getFullYear() +', '+ time.toLowerCase()+'.';
     console.log(d.getUTCDate() +"/ "+ d.getUTCHours() +"/ "+d.getUTCMinutes())+"/ ";
+    console.log(time);
     return clean_date;
 
 }
