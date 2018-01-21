@@ -233,13 +233,13 @@ function dateparser(date){
       console.log(d.getDate()+" "+d.getHours());
       if (offset_type == "+"){ 
           console.log("Prev"+d);
-          d.setHours(d.getUTCHours() + parseInt(offset_hours));
-          d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
+          d.setUTCHours(d.getUTCHours() + parseInt(offset_hours));
+          d.setUTCMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
           console.log("final"+d);
           console.log("adding"+offset_hours+"hrs and mints"+offset_minutes);
        }else{
-          d.setHours(d.getUTCHours() - parseInt(offset_hours));
-          d.setMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
+          d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
+          d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
                   console.log("subtracting"+offset_hours+"hrs and mints"+offset_minutes);
        }
      }
