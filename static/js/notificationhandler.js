@@ -231,8 +231,10 @@ function dateparser(date){
       console.log("-----------------------------");
       console.log(d);
       if (offset_type == "+"){ 
+          console.log("Prev Hour"+d.getUTCHours());
           d.setHours(d.getUTCHours() + parseInt(offset_hours));
           d.setMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
+          console.log("final Hour"+d.getUTCHours());
           console.log("adding"+offset_hours+"hrs and mints"+offset_minutes);
        }else{
           d.setHours(d.getUTCHours() - parseInt(offset_hours));
