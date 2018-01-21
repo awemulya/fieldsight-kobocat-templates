@@ -229,7 +229,7 @@ function dateparser(date){
       offset_type = offSetTime.slice(4, 5);
 
       console.log("-----------------------------");
-      console.log(d.getUTCDate());
+      console.log(d.getUTCDate() +"/"+ d.getUTCHours()+"/"+d.getUTCMinutes());
       console.log(d.getDate()+" "+d.getHours());
       if (offset_type == "+"){ 
           console.log("Prev Hour"+d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })+" Date "+d.getDate());
