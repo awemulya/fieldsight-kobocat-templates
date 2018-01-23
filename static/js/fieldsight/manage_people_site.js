@@ -908,25 +908,28 @@ var OrgVM = function(level, pk){
 
             };
 
-function validateemail(email){
- 
-  var atherate = email.indexOf("@");
-  var dot = email.indexOf(".", atherate);
-    
-      if(atherate != -1 && dot != -1){
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+function validateemail(email) {
+  if (validateEmail(email)) {
         return {
         multiemailstatus: true,
         email: email
         };
-      }
-      else{
-        // alert("Enter valid email address.");
+
+  } 
         return {
-        multiemailstatus: false,
-        email: email
-        };
-      }
+            multiemailstatus: false,
+            email: email
+            };
+  
+  
 }
+
 
 function multiemailvalidate(entry) {
   
@@ -946,6 +949,10 @@ function multiemailvalidate(entry) {
 
       }
     }
+
+
+
+
   self.inviteforemails = (function (newValue) {
     App.showProcessing();
     var email = document.getElementById("multi_invite_email_ps").value;
