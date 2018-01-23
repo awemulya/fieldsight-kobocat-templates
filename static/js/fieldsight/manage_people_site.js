@@ -974,7 +974,7 @@ function multiemailvalidate(entry) {
              App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
            }
           else{ App.hideProcessing();
-            alert('faileded'); }
+            alert('Invalid Email'); }
     }
     });
   
