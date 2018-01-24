@@ -498,67 +498,79 @@ self.setSiteSelected = function(site){
 
             };
 
-function validateemail(email){
- 
-  var atherate = email.indexOf("@");
-  var dot = email.indexOf(".", atherate);
-    
-      if(atherate != -1 && dot != -1){
+
+
+    self.invitereviewersSites = function(){
+          group = 'Reviewer';
+          self.inviteforemailsSites();
+    }
+    self.invitesupervisorsSites = function(){
+        group = 'Site Supervisor';
+        self.inviteforemailsSites();
+    }
+
+    self.invitereviewersRegions = function(){
+          group = 'Reviewer';
+          self.inviteforemailsRegions();
+    }
+    self.invitesupervisorsRegions = function(){
+        group = 'Site Supervisor';
+        self.inviteforemailsRegions();
+    }
+
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+function validateemail(email) {
+  if (validateEmail(email)) {
         return {
         multiemailstatus: true,
         email: email
         };
-      }
-      else{
-        // alert("Enter valid email address.");
+
+  } 
         return {
-        multiemailstatus: false,
-        email: email
-        };
-      }
+            multiemailstatus: false,
+            email: email
+            };
+  
+  
 }
+
 
 function multiemailvalidate(entry) {
   
     email_res = validateemail(entry);
     
     if(email_res.multiemailstatus == false){
-      
-      var email_input = document.getElementById("multi_invite_email_ps");
-      email = email_input.value;
-      start = email.search(email_res.email);
-      end = email.indexOf(",", start);
-      // console.log(start +" "+ end);
-      email_input.setSelectionRange(start, end);
-      email_input.focus();
       multiemailstatus=false;
 
 
       }
     }
-
-    self.invitereviewers = function(){
-          group = 'Reviewer';
-          self.inviteforemails();
-    }
-    self.invitesupervisors = function(){
-        group = 'Site Supervisor';
-        self.inviteforemails();
-    }
-
-  self.inviteforemails = (function () {
+  self.inviteforemailsSites = (function () {
     App.showProcessing();
-    var email = document.getElementById("multi_invite_email_ps").value;
-    if (!email) {
+    var emails = emails2;
+    if (!emails[0]) {
+      App.hideProcessing();
         alert("Please insert an email to invite.");
     } else {
           multiemailstatus=true;
-          emails = email.split(",");
           emails.forEach(multiemailvalidate);
-      
-          if(multiemailstatus == true ){ 
+  
+            if(multiemailstatus == true ){ 
             self.new_invite({'group':group, 'emails':emails, 'levels':[], 'leveltype':'site'});
+ 
+            if(!self.all_selected_sites()[0]){
+              App.hideProcessing();
+              alert("No Sites Selected to assign to.");
+              return false;
+            }    
              
+            
             ko.utils.arrayMap(self.all_selected_sites(), function(item) {
                     self.new_invite().levels.push(item.id);
                     });
@@ -567,7 +579,40 @@ function multiemailvalidate(entry) {
              App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
            }
           else{ App.hideProcessing(); 
-            alert('failed'); }
+            alert('Contains Invalid Email'); }
+    }
+    });
+
+
+  self.inviteforemailsRegions = (function () {
+    App.showProcessing();
+    var emails = emails2;
+    if (!emails[0]) {
+      App.hideProcessing();
+        alert("Please insert an email to invite.");
+    } else {
+          multiemailstatus=true;
+          emails.forEach(multiemailvalidate);
+  
+            if(multiemailstatus == true ){ 
+            self.new_invite({'group':group, 'emails':emails, 'levels':[], 'leveltype':'region'});
+ 
+            if(!self.all_selected_regions()[0]){
+              App.hideProcessing();
+              alert("No Regions Selected to assign to.");
+              return false;
+            }    
+             
+           
+            ko.utils.arrayMap(self.all_selected_regions(), function(item) {
+                    self.new_invite().levels.push(item.id);
+                    });
+            console.log(ko.toJS(self.new_invite()));
+   
+             App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
+           }
+          else{ App.hideProcessing(); 
+            alert('Contains Invalid Email'); }
     }
     });
   
@@ -909,6 +954,8 @@ var OrgVM = function(level, pk){
             };
 
 
+
+
 function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
@@ -936,14 +983,6 @@ function multiemailvalidate(entry) {
     email_res = validateemail(entry);
     
     if(email_res.multiemailstatus == false){
-      
-      var email_input = document.getElementById("multi_invite_email_ps");
-      email = email_input.value;
-      start = email.search(email_res.email);
-      end = email.indexOf(",", start);
-      // console.log(start +" "+ end);
-      email_input.setSelectionRange(start, end);
-      email_input.focus();
       multiemailstatus=false;
 
 
@@ -951,16 +990,18 @@ function multiemailvalidate(entry) {
     }
 
 
-
-
   self.inviteforemails = (function (newValue) {
     App.showProcessing();
-    var email = document.getElementById("multi_invite_email_ps").value;
-    if (!email) {
+
+    var emails = emails2;
+    console.log(emails);
+    if (!emails[0]) {
+        App.hideProcessing();
         alert("Please insert an email to invite.");
+        return false;
+        
     } else {
           multiemailstatus=true;
-          emails = email.split(",");
           emails.forEach(multiemailvalidate);
       
           if(multiemailstatus == true ){ 
@@ -974,7 +1015,7 @@ function multiemailvalidate(entry) {
              App.remotePost(inviteurl, ko.toJS(self.new_invite()), invitepssuccess, invitepsfailure);
            }
           else{ App.hideProcessing();
-            alert('Invalid Email'); }
+            alert('Contains Invalid Email'); }
     }
     });
   
