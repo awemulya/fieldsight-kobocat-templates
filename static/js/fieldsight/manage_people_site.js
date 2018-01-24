@@ -1005,6 +1005,7 @@ function multiemailvalidate(entry) {
           emails.forEach(multiemailvalidate);
           if(!self.all_selected_projects()[0])
           {
+            App.hideProcessing();
             alert("No Projects Selected.");
             return false;
           }
