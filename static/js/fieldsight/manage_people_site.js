@@ -1003,7 +1003,11 @@ function multiemailvalidate(entry) {
     } else {
           multiemailstatus=true;
           emails.forEach(multiemailvalidate);
-      
+          if(!self.all_selected_projects()[0])
+          {
+            alert("No Projects Selected.");
+            return false;
+          }
           if(multiemailstatus == true ){ 
             self.new_invite({'group':'Project Manager', 'emails':emails, 'levels':[], 'leveltype':'project'});
              
