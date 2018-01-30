@@ -69,7 +69,7 @@ function StageViewModel(url) {
     loadData(queryurl);
   };
 
-  self.scrolled: function(data, event) {
+  self.scrolled= function(data, event) {
         if(next_page != null){
         var elem = event.target;
         if (elem.scrollTop > (elem.scrollHeight - elem.offsetHeight - 200)) {
