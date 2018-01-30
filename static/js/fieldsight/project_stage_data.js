@@ -5,8 +5,8 @@ function StageViewModel(url) {
   self.headers = ko.observableArray();
   self.subHeaders = ko.observable();
   self.next_page = null;
-  self.search_key_region = ko.observable();
-  self.show_next_page_region = ko.observable(false);
+  self.searchKeyword = ko.observable("");
+  self.show_next_page = ko.observable(false);
   self.show_search_region_button = ko.observable(false);
   self.is_searching_regions = ko.observable(false);
 
@@ -34,16 +34,16 @@ function StageViewModel(url) {
                 self.subHeaders(Sub_headers);
                 // self.rows(list_rows);
                 self.rows.push.apply(self.rows, list_rows);
-                
+
   //for next page
                   
                   self.next_page = response.next_page;
 
                   if (self.next_page != null){ 
-                    self.show_next_page_region(true);
+                    self.show_next_page(true);
                      }
                   else{ 
-                    self.show_next_page_region(false);
+                    self.show_next_page(false);
                      }
                      console.log(self.headers());
                 App.hideProcessing();
@@ -60,12 +60,12 @@ function StageViewModel(url) {
     self.loadData(next_page);
   }; 
 
-  self.dbsearchallRegions = function(){
+  self.dbsearchallsites = function(){
     self.rows([]);
 
-    url = region_query_url+"?q="+self.search_key_region();
-    // alert(url);
-    loadRegion(url);
+    queryurl = url+"?q="+self.searchKeyword();
+     console.log(queryurl);
+    loadData(queryurl);
   };
   self.loadData(url);
 }
