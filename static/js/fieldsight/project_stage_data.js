@@ -32,8 +32,9 @@ function StageViewModel(url) {
 
                 self.headers(Headers);
                 self.subHeaders(Sub_headers);
-                self.rows(list_rows);
-
+                // self.rows(list_rows);
+                self.rows.push.apply(self.rows, list_rows);
+                
   //for next page
                   
                   self.next_page = response.next_page;
@@ -54,7 +55,8 @@ function StageViewModel(url) {
           });
     };
 
-  loadMoreDatas = function(){
+  self.loadMoreDatas = function(){
+    console.log(next_page);
     self.loadData(next_page);
   }; 
 
