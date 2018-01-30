@@ -191,7 +191,7 @@ var Region =function (data, project){
   for (var i in data){
     self[i] = ko.observable(data[i]);
       }
-  self.url= ko.observable("/fieldsight/project/"+ project +"/regional-sites/"+self.id()+"/");
+  self.url= ko.observable("/fieldsight/api/project/"+ project +"/regional-sites/"+self.id()+"/");
 }
 
 
@@ -627,7 +627,8 @@ function multiemailvalidate(entry) {
     self.regions = ko.observableArray();
     self.all_selected_regions = ko.observableArray();
     self.all_selected_regions([]);
-
+    self.loadRegionalSites = ko.observable();
+    self.showsites = ko.observable(false);
       self.loadAllRegions = function(){
       App.showProcessing();
         $.ajax({
@@ -640,7 +641,7 @@ function multiemailvalidate(entry) {
                 App.hideProcessing();
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         
-                        region = new Region(item);
+                        region = new Region(item, pk);
                         return region;
 
 
@@ -655,6 +656,17 @@ function multiemailvalidate(entry) {
             }
         });
   };
+
+self.loadRegionalSites.subscribe(function (newValue) {
+    if(newValue){
+        proj_site_url = newValue;
+        self.loadAllSites();
+        self.showsites(true);
+      }
+    else{
+      self.showsites(false);
+    }
+    });
 
 self.setRegionSelected = function(region){
  
@@ -723,18 +735,29 @@ self.setRegionSelected = function(region){
 
     self.doAssign = function(){
     App.showProcessing();
+
+    if (!self.all_selected_sites().length){
+      alert("No Sites Selected to Assign to.");
+      App.hideProcessing();
+      return false;
+    }
     
-    if(type == "region"){
-    self.new_role({'group':group, 'users':[], 'regions':[]});
+     if (!all_selected_users().length){
+      alert("No Users Selected to Assign to.");
+      App.hideProcessing();
+      return false;
+    }
+    // if(type == "region"){
+    // self.new_role({'group':group, 'users':[], 'regions':[]});
     
     
 
-    ko.utils.arrayMap(self.all_selected_regions(), function(item) {
-                    console.log(item.id());
-                    self.new_role().regions.push(item.id);
-                    });
-    }
-    else{
+    // ko.utils.arrayMap(self.all_selected_regions(), function(item) {
+    //                 console.log(item.id());
+    //                 self.new_role().regions.push(item.id);
+    //                 });
+    // }
+    // else{
     self.new_role({'group':group, 'users':[], 'sites':[]});
     
     
@@ -743,7 +766,7 @@ self.setRegionSelected = function(region){
                     console.log(item.id());
                     self.new_role().sites.push(item.id);
                     });
-    }
+    // }
 
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
