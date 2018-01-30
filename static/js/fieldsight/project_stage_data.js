@@ -1,3 +1,62 @@
+ko.bindingHandlers.scroll = {
+
+    updating: true,
+
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var self = this;
+        self.updating = true;
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $(window).off("scroll.ko.scrollHandler");
+            self.updating = false;
+        });
+    },
+
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        var props = allBindingsAccessor().scrollOptions;
+        var offset = props.offset ? props.offset : "0";
+        var loadFunc = props.loadFunc;
+        var load = ko.utils.unwrapObservable(valueAccessor());
+        var self = this;
+
+        if (load) {
+            element.style.display = "";
+            $(window).on("scroll.ko.scrollHandler", function () {
+                if (($(document).height() - offset <= $(window).height() + $(window).scrollTop())) {
+                    if (self.updating) {
+                        loadFunc();
+                        self.updating = false;
+                    }
+                } else {
+                    self.updating = true;
+                }
+            });
+        } else {
+            element.style.display = "none";
+            $(window).off("scroll.ko.scrollHandler");
+            self.updating = false;
+        }
+    }
+};
+
+
+
+// var viewModel = function () {
+//     this.collection = ko.observableArray([]);
+//     var disney = ["Mickey", "Donald", "Daffy", "Hewie", "Dewie", "Lewie"];
+//     var self = this;
+//     this.addSome = function () {
+
+//         for (var i = 0; i < 40; i++) {
+//             self.collection.push(disney[Math.floor((Math.random() * 6))]);
+//         }
+//     };
+
+//     this.addSome();
+
+// };
+
+
+
 function StageViewModel(url) {
   var self=this;
   self.allRows = ko.observableArray();
@@ -9,7 +68,6 @@ function StageViewModel(url) {
   self.show_next_page = ko.observable(false);
   self.show_search_region_button = ko.observable(false);
   self.is_searching_regions = ko.observable(false);
-
 
 
   self.loadData = function(url){
@@ -58,7 +116,9 @@ function StageViewModel(url) {
 
   self.loadMoreDatas = function(){
     console.log(next_page);
+    if(next_page != "null"){
     self.loadData(next_page);
+    }
   }; 
 
   self.dbsearchallsites = function(){
@@ -68,17 +128,6 @@ function StageViewModel(url) {
      console.log(queryurl);
     loadData(queryurl);
   };
-
-  self.scrolled= function(data, event) {
-        if(next_page != null){
-        var elem = event.target;
-        if (elem.scrollTop > (elem.scrollHeight - elem.offsetHeight - 200)) {
-            
-            self.loadData(next_page);
-        }
-      }
-    }
-
   self.loadData(url);
 }
 
