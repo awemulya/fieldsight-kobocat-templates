@@ -11,6 +11,7 @@ function StageViewModel(url) {
   self.is_searching_regions = ko.observable(false);
 
 
+
   self.loadData = function(url){
       App.showProcessing();
           $.ajax({
@@ -67,6 +68,17 @@ function StageViewModel(url) {
      console.log(queryurl);
     loadData(queryurl);
   };
+
+  self.scrolled: function(data, event) {
+        if(next_page != null){
+        var elem = event.target;
+        if (elem.scrollTop > (elem.scrollHeight - elem.offsetHeight - 200)) {
+            
+            self.loadData(next_page);
+        }
+      }
+    }
+
   self.loadData(url);
 }
 
