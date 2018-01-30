@@ -72,6 +72,7 @@ function StageViewModel(url) {
 
   self.loadData = function(url){
       App.showProcessing();
+
           $.ajax({
               url: url,
               method: 'GET',
