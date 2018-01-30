@@ -58,6 +58,13 @@ function StageViewModel(url) {
     self.loadData(next_page);
   }; 
 
+  self.dbsearchallRegions = function(){
+    self.rows([]);
+
+    url = region_query_url+"?q="+self.search_key_region();
+    // alert(url);
+    loadRegion(url);
+  };
   self.loadData(url);
 }
 
