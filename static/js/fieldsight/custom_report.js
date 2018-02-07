@@ -61,7 +61,7 @@ function StageViewModel(url) {
              });
     console.log(selectedFormids);
     
-    self.data({'fx_ids':selectedFormids});
+    self.data({'fs_ids':selectedFormids});
     
 
     var success =  function (response) {
