@@ -12,6 +12,8 @@ var Images =function (data){
       }
 }
 function StageViewModel(url1, url2) {
+  alert(url1);
+  alert(url2);
   var self=this;
   self.generalforms = ko.observableArray();
   self.scheduledforms = ko.observableArray();
@@ -103,7 +105,7 @@ function StageViewModel(url1, url2) {
       // App.showProcessing();
 
           $.ajax({
-              url: url,
+              url: url1,
               method: 'GET',
               dataType: 'json',
               
@@ -149,13 +151,13 @@ function StageViewModel(url1, url2) {
 
   
 
-  self.loadData(url1);
+  
 
    self.loadImageData = function(url2){
-      // App.showProcessing();
+       App.showProcessing();
 
           $.ajax({
-              url: url,
+              url: url2,
               method: 'GET',
               dataType: 'json',
               
@@ -168,6 +170,7 @@ function StageViewModel(url1, url2) {
                 self.allImages(mappedData);
 
                 App.hideProcessing();
+                self.loadData(url1);
                 },
               error: function (errorThrown) {
                   App.hideProcessing();
