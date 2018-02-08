@@ -12,8 +12,7 @@ var Images =function (data){
       }
 }
 function StageViewModel(url1, url2) {
-  alert(url1);
-  alert(url2);
+ 
   var self=this;
   self.generalforms = ko.observableArray();
   self.scheduledforms = ko.observableArray();
@@ -165,6 +164,8 @@ function StageViewModel(url1, url2) {
               success: function (response) {
                 var mappedData = ko.utils.arrayMap(response, function(item) {
                         datas = new Images(item);
+                        console.log(item);
+                        console.log(data);
                         return datas;
                     });
                 self.allImages(mappedData);
