@@ -2,7 +2,16 @@ function assigntoken(csrf){
   csrf_token=csrf;
   
 }
-function StageViewModel(url) {
+var Images =function (data){
+  self = this;
+  self.fs_uuid = ko.observable();
+  self._attachments = ko.observable();
+  
+  for (var i in data){
+    self[i] = ko.observable(data[i]);
+      }
+}
+function StageViewModel(url1, url2) {
   var self=this;
   self.generalforms = ko.observableArray();
   self.scheduledforms = ko.observableArray();
@@ -12,6 +21,8 @@ function StageViewModel(url) {
   self.generalForm = ko.observable();
   self.scheduleForm = ko.observable();
 
+  self.allImages = ko.observable();
+  
   
   self.setSelected = function(item){
      
@@ -88,7 +99,7 @@ function StageViewModel(url) {
 };
 
 
-  self.loadData = function(url){
+  self.loadData = function(url1){
       // App.showProcessing();
 
           $.ajax({
@@ -138,6 +149,37 @@ function StageViewModel(url) {
 
   
 
-  self.loadData(url);
+  self.loadData(url1);
+
+   self.loadImageData = function(url2){
+      // App.showProcessing();
+
+          $.ajax({
+              url: url,
+              method: 'GET',
+              dataType: 'json',
+              
+
+              success: function (response) {
+                var mappedData = ko.utils.arrayMap(response, function(item) {
+                        datas = new Images(item);
+                        return datas;
+                    });
+                self.allImages(mappedData);
+
+                App.hideProcessing();
+                },
+              error: function (errorThrown) {
+                  App.hideProcessing();
+                  console.log(errorThrown);
+              }
+          });
+    };
+
+  
+
+  self.loadImageData(url2);
 }
+
+
 
