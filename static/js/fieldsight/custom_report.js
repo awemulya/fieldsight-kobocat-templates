@@ -162,6 +162,7 @@ function StageViewModel(url1, url2) {
               
 
               success: function (response) {
+                console.log(response);
                 var mappedData = ko.utils.arrayMap(response.images, function(item) {
                         datas = new Images(item);
                         console.log(item);
