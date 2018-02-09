@@ -168,7 +168,45 @@ function StageViewModel(url1, url2) {
                         return datas;
                     });
                 self.allImages(mappedData);
-
+                $('.scrollingSlider').slick({
+                slidesToShow: 4,
+                arrows: false,
+                autoplay : true,
+                infinite: false,
+                responsive: [
+                {
+                  breakpoint: 768,
+                  settings: {
+                  arrows: false,
+                  slidesToShow: 3
+                  }
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                  arrows: false,
+                  centerMode: true,
+                  slidesToShow: 1
+                  }
+                }
+                ]
+              });
+              $('.photo-item img').on('click',function(){
+                var title = $(this).attr('img-title');
+                var src = $(this).attr('src');
+                var img = '<img src="' + src + '" class="img-responsive"/>';
+                var html = '';
+                html += img;
+                $('#myModalLabel').modal();
+                $('#myModalLabel').on('shown.bs.modal', function(){
+                  $('#myModalLabel .modal-header .modal-title').html(title);
+                  $('#myModalLabel .modal-body').html(html);
+                })
+                $('#myModalLabel').on('hidden.bs.modal', function(){
+                  $('#myModalLabel .modal-header .modal-title').html('');
+                  $('#myModalLabel .modal-body').html('');
+                });
+              });
                 App.hideProcessing();
                 self.loadData(url1);
                 },
