@@ -96,7 +96,7 @@ function StageViewModel(url1, url2) {
 
             };
           console.log(csrf_token);
-       App.remotePost(url, ko.toJS(self.data()), success, failure);  
+       App.remotePost(url1, ko.toJS(self.data()), success, failure);  
 };
 
 
