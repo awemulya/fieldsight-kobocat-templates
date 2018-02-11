@@ -185,11 +185,13 @@ var FieldSightXF = function (data){
 
   self.save = function(){
     vm.generalVm().saveGeneralForm(self.xf())
+    vm.generalVm().saveGeneralForm(self.default_submission_status())
     vm.generalVm().general_form_modal_visibility(false);
   };
  
   self.save_survey = function(){
     vm.surveyVm().saveGeneralForm(self.xf())
+    vm.generalVm().saveGeneralForm(self.default_submission_status())
     vm.surveyVm().general_form_modal_visibility(false);
   };
  
