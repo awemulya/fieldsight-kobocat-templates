@@ -460,9 +460,9 @@ console.log(self.stage_forms().xf);
   self.default_submission_status.subscribe(function (newValue) { 
   console.log(self.stage_forms().default_submission_status());
   console.log(self.stage_forms().id());
-
+  if (self.stage_forms().id()){
       doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
-
+    }
   });
 
   console.log("after");
