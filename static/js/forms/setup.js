@@ -19,7 +19,7 @@ function formatDate(date) {
   return (flag == true) ? "Undeploy" : "Deploy";
  }
 
- var availableoptions = ko.observableArray([{id:0, name:'Pending'},{id:1, name:"Rejected"}, {id:2, name:"Flagged"}, {id:3, name: 'Approved'}]);
+ var availableoptions = ko.observableArray([{id:0, name:'Pending'}, {id:3, name: 'Approved'}]);
  var scheduleOptions = ko.observableArray([{id:0, name:'Daily'},{id:1, name:'Weekly'}, {id:2, name:'Monthly'}]);
 
 
@@ -216,7 +216,7 @@ var FieldSightXF = function (data){
   }
 self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
 
-self.default_submission_status_text.subscribe(function (newValue) { 
+self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
 console.log(self.id());  
     doAssignDefaultFormStatus(self.id(), newValue);
@@ -346,7 +346,7 @@ self.education_material = function(){
 }
 self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
 
-self.default_submission_status_text.subscribe(function (newValue) { 
+self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
 console.log(self.id());  
     doAssignDefaultFormStatus(self.id(), newValue);
@@ -457,7 +457,7 @@ console.log(self.stage_forms().xf);
   
   self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
 
-  self.default_submission_status_text.subscribe(function (newValue) { 
+  self.default_submission_status.subscribe(function (newValue) { 
   console.log(self.stage_forms().default_submission_status());
   console.log(self.stage_forms().id());
 
