@@ -184,14 +184,12 @@ var FieldSightXF = function (data){
   
 
   self.save = function(){
-    vm.generalVm().saveGeneralForm(self.xf())
-    vm.generalVm().saveGeneralForm(self.default_submission_status())
+    vm.generalVm().saveGeneralForm(self.xf(), self.default_submission_status())
     vm.generalVm().general_form_modal_visibility(false);
   };
  
   self.save_survey = function(){
-    vm.surveyVm().saveGeneralForm(self.xf())
-    vm.generalVm().saveGeneralForm(self.default_submission_status())
+    vm.surveyVm().saveGeneralForm(self.xf(), self.default_submission_status())
     vm.surveyVm().general_form_modal_visibility(false);
   };
  
@@ -786,7 +784,7 @@ var SurveyVM = function(is_project, pk){
   };
 
 
-  self.saveGeneralForm = function(xf){
+  self.saveGeneralForm = function(xf, default_status){
     App.showProcessing();
     var url = '/forms/api/fxf/';
     var fxf = new FieldSightXF();
@@ -796,6 +794,7 @@ var SurveyVM = function(is_project, pk){
     }else {
       fxf.site = self.pk;
     }
+    fxf.default_submission_status = default_status
     fxf.is_survey = true;
 
     var success =  function (response) {
@@ -886,7 +885,7 @@ var GeneralVM = function(is_project, pk){
   };
 
 
-  self.saveGeneralForm = function(xf){
+  self.saveGeneralForm = function(xf, default_status){
     App.showProcessing();
     var url = '/forms/api/fxf/';
     var fxf = new FieldSightXF();
@@ -896,6 +895,7 @@ var GeneralVM = function(is_project, pk){
     }else {
       fxf.site = self.pk;
     }
+    fxf.default_submission_status = default_status
 
     var success =  function (response) {
                 App.hideProcessing();
