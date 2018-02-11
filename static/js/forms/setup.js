@@ -219,7 +219,7 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
 self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
 console.log(self.id()); 
-  if (self.id()){ 
+  if (self.id() != null){ 
     doAssignDefaultFormStatus(self.id(), newValue);
 }
 });
@@ -350,7 +350,7 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
 self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
 console.log(self.id());  
-if (self.id()){
+if (self.id() != null){
     doAssignDefaultFormStatus(self.id(), newValue);
 }
 });
@@ -462,7 +462,7 @@ console.log(self.stage_forms().xf);
   self.default_submission_status.subscribe(function (newValue) { 
   console.log(self.stage_forms().default_submission_status());
   console.log(self.stage_forms().id());
-  if (self.stage_forms().id()){
+  if (self.stage_forms().id() != null){
       doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
     }
   });
