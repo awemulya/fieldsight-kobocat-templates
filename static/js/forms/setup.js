@@ -20,7 +20,7 @@ function formatDate(date) {
  }
 
  var availableoptions = ko.observableArray(['Pending', 'Approved']);
- var scheduleOptions = ko.observableArray(['Daily', 'Weekly', 'Monthly']);
+ var scheduleOptions = ko.observableArray([{id:0, name:'Daily'},{id:1, name:'Weekly'}, {id:2, name:'Monthly'}]);
 
 
  function formStatus(flag){
