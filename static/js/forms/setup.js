@@ -218,9 +218,10 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
 
 self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
-console.log(self.id());  
+console.log(self.id()); 
+  if (self.id()){ 
     doAssignDefaultFormStatus(self.id(), newValue);
-
+}
 });
 
 self.deploy = function(){
@@ -349,8 +350,9 @@ self.default_submission_status_text = ko.observable(formStatus(self.default_subm
 self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
 console.log(self.id());  
+if (self.id()){
     doAssignDefaultFormStatus(self.id(), newValue);
-
+}
 });
 self.save_em = function(){
   // console.log("called save");
