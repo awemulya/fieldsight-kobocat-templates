@@ -20,6 +20,7 @@ function formatDate(date) {
  }
 
  var availableoptions = ko.observableArray(['Pending', 'Approved']);
+ var scheduleOptions = ko.observableArray(['Daily', 'Weekly', 'Monthly']);
 
 
  function formStatus(flag){
@@ -29,6 +30,13 @@ function formatDate(date) {
   if (flag == 2) return "Flagged"
   if (flag == 3) return "Approved"
 
+  }
+function scheduleStatus(level){
+  console.log(level);
+  if (level == 0) return "Daily"
+  if (level == 1) return "Weekly"
+  if (level == 2) return "Monthly"
+  
   }
 
 
@@ -318,6 +326,7 @@ var Schedule = function (data){
   self.project = ko.observable();
   self.em = ko.observable();
   self.default_submission_status = ko.observable();
+  self.schedule_level = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
 
 
@@ -341,19 +350,21 @@ for (var i in data){
 
   }
 
-self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+self.schedule_level_text = ko.observable(scheduleStatus(self.schedule_level()));
 
-self.default_submission_status_text.subscribe(function (newValue) { 
-console.log(newValue);
-console.log(self.form());  
-    doAssignDefaultFormStatus(self.form(), newValue);
-
-});
 
 self.education_material = function(){
   self.em_form_modal_visibility(true);
 
 }
+self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+
+self.default_submission_status_text.subscribe(function (newValue) { 
+console.log(newValue);
+console.log(self.id());  
+    doAssignDefaultFormStatus(self.id(), newValue);
+
+});
 self.save_em = function(){
   // console.log("called save");
     App.showProcessing();
@@ -1018,6 +1029,7 @@ var ScheduleVM = function(is_project, pk){
   self.is_deployed = ko.observable(false);
   self.search_key = ko.observable();
   self.days = ko.observableArray();
+  self.schedule_level = ko.observable();
 
 
   self.getDays = function(){
