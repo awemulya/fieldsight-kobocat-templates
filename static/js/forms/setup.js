@@ -19,7 +19,7 @@ function formatDate(date) {
   return (flag == true) ? "Undeploy" : "Deploy";
  }
 
- var availableoptions = ko.observableArray(['Pending', 'Approved']);
+ var availableoptions = ko.observableArray([{id:0, name:'Pending'},{id:1, name:"Rejected"}, {id:2, name:"Flagged"}, {id:3, name: 'Approved'}]);
  var scheduleOptions = ko.observableArray([{id:0, name:'Daily'},{id:1, name:'Weekly'}, {id:2, name:'Monthly'}]);
 
 
@@ -135,21 +135,8 @@ var EducationMaterial = function(data){
   function doAssignDefaultFormStatus(fsxf_id, status){
     
     App.showProcessing();
-
-    if (status == "Rejected"){
-        status_id=1;
-    }
-    else if (status == "Flagged"){
-        status_id=2;
-    }
-    else if (status == "Approved"){
-        status_id=3;
-    }
-    else{
-        status_id=0;
-    }
     
-    url = "/forms/assigndefaultformstatus/"+ fsxf_id +"/"+status_id;
+    url = "/forms/assigndefaultformstatus/"+ fsxf_id +"/"+status;
     console.log(url);
     var success =  function (response) {
                 App.hideProcessing();
