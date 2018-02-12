@@ -447,6 +447,7 @@ var SubStage = function(data){
   self.editable = ko.observable(false);
   self.em_form_modal_visibility = ko.observable(false);
   self.edit_modal_visibility = ko.observable(false);
+  self.default_submission_status = ko.observable();
 
    for (var i in data){
       self[i] = ko.observable(data[i]);
