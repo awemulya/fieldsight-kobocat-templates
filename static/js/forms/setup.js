@@ -447,7 +447,6 @@ var SubStage = function(data){
   self.editable = ko.observable(false);
   self.em_form_modal_visibility = ko.observable(false);
   self.edit_modal_visibility = ko.observable(false);
-  self.default_submission_status = ko.observable();
 
    for (var i in data){
       self[i] = ko.observable(data[i]);
@@ -460,7 +459,7 @@ console.log(self.stage_forms().xf);
   
   self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
 
-  self.default_submission_status.subscribe(function (newValue) { 
+  self.stage_forms().default_submission_status.subscribe(function (newValue) { 
   console.log(self.stage_forms().default_submission_status());
   console.log(self.stage_forms().id());
   if (self.stage_forms().id() != null){
