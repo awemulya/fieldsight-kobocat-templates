@@ -680,7 +680,7 @@ self.mainStageClicked = function(){
                         "id": vm.stagesVm().xforms()[0].id()
                     },
                     "id": "",
-                    "default_submission_status":0
+                    "default_submission_status":vm.newSubstage().stage_forms().default_submission_status()
                 }
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
@@ -692,7 +692,7 @@ self.mainStageClicked = function(){
                         "id": self.newSubstage().stage_forms().xf().id()
                     },
                     "id": "",
-                    "default_submission_status":0
+                    "default_submission_status":self.newSubstage().stage_forms().default_submission_status()
                 },
                 "name": self.newSubstage().name(),
                 "description": self.newSubstage().description(),
