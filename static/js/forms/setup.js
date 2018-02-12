@@ -1100,6 +1100,7 @@ self.saveSchedule = function(){
       schedule.date_range_start = self.current_form().date_range_start().toISOString().slice(0,10);
       schedule.date_range_end= self.current_form().date_range_end().toISOString().slice(0,10);
       schedule.selected_days= self.current_form().selected_days();
+      schedule.default_submission_status = self.current_form().default_submission_status();
     var success =  function (response) {
                 App.hideProcessing();
                 var date_st = response.date_range_start.slice(0,10);
