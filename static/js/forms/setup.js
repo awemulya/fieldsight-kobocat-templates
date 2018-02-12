@@ -682,6 +682,8 @@ self.mainStageClicked = function(){
                     "id": "",
                     "default_submission_status":self.newSubstage().stage_forms().default_submission_status()
                 }
+                
+    console.log(self.newSubstage().stage_forms().default_submission_status());
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
         var saved_substage = new SubStage({
