@@ -26,7 +26,8 @@ function StageViewModel(url1, url2) {
   
   
   self.setSelected = function(item){
-     
+          console.log(item.selected());
+
           ko.utils.arrayForEach(item.forms, function(child) {
              
               child.selected((item.selected()));
@@ -36,6 +37,34 @@ function StageViewModel(url1, url2) {
              
              });
              
+             });
+
+          ko.utils.arrayForEach(self.allformjson(), function(item) {
+
+
+                  select_status1 = false;
+
+                    ko.utils.arrayForEach(item().forms, function(child) {
+                        
+                        if (child.selected() === true && item().xf_title != "Stage Forms"){
+                              select_status1=true;
+                        }
+
+                            else{
+                                select_status2 = false;
+                                ko.utils.arrayForEach(child.forms, function(subchild) {
+                                    if (subchild.selected() === true){
+                                      select_status2 = true;        
+                                      select_status1 = true;
+                                    }                                             
+                                });
+                                child.selected(select_status2);    
+                            }
+                        item.selected(select_status1);    
+                            
+                                  
+                    });           
+
              });
 
   return true;
