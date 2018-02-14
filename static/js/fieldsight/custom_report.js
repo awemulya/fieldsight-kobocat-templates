@@ -60,7 +60,7 @@ function StageViewModel(url1, url2) {
                                 });
                                 child.selected(select_status2);    
                             }
-                        item.selected(select_status1);    
+                        item().selected(select_status1);    
                             
                                   
                     });           
