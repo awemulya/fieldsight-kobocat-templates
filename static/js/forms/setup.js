@@ -413,8 +413,13 @@ self.save_em = function(){
   };
 
     self.save = function(){
+    if(self.name().length >0){
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
+    }else{
+      App.notifyUser('SubStage Name Cannot be Empty', 'error');
+      return;
+    }
   };
   self.save_edit = function(){
     vm.scheduleVm().saveSchedule();
