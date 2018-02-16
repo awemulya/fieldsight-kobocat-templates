@@ -413,7 +413,9 @@ self.save_em = function(){
   };
 
     self.save = function(){
-    if(self.current_form().name().length >0){
+      console.log(self.id());  
+
+    if(name().length >0){
 
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
