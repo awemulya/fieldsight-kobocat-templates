@@ -413,9 +413,9 @@ self.save_em = function(){
   };
 
     self.save = function(){
-      console.log(vm.scheduleVm().current_form().name().length);
+      // console.log(vm.scheduleVm().current_form().name().length);
 
-    if(vm.scheduleVm().current_form().name().length >0){
+    if(vm.scheduleVm().current_form().name().length === undefined || vm.scheduleVm().current_form().name().length >0){
 
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
