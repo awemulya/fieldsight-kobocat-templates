@@ -416,11 +416,12 @@ self.save_em = function(){
       // console.log(vm.scheduleVm().current_form().name().length);
 
     if(vm.scheduleVm().current_form().name() === undefined || vm.scheduleVm().current_form().name().length >0){
-
+      alert(vm.scheduleVm().current_form().name());
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
     
     }else{
+      alert();
       App.notifyUser('SubStage Name Cannot be Empty', 'error');
       return;
     }
