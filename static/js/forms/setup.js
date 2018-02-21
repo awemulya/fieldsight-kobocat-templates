@@ -19,7 +19,8 @@ function formatDate(date) {
   return (flag == true) ? "Undeploy" : "Deploy";
  }
 
- var availableoptions = ko.observableArray(['Pending', 'Approved']);
+ var availableoptions = ko.observableArray([{id:0, name:'Pending'}, {id:3, name: 'Approved'}]);
+ var scheduleOptions = ko.observableArray([{id:0, name:'Daily'},{id:1, name:'Weekly'}, {id:2, name:'Monthly'}]);
 
 
  function formStatus(flag){
@@ -29,6 +30,13 @@ function formatDate(date) {
   if (flag == 2) return "Flagged"
   if (flag == 3) return "Approved"
 
+  }
+function scheduleStatus(level){
+  console.log(level);
+  if (level == 0) return "Daily"
+  if (level == 1) return "Weekly"
+  if (level == 2) return "Monthly"
+  
   }
 
 
@@ -127,21 +135,8 @@ var EducationMaterial = function(data){
   function doAssignDefaultFormStatus(fsxf_id, status){
     
     App.showProcessing();
-
-    if (status == "Rejected"){
-        status_id=1;
-    }
-    else if (status == "Flagged"){
-        status_id=2;
-    }
-    else if (status == "Approved"){
-        status_id=3;
-    }
-    else{
-        status_id=0;
-    }
     
-    url = "/forms/assigndefaultformstatus/"+ fsxf_id +"/"+status_id;
+    url = "/forms/assigndefaultformstatus/"+ fsxf_id +"/"+status;
     console.log(url);
     var success =  function (response) {
                 App.hideProcessing();
@@ -189,12 +184,12 @@ var FieldSightXF = function (data){
   
 
   self.save = function(){
-    vm.generalVm().saveGeneralForm(self.xf())
+    vm.generalVm().saveGeneralForm(self.xf(), self.default_submission_status())
     vm.generalVm().general_form_modal_visibility(false);
   };
  
   self.save_survey = function(){
-    vm.surveyVm().saveGeneralForm(self.xf())
+    vm.surveyVm().saveGeneralForm(self.xf(), self.default_submission_status())
     vm.surveyVm().general_form_modal_visibility(false);
   };
  
@@ -221,11 +216,12 @@ var FieldSightXF = function (data){
   }
 self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
 
-self.default_submission_status_text.subscribe(function (newValue) { 
+self.default_submission_status.subscribe(function (newValue) { 
 console.log(newValue);
-console.log(self.id());  
+console.log(self.id()); 
+  if (self.id() != null){ 
     doAssignDefaultFormStatus(self.id(), newValue);
-
+}
 });
 
 self.deploy = function(){
@@ -318,6 +314,7 @@ var Schedule = function (data){
   self.project = ko.observable();
   self.em = ko.observable();
   self.default_submission_status = ko.observable();
+  self.schedule_level = ko.observable();
   self.em_form_modal_visibility = ko.observable(false);
 
 
@@ -341,19 +338,22 @@ for (var i in data){
 
   }
 
-self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+self.schedule_level_text = ko.observable(scheduleStatus(self.schedule_level()));
 
-self.default_submission_status_text.subscribe(function (newValue) { 
-console.log(newValue);
-console.log(self.form());  
-    doAssignDefaultFormStatus(self.form(), newValue);
-
-});
 
 self.education_material = function(){
   self.em_form_modal_visibility(true);
 
 }
+self.default_submission_status_text = ko.observable(formStatus(self.default_submission_status()));
+
+self.default_submission_status.subscribe(function (newValue) { 
+console.log(newValue);
+console.log(self.id());  
+if (self.id() != null){
+    doAssignDefaultFormStatus(self.id(), newValue);
+}
+});
 self.save_em = function(){
   // console.log("called save");
     App.showProcessing();
@@ -413,8 +413,17 @@ self.save_em = function(){
   };
 
     self.save = function(){
+      // console.log(vm.scheduleVm().current_form().name().length);
+
+    if(vm.scheduleVm().current_form().name() !== undefined && vm.scheduleVm().current_form().name().length >0){
+      
     vm.scheduleVm().saveSchedule();
     vm.scheduleVm().schedule_form_modal_visibility(false);
+    
+    }else{
+      App.notifyUser('SubStage Name Cannot be Empty', 'error');
+      return;
+    }
   };
   self.save_edit = function(){
     vm.scheduleVm().saveSchedule();
@@ -459,12 +468,12 @@ console.log(self.stage_forms().xf);
   
   self.default_submission_status_text = ko.observable(formStatus(self.stage_forms().default_submission_status()));
 
-  self.default_submission_status_text.subscribe(function (newValue) { 
+  self.stage_forms().default_submission_status.subscribe(function (newValue) { 
   console.log(self.stage_forms().default_submission_status());
   console.log(self.stage_forms().id());
-
+  if (self.stage_forms().id() != null){
       doAssignDefaultFormStatus(self.stage_forms().id(), newValue);
-
+    }
   });
 
   console.log("after");
@@ -674,14 +683,17 @@ self.mainStageClicked = function(){
   };
 
   self.save_sub_stage = function(){
+    console.log('Hit ');
     st_form = {
                     "xf": {
                         "title": vm.stagesVm().xforms()[0].title(),
                         "id": vm.stagesVm().xforms()[0].id()
                     },
                     "id": "",
-                    "default_submission_status":0
+                    "default_submission_status":self.newSubstage().stage_forms().default_submission_status()
                 }
+
+    console.log(self.newSubstage().stage_forms().default_submission_status());
     var parentLength = self.parent().length || 0;
     if(self.newSubstage().name().length >0){
         var saved_substage = new SubStage({
@@ -692,7 +704,7 @@ self.mainStageClicked = function(){
                         "id": self.newSubstage().stage_forms().xf().id()
                     },
                     "id": "",
-                    "default_submission_status":0
+                    "default_submission_status":self.newSubstage().stage_forms().default_submission_status()
                 },
                 "name": self.newSubstage().name(),
                 "description": self.newSubstage().description(),
@@ -784,7 +796,7 @@ var SurveyVM = function(is_project, pk){
   };
 
 
-  self.saveGeneralForm = function(xf){
+  self.saveGeneralForm = function(xf, default_status){
     App.showProcessing();
     var url = '/forms/api/fxf/';
     var fxf = new FieldSightXF();
@@ -794,6 +806,7 @@ var SurveyVM = function(is_project, pk){
     }else {
       fxf.site = self.pk;
     }
+    fxf.default_submission_status = default_status
     fxf.is_survey = true;
 
     var success =  function (response) {
@@ -884,7 +897,7 @@ var GeneralVM = function(is_project, pk){
   };
 
 
-  self.saveGeneralForm = function(xf){
+  self.saveGeneralForm = function(xf, default_status){
     App.showProcessing();
     var url = '/forms/api/fxf/';
     var fxf = new FieldSightXF();
@@ -894,6 +907,7 @@ var GeneralVM = function(is_project, pk){
     }else {
       fxf.site = self.pk;
     }
+    fxf.default_submission_status = default_status
 
     var success =  function (response) {
                 App.hideProcessing();
@@ -1018,6 +1032,7 @@ var ScheduleVM = function(is_project, pk){
   self.is_deployed = ko.observable(false);
   self.search_key = ko.observable();
   self.days = ko.observableArray();
+  self.schedule_level = ko.observable();
 
 
   self.getDays = function(){
@@ -1093,9 +1108,11 @@ self.saveSchedule = function(){
     }
       schedule.xf = self.current_form().form();
       schedule.name = self.current_form().name();
+      schedule.schedule_level = self.current_form().schedule_level();
       schedule.date_range_start = self.current_form().date_range_start().toISOString().slice(0,10);
       schedule.date_range_end= self.current_form().date_range_end().toISOString().slice(0,10);
       schedule.selected_days= self.current_form().selected_days();
+      schedule.default_submission_status = self.current_form().default_submission_status();
     var success =  function (response) {
                 App.hideProcessing();
                 var date_st = response.date_range_start.slice(0,10);
