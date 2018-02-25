@@ -48,8 +48,8 @@ progressText = ['0%','0-20%','20-40%','40-60%','60-80%','80-100%', '100%'];
         //}
 
 
-function loaddataonmap(data){
-   site_response = new L.geoJson(data, {
+
+   site_response = new L.geoJson(coordinates, {
             pointToLayer: function(feature, latlng) {
                  console.log(feature);
                 
@@ -70,7 +70,7 @@ function loaddataonmap(data){
                 
             }
                 }).addTo(map);
-}
+
 
 
 
