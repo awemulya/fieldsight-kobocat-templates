@@ -1,4 +1,4 @@
-var site_response = [{"geometry": {"type": "Point", "coordinates": [84.428713,27.2155476] }, "type": "Feature", "properties": {"submitted_by": "elvar", "fs_uuid": "3391", "id": 433}}, {"geometry": {"type": "Point", "coordinates": [85.428713, 27.7155476 ]}, "type": "Feature", "properties": {"submitted_by": "elvar", "fs_uuid": "3391", "id": 435}}, {"geometry": {"type": "Point", "coordinates": [85.4138713, 27.71531476]}, "type": "Feature", "properties": {"submitted_by": "elvar", "fs_uuid": "3804", "id": 450}}];
+// var site_response = [{"geometry": {"type": "Point", "coordinates": [84.428713,27.2155476] }, "type": "Feature", "properties": {"submitted_by": "elvar", "fs_uuid": "3391", "id": 433}}, {"geometry": {"type": "Point", "coordinates": [85.428713, 27.7155476 ]}, "type": "Feature", "properties": {"submitted_by": "elvar", "fs_uuid": "3391", "id": 435}}, {"geometry": {"type": "Point", "coordinates": [85.4138713, 27.71531476]}, "type": "Feature", "properties": {"submitted_by": "elvar", "fs_uuid": "3804", "id": 450}}];
 
 
 
