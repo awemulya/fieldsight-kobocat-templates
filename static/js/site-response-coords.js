@@ -38,7 +38,7 @@ statusText = ['Rejected submission','Flagged submission','Approved submission','
 progressIconList = ['marker-red','marker10-20','marker30-40','marker50-60','marker70-80','marker80-90','marker90-100'];
 progressText = ['0%','0-20%','20-40%','40-60%','60-80%','80-100%', '100%'];
 //end array legend
-console.log(data);
+
 //console.log(data.features.length);
         //if(data.features.length!=0){
            //map = L.map("map",{layers:osm}).fitBounds(markers); 
@@ -48,8 +48,8 @@ console.log(data);
         //}
 
 
-function loaddataonmap(site_response){
-   site_response = new L.geoJson(site_response, {
+function loaddataonmap(data){
+   site_response = new L.geoJson(data, {
             pointToLayer: function(feature, latlng) {
                  console.log(feature);
                 
