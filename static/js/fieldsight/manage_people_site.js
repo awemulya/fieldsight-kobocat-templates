@@ -1290,6 +1290,11 @@ self.unAssignUserROle = function(role_id){
         self.doAssign();
     }
 
+    self.assignDonor = function(){
+        group = 'Project Donor';
+        self.doAssign();
+    }
+
   self.doAssign = function(){
     App.showProcessing();
     self.new_role(({'group':group, 'users':[]}));
