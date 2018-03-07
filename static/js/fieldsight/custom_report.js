@@ -102,7 +102,7 @@ function StageViewModel(url1, url2) {
              });
     console.log(selectedFormids);
     
-    self.data({'fs_ids':selectedFormids});
+    self.data({'fs_ids':selectedFormids, 'csrf_token':csrf_token});
     
 
     var success =  function (response) {
