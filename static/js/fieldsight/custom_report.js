@@ -102,7 +102,7 @@ function StageViewModel(url1, url2) {
              });
     console.log(selectedFormids);
     
-    self.data({'fs_ids':selectedFormids});
+    self.data({'fs_ids':selectedFormids, 'csrf_token':csrf_token});
     
 
     var success =  function (response) {
@@ -130,9 +130,7 @@ function StageViewModel(url1, url2) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url1, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify({
-          value: self.data()
-      })); 
+      xhr.send(ko.toJS(self.data())); 
 };
 
 
