@@ -102,7 +102,8 @@ function StageViewModel(url1, url2) {
              });
     console.log(selectedFormids);
     
-    self.data({'fs_ids':selectedFormids, 'csrf_token':csrf_token});
+
+    self.data({'fs_ids':selectedFormids, 'csrfmiddlewaretoken':csrf_token});
     
 
     var success =  function (response) {
@@ -130,7 +131,29 @@ function StageViewModel(url1, url2) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url1, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify(self.data())); 
+xhr.setRequestHeader('X-CSRFToken', csrf_token);
+xhr.responseType = 'blob';
+xhr.send(JSON.stringify(self.data())); 
+    xhr.onload = function(e) {
+        if (this.status == 200) {
+            // Create a new Blob object using the response data of the onload object
+            var blob = new Blob([this.response], {type: 'image/pdf'});
+            //Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
+            let a = document.createElement("a");
+            a.style = "display: none";
+            document.body.appendChild(a);
+            //Create a DOMString representing the blob and point the link element towards it
+            let url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = 'myFile.pdf';
+            //programatically click the link to trigger the download
+            a.click();
+            //release the reference to the file by revoking the Object URL
+            window.URL.revokeObjectURL(url);
+        }else{
+            //deal with your error state here
+        }
+    };
 };
 
 
