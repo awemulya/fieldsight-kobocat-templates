@@ -323,6 +323,8 @@ var ProjectVM = function(level, pk){
   self.search_key = ko.observable();
   self.projectManagers = ko.observableArray();
   self.allProjectManagers = ko.observableArray();
+  self.allProjectDonors = ko.observableArray();
+  self.projectDonors = ko.observableArray();
  
   
   self.available_projectManagers = ko.observableArray(); 
@@ -371,6 +373,29 @@ var ProjectVM = function(level, pk){
         });
   };
 
+self.loadProjectDonors = function(){
+    App.showProcessing();
+        $.ajax({
+            url: '/userrole/api/doners/'+ String(pk),
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                App.hideProcessing();
+               var mappedData = ko.utils.arrayMap(response, function(item) {
+                        return new Role(item);
+                    });
+                self.allProjectDonors(mappedData);
+
+                self.projectDonors(mappedData);
+
+            },
+            error: function (errorThrown) {
+                App.hideProcessing();
+                console.log(errorThrown);
+            }
+        });
+  };
+
 
   // self.search_key.subscribe(function (newValue) {
   //   if (!newValue) {
@@ -385,6 +410,7 @@ var ProjectVM = function(level, pk){
 
   
   self.loadProjectManagers();
+  self.loadProjectDonors();
 
 
   self.loadAllSites = function(){
