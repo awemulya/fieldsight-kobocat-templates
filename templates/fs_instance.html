@@ -145,7 +145,7 @@ textarea.form-control{
       <div class="header-response col-sm-8 col-md-8 col-xs-12">
        {% if fxf.project %}
               {% if is_readonly %}
-              <a href="{% url 'fieldsight:project-dashboard-lite' fxf.project.pk %}">Dashboard</a> |              
+              <a href="{% url 'fieldsight:project_dashboard_lite' fxf.project.pk %}">Dashboard</a> |              
               {% else %}
               <a href="{% url 'fieldsight:project-dashboard' fxf.project.pk %}">Dashboard</a> |
               {% endif %}
@@ -156,7 +156,7 @@ textarea.form-control{
 
         {% if fxf.site %}
               {% if is_readonly %}
-              <a href="{% url 'fieldsight:site-dashboard-lite' fxf.site.pk %}">Dashboard</a> |              
+              <a href="{% url 'fieldsight:site_dashboard_lite' fxf.site.pk %}">Dashboard</a> |              
               {% else %}
               <a href="{% url 'fieldsight:site-dashboard' fxf.site.pk %}">Dashboard</a> |
               {% endif %}
