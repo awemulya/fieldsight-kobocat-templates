@@ -20,11 +20,41 @@ window.app = new Vue({
                             <a @click="cancel_stage" class="btn btn-warning">Cancel</a>
                     </form>
                     </div>
+                    <div class="col-sm-12" v-if="substage_detail">
+                    Name : {{substage_detail.name}}
+                    Description : {{substage_detail.description}}
+                    Responses : {{substage_detail.responses_count}}
+                    Form Assigned : {{substage_detail.stage_forms.xf.title}}
+                    Weight :
+                    Tags :
+                    <h4> Sub Stage Detail <h4>
 
-                    <div class="col-sm-12" v-show="!show_ad_stage_form">
+                    </div>
+
+                    <div class="col-sm-12" v-if="current_stage">
+                        <div class="panel"><a class="btn btn-info" @click="add_stage">Add Sub Stage</a></div>
+                        <div class="col-sm-12" v-if="substages.length>0">
+                            <h2>Stage Detail/ Substages</h2>
+                            Stage :{{current_stage.name}} <br>
+                            Description :{{current_stage.description}}
+
+                            <div v-for="substage, sindex in substages">
+                                <b>#
+                                <span v-text='sindex+1'></span> </b>
+                                <a @click="substageDetail(substage)">{{substage.name}}</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" v-if="substages.length==0">
+                        There are no substages in {{current_stage.name}}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12" >
+                    <h1>Stages </h1>
                         <div v-for="stage, index in stages">
-                            <b># <span v-text='index+1'></span>
-                            <span v-text='stage.name'></span></b><br>
+                            <b>#
+                            <span v-text='index+1'></span> </b>
+                            <a @click="stageDetail(stage)">{{stage.name}}</a>
                         </div>
                     </div>
 
@@ -32,17 +62,56 @@ window.app = new Vue({
             </div>
         </div> `,
   data: {
-    stages: [],
-    loading: false,
-    is_project: configure_settings.is_project,
-    pk: configure_settings.id,
-    error: '',
-    show_ad_stage_form: false,
-    stage_form_obj: {'name': '', 'description':'', 'id':''},
+        stages: [],
+        loading: false,
+        is_project: configure_settings.is_project,
+        pk: configure_settings.id,
+        error: '',
+        show_ad_stage_form: false,
+        stage_form_obj: {'name': '', 'description':'', 'id':''},
+        current_stage: '',
+        substages: [],
+        substage_detail: '',
+        current_sub_stage: '',
   },
   methods:{
-            loadStages: function () {
-            console.log("load stages");
+            loadSubStageDetail: function (sub_stage_id) {
+            var self = this;
+            self.loading = true;
+            var options = {};
+
+            function successCallback(response) {
+                self.substage_detail = response.body;
+                self.loading = false;
+            }
+
+            function errorCallback() {
+                self.loading = false;
+                console.log('failed');
+            }
+            self.$http.get('/forms/api/sub-stage-detail/'+sub_stage_id+'/', {
+                params: options
+            }).then(successCallback, errorCallback);
+        },
+        loadSubStages: function (stage_id) {
+            var self = this;
+            self.loading = true;
+            var options = {};
+
+            function successCallback(response) {
+                self.substages = response.body;
+                self.loading = false;
+            }
+
+            function errorCallback() {
+                self.loading = false;
+                console.log('failed');
+            }
+            self.$http.get('/forms/api/sub-stage-list/'+stage_id+'/', {
+                params: options
+            }).then(successCallback, errorCallback);
+        },
+        loadStages: function () {
             var self = this;
             self.loading = true;
             var options = {};
@@ -50,7 +119,6 @@ window.app = new Vue({
             function successCallback(response) {
                 self.stages = response.body;
                 self.loading = false;
-                console.log(self.stages);
             }
 
             function errorCallback() {
@@ -91,7 +159,6 @@ window.app = new Vue({
         }
 
         function errorCallback (response){
-        console.log(response.body);
           new PNotify({
           title: 'failed',
           text: 'Failed to Save Stage',
@@ -125,10 +192,37 @@ window.app = new Vue({
 //          self.error = '';
 //            self.show_ad_stage_form = false;
         },
+        stageDetail : function (stage){
+            var self = this;
+            self.current_stage = stage;
+        },
+
+         substageDetail : function (stage){
+            var self = this;
+            self.current_sub_stage = stage;
+        },
+  },
+  watch: {
+    current_stage: function(newVal, oldVal) {
+    var self = this;
+    if (newVal){
+      self.substages = [];
+      self.substage_detail = '';
+      self.loadSubStages(newVal.id);
+      }
+
+    },
+    current_sub_stage: function(newVal, oldVal) {
+    var self = this;
+    if (newVal){
+      self.substage_detail = '';
+      self.loadSubStageDetail(newVal.id);
+      }
+
+    },
   },
   created(){
     var self= this;
-    console.log("hello");
     self.loadStages();
   },
 
