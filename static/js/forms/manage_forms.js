@@ -5,6 +5,7 @@ window.app = new Vue({
             <div class="panel panel-default">
                  <div class="panel-heading"><a class="btn btn-info" @click="add_stage">Add Stage</a></div>
                 <div class="panel-body">
+
                     <div class="col-sm-12" v-show="show_ad_stage_form">
                     <form class="form">
                         <div class="col-sm-12" v-show="error">
@@ -20,15 +21,46 @@ window.app = new Vue({
                             <a @click="cancel_stage" class="btn btn-warning">Cancel</a>
                     </form>
                     </div>
+
+                    <div class="col-sm-12" v-show="(update_substage_mode=='true') && (substage_detail)">
+                    <form class="form">
+                        <div class="col-sm-12" v-show="error">
+                        {{error}}
+                        </div>
+                          <div class="form-group">
+                            <input v-model="substage_detail.name" class="form-control" placeholder="Sub Stage Name">
+                          </div>
+                          <div class="form-group">
+                            <textarea v-model="substage_detail.description" placeholder="Description"></textarea>
+                          </div>
+                          <div class="form-group">
+                            <input v-model="substage_detail.weight" placeholder="weight" type="integer" minimum="0"></input>
+                          </div>
+                          <div class="form-group">
+                            <input v-model="substage_detail.tags" placeholder="tags"></input>
+                          </div>
+                          <div class="form-group" v-show="substage_detail.stage_forms">
+                            {{substage_detail.stage_forms}}
+                            <input v-model="sub_stage_form" placeholder="form"></input>
+                          </div>
+                          <div class="form-group" v-show="!substage_detail.stage_forms">
+                            No Form Assigned Yet Choose One !!
+                            <input v-model="sub_stage_form" placeholder="form"></input>
+                          </div>
+                            <a @click="save_sub_stage" class="btn btn-primary">Save</a> &nbsp;
+                            <a @click="cancel_sub_stage" class="btn btn-warning">Cancel</a>
+                    </form>
+                    </div>
+
                     <div class="col-sm-12" v-if="substage_detail">
+                    <h4> Sub Stage Detail </h4>
                     Name : {{substage_detail.name}}
                     Description : {{substage_detail.description}}
                     Responses : {{substage_detail.responses_count}}
                     Form Assigned : {{substage_detail.stage_forms.xf.title}}
-                    Weight :
-                    Tags :
-                    <h4> Sub Stage Detail <h4>
-
+                    Weight : {{substage_detail.weight}}
+                    Tags :[t1, t2, t3]
+                    <a @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a> &nbsp;
                     </div>
 
                     <div class="col-sm-12" v-if="current_stage">
@@ -73,8 +105,18 @@ window.app = new Vue({
         substages: [],
         substage_detail: '',
         current_sub_stage: '',
+        update_substage_mode: false,
+        sub_stage_form: '',
   },
   methods:{
+            update_sub_stage: function (){
+                var self = this;
+                self.update_substage_mode = true;
+            },
+            update_sub_done: function (){
+                var self = this;
+                self.update_substage_mode = false;
+            },
             loadSubStageDetail: function (sub_stage_id) {
             var self = this;
             self.loading = true;
@@ -136,10 +178,19 @@ window.app = new Vue({
             self.stage_form_obj = {'name': '', 'description':'', 'id':''};
             self.show_ad_stage_form = true;
         },
+        save_sub_stage : function (){
+            var self = this;
+            self.error = "";
+            self.update_substage_mode = false;
+        },
         cancel_stage : function (){
             var self = this;
             self.show_ad_stage_form = false;
             self.stage_form_obj = {'name': '', 'description':'', 'id':''};
+        },
+        cancel_sub_stage : function (){
+            var self = this;
+            self.update_substage_mode = false;
         },
 
       saveNewStage: function () {
