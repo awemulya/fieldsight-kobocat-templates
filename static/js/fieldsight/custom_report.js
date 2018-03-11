@@ -145,7 +145,7 @@ xhr.send(JSON.stringify(self.data()));
             //Create a DOMString representing the blob and point the link element towards it
             let url = window.URL.createObjectURL(blob);
             a.href = url;
-            a.download = 'myFile.pdf';
+            a.download = 'Custom_Report.pdf';
             //programatically click the link to trigger the download
             a.click();
             //release the reference to the file by revoking the Object URL
