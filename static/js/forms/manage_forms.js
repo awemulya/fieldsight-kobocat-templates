@@ -6,6 +6,7 @@ window.app = new Vue({
             <div class="panel panel-default">
                  <div class="panel-heading"><a class="btn btn-info" @click="add_stage">Add Stage</a></div>
                 <div class="panel-body">
+
                     <div class="col-sm-12" v-show="show_ad_stage_form">
                     <form class="form">
                         <div class="col-sm-12" v-show="error">
@@ -19,6 +20,22 @@ window.app = new Vue({
                           </div>
                             <a @click="save_stage" class="btn btn-primary">Save</a> &nbsp;
                             <a @click="cancel_stage" class="btn btn-warning">Cancel</a>
+                    </form>
+                    </div>
+
+                    <div class="col-sm-12" v-show="update_stage_mode">
+                    <form class="form">
+                        <div class="col-sm-12" v-show="error">
+                        {{error}}
+                        </div>
+                          <div class="form-group">
+                            <input v-model="stage_form_obj_edit.name" class="form-control" placeholder="Stage Name">
+                          </div>
+                          <div class="form-group">
+                            <textarea v-model="stage_form_obj_edit.description" placeholder="Description"></textarea>
+                          </div>
+                            <a @click="do_update_stage" class="btn btn-primary">Save</a> &nbsp;
+                            <a @click="update_stage_done" class="btn btn-warning">Cancel</a>
                     </form>
                     </div>
 
@@ -124,8 +141,9 @@ window.app = new Vue({
                     <div class="col-sm-12" v-if="current_stage">
                         <div class="panel" v-show="!substage_detail && !show_ad_substage_form">
                         <a class="btn btn-info" @click="add_substage">Add Sub Stage</a></div>
-                        <div class="col-sm-12" v-if="substages.length>0">
-                            <h2>Stage Detail/ Substages</h2>
+                        <div class="col-sm-12">
+                            <h2>Stage Detail </h2>
+                            <a @click="update_stage" class="btn btn-primary">Update Stage</a> <br>
                             Stage :{{current_stage.name}} <br>
                             Description :{{current_stage.description}}
 
@@ -134,10 +152,11 @@ window.app = new Vue({
                                 <span v-text='sindex+1'></span> </b>
                                 <a @click="substageDetail(substage)">{{substage.name}}</a>
                             </div>
-                        </div>
-                        <div class="col-sm-12" v-if="substages.length==0 && !show_ad_substage_form">
+                            <div class="col-sm-12" v-if="substages.length==0 && !show_ad_substage_form">
                         There are no substages in {{current_stage.name}}
                         </div>
+                        </div>
+
                     </div>
 
                     <div class="col-sm-12" >
@@ -150,6 +169,19 @@ window.app = new Vue({
                         <div class="col-sm-12" v-if="stages.length==0">
                         There are no Stages ..
                         </div>
+                    </div>
+
+                    <div class="col-sm-12" >
+                    <h1>Sort Stages </h1>
+                         <div id="main">
+
+                            <div class="drag">
+                                <draggable :list="stages" class="dragArea">
+                                    <div v-for="stage in stages" class="dragable-stage">{{stage.name}}</div>
+                                 </draggable>
+                             </div>
+                         </div>
+
                     </div>
 
                 </div>
@@ -171,11 +203,13 @@ window.app = new Vue({
         substage_detail: '',
         current_sub_stage: '',
         update_substage_mode: false,
+        update_stage_mode: false,
         sub_stage_form: '',
         forms: [],
         tags: [{'id': 1, 'name':'Tag 1'}, {'id': 2, 'name':'Tag 2'}, {'id': 3, 'name':'Tag 3'}],
         form: '',
         selected_tags: [],
+        stage_form_obj_edit: '',
   },
   methods:{
         saveNewSubStage: function () {
@@ -221,9 +255,22 @@ window.app = new Vue({
                 console.log("update subupdate_sub_stagestage");
                 self.update_substage_mode = true;
             },
+            update_stage: function (){
+                var self = this;
+                self.error = "";
+                console.log("update stage");
+                self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
+                                            self.current_stage.description}
+                self.update_stage_mode = true;
+            },
             update_sub_done: function (){
                 var self = this;
                 self.update_substage_mode = false;
+            },
+            update_stage_done: function (){
+                var self = this;
+                self.error = "";
+                self.update_stage_mode = false;
             },
             loadSubStageDetail: function (sub_stage_id) {
             var self = this;
@@ -333,6 +380,12 @@ window.app = new Vue({
             self.saveExistingSubStage();
 
         },
+        do_update_stage : function (){
+            var self = this;
+            self.error = "";
+            self.saveExistingStage();
+
+        },
         cancel_stage : function (){
             var self = this;
             self.show_ad_stage_form = false;
@@ -393,12 +446,16 @@ window.app = new Vue({
           title: 'Sub Stage Updated',
           text: 'Sub Stage '+ response.body.name + ' Updated'
         });
-        self.stages.push(response.body);
+        var index = self.substages.findIndex(x => x.id==response.body.id);
+
+
+        Vue.set(self.substages, index, response.body);
+
         self.update_substage_mode = false;
         self.show_ad_substage_form = false;
         self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':[], 'xf':''};;
-        self.current_sub_stage = '';
-        self.substage_detail = '';
+        self.current_sub_stage = response.body;
+        self.substage_detail = response.body;
         }
 
         function errorCallback (response){
@@ -416,6 +473,46 @@ window.app = new Vue({
             }
         }
        self.$http.put('/forms/api/sub-stage-detail/'+self.substage_detail.id+'/', self.substage_detail, options).then(successCallback, errorCallback);
+
+
+    },
+    saveExistingStage: function () {
+        var self = this;
+        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+
+        function successCallback (response){
+
+        self.error = "";
+            new PNotify({
+          title: 'Stage Updated',
+          text: 'Stage '+ response.body.name + ' Updated'
+        });
+        var index = self.stages.findIndex(x => x.id==response.body.id);
+
+
+        Vue.set(self.stages, index, response.body);
+
+        self.update_stage_mode = false;
+        self.stage_form_obj_edit = '';
+        self.current_stage = response.body;
+        }
+
+        function errorCallback (response){
+          new PNotify({
+          title: 'failed',
+          text: 'Failed to Update Stage',
+          type: 'error'
+        });
+            if(response.body.error){
+            console.log(response.body.error)
+              self.error = response.body.error;
+            }else{
+                self.error = "Incorrect Form Data !.";
+
+            }
+        }
+       self.$http.put('/forms/api/configure-stage-update/'+self.stage_form_obj_edit.id+'/', self.stage_form_obj_edit, options).then(successCallback, errorCallback);
 
 
     },
