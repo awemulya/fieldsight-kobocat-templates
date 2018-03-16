@@ -336,7 +336,7 @@ var ProjectVM = function(level, pk){
   self.sites = ko.observableArray();
   self.site = ko.observableArray();
   self.allsites = ko.observableArray();
-  self.search_key = ko.observable();
+  
   self.allsiteid = ko.observableArray();
   self.allsiteid([]);
   self.all_selected_sites = ko.observableArray();
@@ -655,6 +655,7 @@ function multiemailvalidate(entry) {
     self.all_selected_regions([]);
     self.loadRegionalSites = ko.observable();
     self.showsites = ko.observable(false);
+    self.region_search_key = ko.observable();
       self.loadAllRegions = function(){
       App.showProcessing();
         $.ajax({
@@ -735,7 +736,7 @@ self.setRegionSelected = function(region){
    
   };
 
-  self.search_key.subscribe(function (newValue) {
+  self.region_search_key.subscribe(function (newValue) {
    
     if (!newValue) {
         self.regions(self.allRegions());
@@ -751,39 +752,50 @@ self.setRegionSelected = function(region){
 
 
     self.assignselectedreviewer = function(){
-          group = 'Reviewer';
-          self.doAssign();
+         
+            
+            self.doAssign('Reviewer');
+         
     };
     self.assignselectedsupervisor = function(){
-        group = 'Site Supervisor';
-        self.doAssign();
+       
+           
+            self.doAssign('Site Supervisor');
+       
     };
 
-    self.doAssign = function(){
+    self.doAssign = function(group){
     App.showProcessing();
 
+     if (!all_selected_users().length){
+      alert("No Users Selected to Assign to.");
+      App.hideProcessing();
+      return false;
+    }
+    if(type == "region"){
+
+    if (!self.all_selected_regions().length){
+      alert("No Regions Selected to Assign to.");
+      App.hideProcessing();
+      return false;
+    }
+    
+    self.new_role({'group':group, 'users':[], 'regions':[]});
+    
+    
+
+    ko.utils.arrayMap(self.all_selected_regions(), function(item) {
+                    console.log(item.id());
+                    self.new_role().regions.push(item.id);
+                    });
+    }
+    else{
     if (!self.all_selected_sites().length){
       alert("No Sites Selected to Assign to.");
       App.hideProcessing();
       return false;
     }
     
-     if (!all_selected_users().length){
-      alert("No Users Selected to Assign to.");
-      App.hideProcessing();
-      return false;
-    }
-    // if(type == "region"){
-    // self.new_role({'group':group, 'users':[], 'regions':[]});
-    
-    
-
-    // ko.utils.arrayMap(self.all_selected_regions(), function(item) {
-    //                 console.log(item.id());
-    //                 self.new_role().regions.push(item.id);
-    //                 });
-    // }
-    // else{
     self.new_role({'group':group, 'users':[], 'sites':[]});
     
     
@@ -792,7 +804,7 @@ self.setRegionSelected = function(region){
                     console.log(item.id());
                     self.new_role().sites.push(item.id);
                     });
-    // }
+    }
 
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
@@ -825,6 +837,7 @@ self.setRegionSelected = function(region){
 
        App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
 };
+    
 
     if(type == "region"){
       self.loadAllRegions();
