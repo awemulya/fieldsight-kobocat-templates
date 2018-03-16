@@ -187,6 +187,7 @@ var Region =function (data, project){
   self = this;
   self.id = ko.observable();
   self.name = ko.observable();
+  self.identifier = ko.observable();
   self.selected = ko.observable(false);
   
   for (var i in data){
