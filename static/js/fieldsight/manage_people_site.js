@@ -744,7 +744,7 @@ self.setRegionSelected = function(region){
         self.regions(self.allRegions());
     } else {
         filter_data = ko.utils.arrayFilter(self.allRegions(), function(item) {
-            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
+            return (ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase()) || ko.utils.stringStartsWith(item.identifier().toLowerCase(), newValue.toLowerCase()));
         });
         self.regions(filter_data);
     }
