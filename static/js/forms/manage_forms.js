@@ -63,7 +63,7 @@ window.app = new Vue({
                          <a @click="substageDetail(substage)">{{substage.name}}</a></li>
                     </ul>
 
-                    <a  @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!substage_detail && !show_ad_substage_form">
+                    <a  @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
                     <i class="la la-plus"></i> New Sub Stage</a>
 
                     <div class="margin-top" v-show="show_ad_substage_form">
@@ -129,6 +129,22 @@ window.app = new Vue({
                         </div>
                 </form>
             </div>
+
+            <div class="widget-info bg-white padding" v-show="reorder_stages_mode">
+                <div class="widget-head">
+                    <h4>Reorder  Stages </h4>
+                </div>
+                         <div id="main" class="widget-body">
+
+                            <div class="drag">
+                                <draggable :list="stages" class="dragArea">
+                                    <div v-for="stage in stages" class="dragable-stage">{{stage.name}}</div>
+                                 </draggable>
+                             </div>
+                         </div>
+
+            </div>
+
         </div>
         <div class="col-md-4">
             <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode">
@@ -184,6 +200,20 @@ window.app = new Vue({
 
                         </form>
                     </div>
+                <div class="widget-info bg-white padding" v-show="reorder_sub_stages_mode">
+                <div class="widget-head">
+                    <h4>Reorder  Sub Stages </h4>
+                </div>
+                         <div id="main" class="widget-body">
+
+                            <div class="drag">
+                                <draggable :list="substages" class="dragArea">
+                                    <div v-for="stage in substages" class="dragable-stage">{{stage.name}}</div>
+                                 </draggable>
+                             </div>
+                         </div>
+
+            </div>
         </div>
         </div> `,
     components: {'vselect': VueMultiselect.default,},
@@ -212,6 +242,8 @@ window.app = new Vue({
         form: '',
         selected_tags: [],
         stage_form_obj_edit: '',
+        reorder_stages_mode: true,
+        reorder_sub_stages_mode: true,
   },
   methods:{
         saveNewSubStage: function () {
@@ -220,7 +252,7 @@ window.app = new Vue({
         let options = {headers: {'X-CSRFToken':csrf}};
         self.substage_form_obj.order = self.substages.length;
         function successCallback (response){
-        console.log(response.body);
+
 
         self.error = "";
             new PNotify({
@@ -398,7 +430,6 @@ window.app = new Vue({
             self.show_ad_substage_form = false;
             self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':[], 'xf':''};;
             self.current_sub_stage = '';
-            self.substage_detail = '';
         },
 
       saveNewStage: function () {
@@ -453,8 +484,6 @@ window.app = new Vue({
         Vue.set(self.substages, index, response.body);
 
         self.update_substage_mode = false;
-        self.show_ad_substage_form = false;
-        self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':[], 'xf':''};;
         self.current_sub_stage = response.body;
         self.substage_detail = response.body;
         }
