@@ -10,7 +10,7 @@ window.app = new Vue({
                 </div>
                 <div class="widget-body">
                     <ul class="stage-list"  v-if="stages.length>0">
-                        <li v-for="stage, index in stages"><span>{{index+1}}.</span> <a @click="stageDetail(stage)">{{stage.name}}</a></li>
+                        <li v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)">{{stage.name}}</a></li>
                     </ul>
                     <ul class="stage-list" v-if="stages.length==0">
                         <li><span>There are no Stages.. Please Add Stages</span></li>
@@ -33,8 +33,8 @@ window.app = new Vue({
                                     v-model="stage_form_obj.description"></textarea>
                             </div>
                             <div class="form-group">
-                                <a @click="save_stage" title=""  class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
-                                <a @click="cancel_stage" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
+                                <a  href="javascript:void(0)" @click="save_stage" title=""  class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a  href="javascript:void(0)" @click="cancel_stage" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
                             </div>
 
                         </form>
@@ -51,7 +51,7 @@ window.app = new Vue({
                 </div>
                 <div class="widget-body">
                     <p>{{current_stage.description}}</p>
-                    <a @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">Update Stage</a>
+                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">Update Stage</a>
                 </div>
                 <div class="widget-head margin-top padding-left" v-show="!show_ad_substage_form">
                     <h4 v-show="substages.length>0">Sub Stages</h4>
@@ -60,10 +60,10 @@ window.app = new Vue({
                 <div class="widget-body overflow-auto">
                     <ul class="stage-list padding-left" >
                         <li class="active" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
-                         <a @click="substageDetail(substage)">{{substage.name}}</a></li>
+                         <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
                     </ul>
 
-                    <a  @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
+                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
                     <i class="la la-plus"></i> New Sub Stage</a>
 
                     <div class="margin-top" v-show="show_ad_substage_form">
@@ -100,8 +100,8 @@ window.app = new Vue({
 
                             </div>
                             <div class="form-group">
-                                <a @click="save_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
-                                <a @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                                <a href="javascript:void(0)" @click="save_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a href="javascript:void(0)" @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
                             </div>
 
                         </form>
@@ -124,8 +124,8 @@ window.app = new Vue({
                         <textarea v-model="stage_form_obj_edit.description" class="form-control" placeholder="Description" rows="3"></textarea>
                       </div>
                       <div class="form-group">
-                        <a @click="do_update_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a> &nbsp;
-                        <a @click="update_stage_done" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
+                        <a href="javascript:void(0)" @click="do_update_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a> &nbsp;
+                        <a href="javascript:void(0)" @click="update_stage_done" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
                         </div>
                 </form>
             </div>
@@ -157,7 +157,7 @@ window.app = new Vue({
                     Form Assigned : {{form_name}} <br>
                     Weight : {{substage_detail.weight}} <br>
                     Tags :[t1, t2, t3] <br>
-                    <a @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
+                    <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
                 </div>
             </div>
             <div class="margin-top" v-show="update_substage_mode && substage_detail">
@@ -194,8 +194,8 @@ window.app = new Vue({
 
                             </div>
                             <div class="form-group">
-                                <a @click="do_update_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
-                                <a @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                                <a href="javascript:void(0)" @click="do_update_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a href="javascript:void(0)" @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
                             </div>
 
                         </form>
