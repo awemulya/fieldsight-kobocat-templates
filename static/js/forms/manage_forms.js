@@ -13,7 +13,7 @@ window.app = new Vue({
                 <div class="widget-body">
                     <ul class="stage-list"  v-if="stages.length>0">
 
-                        <li v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)">{{stage.name}}</a></li>
+                        <li v-bind:class="{ active: activeStage(stage) }" v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)" >{{stage.name}}</a></li>
                     </ul>
                     <ul class="stage-list" v-if="stages.length==0">
                         <li><span>There are no Stages.. Please Add Stages</span></li>
@@ -64,7 +64,7 @@ window.app = new Vue({
                 <div class="widget-body overflow-auto">
                     <ul class="stage-list padding-left" >
 
-                    <li class="active" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
+                    <li v-bind:class="{ active: activeSubStage(substage) }" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
                          <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
                     </ul>
 
@@ -265,6 +265,24 @@ window.app = new Vue({
                     $(this).css('min-height', panelHeight);
                 });
                 }.bind(self));
+          },
+          activeStage: function(stage){
+            var self = this;
+            if(self.current_stage.hasOwnProperty("id")){
+            return self.current_stage.id == stage.id;
+
+            }
+            return false;
+
+          },
+          activeSubStage: function(stage){
+            var self = this;
+            if(self.current_sub_stage.hasOwnProperty("id")){
+            return self.current_sub_stage.id == stage.id;
+
+            }
+            return false;
+
           },
 
         reorderStages: function (){
@@ -752,6 +770,7 @@ window.app = new Vue({
             }
         return "No Form Assigned Yet";
     },
+
     },
   created(){
     var self= this;
