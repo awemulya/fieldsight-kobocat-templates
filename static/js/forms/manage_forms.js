@@ -6,11 +6,13 @@ window.app = new Vue({
         <div class="col-md-4">
             <div class="widget-info bg-white padding" >
                 <div class="widget-head">
-                    <h4>Stages</h4>
+                    <h4>Stages </h4>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
+
                 </div>
                 <div class="widget-body">
                     <ul class="stage-list"  v-if="stages.length>0">
-                        <li><a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a></li>
+
                         <li v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)">{{stage.name}}</a></li>
                     </ul>
                     <ul class="stage-list" v-if="stages.length==0">
@@ -49,6 +51,7 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" v-if="current_stage">
                 <div class="widget-head">
                     <h4>{{current_stage.name}}</h4>
+                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
                 </div>
                 <div class="widget-body">
                     <p>{{current_stage.description}}</p>
@@ -60,7 +63,7 @@ window.app = new Vue({
                 </div>
                 <div class="widget-body overflow-auto">
                     <ul class="stage-list padding-left" >
-                    <li v-show="substages.length>0"><a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a></li>
+
                     <li class="active" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
                          <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
                     </ul>
