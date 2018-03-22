@@ -3,6 +3,7 @@ var Region =function (data, project){
   self.id = ko.observable();
   self.name = ko.observable();
   self.identifier = ko.observable();
+  self.get_sites_count = ko.observable();
   
   for (var i in data){
     self[i] = ko.observable(data[i]);
