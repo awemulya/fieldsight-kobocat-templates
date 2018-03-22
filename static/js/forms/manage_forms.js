@@ -2,204 +2,244 @@ Vue.use(VueMultiselect);
 window.app = new Vue({
   el: '#app',
   template: `
-        <div>
-            <div class="panel panel-default">
-                 <div class="panel-heading"><a class="btn btn-info" @click="add_stage">Add Stage</a></div>
-                <div class="panel-body">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="widget-info bg-white padding" >
+                <div class="widget-head">
+                    <h4>Stages</h4>
+                </div>
+                <div class="widget-body">
+                    <ul class="stage-list"  v-if="stages.length>0">
+                        <li><a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a></li>
+                        <li v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)">{{stage.name}}</a></li>
+                    </ul>
+                    <ul class="stage-list" v-if="stages.length==0">
+                        <li><span>There are no Stages.. Please Add Stages</span></li>
+                    </ul>
 
-                    <div class="col-sm-12" v-show="show_ad_stage_form">
-                    <form class="form">
-                        <div class="col-sm-12" v-show="error">
-                        {{error}}
-                        </div>
-                          <div class="form-group">
-                            <input v-model="stage_form_obj.name" class="form-control" placeholder="Stage Name">
-                          </div>
-                          <div class="form-group">
-                            <textarea v-model="stage_form_obj.description" placeholder="Description"></textarea>
-                          </div>
-                            <a @click="save_stage" class="btn btn-primary">Save</a> &nbsp;
-                            <a @click="cancel_stage" class="btn btn-warning">Cancel</a>
-                    </form>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
+
+                    <div class="margin-top" v-show="show_ad_stage_form">
+                        <form class="padding-top" >
+                            <div class="error" v-show="error">
+                                {{error}}
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStageName">Name</label>
+                                <input type="text" class="form-control" id="inputStageName" v-model="stage_form_obj.name">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStageDescription">Description</label>
+                                <textarea class="form-control" id="inputStageDescription" rows="3"
+                                    v-model="stage_form_obj.description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <a  href="javascript:void(0)" @click="save_stage" title=""  class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a  href="javascript:void(0)" @click="cancel_stage" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
+                            </div>
+
+                        </form>
                     </div>
 
-                    <div class="col-sm-12" v-show="update_stage_mode">
-                    <form class="form">
-                        <div class="col-sm-12" v-show="error">
-                        {{error}}
-                        </div>
-                          <div class="form-group">
-                            <input v-model="stage_form_obj_edit.name" class="form-control" placeholder="Stage Name">
-                          </div>
-                          <div class="form-group">
-                            <textarea v-model="stage_form_obj_edit.description" placeholder="Description"></textarea>
-                          </div>
-                            <a @click="do_update_stage" class="btn btn-primary">Save</a> &nbsp;
-                            <a @click="update_stage_done" class="btn btn-warning">Cancel</a>
-                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <div class="widget-info bg-white padding" v-if="current_stage">
+                <div class="widget-head">
+                    <h4>{{current_stage.name}}</h4>
+                </div>
+                <div class="widget-body">
+                    <p>{{current_stage.description}}</p>
+                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">Update Stage</a>
+                </div>
+                <div class="widget-head margin-top padding-left" v-show="!show_ad_substage_form">
+                    <h4 v-show="substages.length>0">Sub Stages</h4>
+                    <h4 v-show="substages.length==0">No SubStages In this Stage</h4>
+                </div>
+                <div class="widget-body overflow-auto">
+                    <ul class="stage-list padding-left" >
+                    <li v-show="substages.length>0"><a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a></li>
+                    <li class="active" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
+                         <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
+                    </ul>
+
+                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
+                    <i class="la la-plus"></i> New Sub Stage</a>
+
+                    <div class="margin-top" v-show="show_ad_substage_form">
+                        <form class="padding-top">
+                            <div class="form-group">
+                                <label for="inputSubStageName">Name <span class="error" v-show="add_sub_error"> {{add_sub_error}} </span></label>
+                                <input type="text" v-model="substage_form_obj.name" class="form-control" id="inputSubStageName">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageDescription">Description</label>
+                                <textarea class="form-control" v-model="substage_form_obj.description" id="inputSubStageDescription" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageForm">Form</label>
+                                <vselect :options="forms" label="title" :value="''" v-model="substage_form_obj.xf" :allow-empty="true" :loading="loading"
+                                 :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Form'" :multiple=false track-by="id" :hide-selected="true">
+                                <template slot="noResult">Forms Available</template>
+                                <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
+                                No Forms</div></template>
+                            </vselect>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageWeight">Weight</label>
+                                <input type="number" min="0" max="100" v-model="substage_form_obj.weight" class="form-control" id="inputSubStageWeight">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageTags">Tags</label>
+                                <vselect :options="tags" label="name" :value="[]" v-model="substage_form_obj.selected_tags" :allow-empty="true" :loading="loading"
+                                     :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
+                                    <template slot="noResult">NO tags Available</template>
+                                    <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
+                                    No Tags</div></template>
+                                </vselect>
+
+                            </div>
+                            <div class="form-group">
+                                <a href="javascript:void(0)" @click="save_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a href="javascript:void(0)" @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                            </div>
+
+                        </form>
                     </div>
 
-                    <div class="col-sm-12" v-show="show_ad_substage_form">
-                    <form class="form">
 
+                </div>
+            </div>
+            <div class="margin-top" v-show="update_stage_mode">
+                <form class="padding-top">
+                    <div class="error" v-show="update_error">
+                    {{update_error}}
+                    </div>
                       <div class="form-group">
-                          Name <span class="error" v-show="error"> {{error}} </span>
-                            <input v-model="substage_form_obj.name" class="form-control" placeholder="Sub Stage Name">
-                          </div>
-                          <div class="form-group">
-                          Description
-                            <textarea v-model="substage_form_obj.description" placeholder="Description"></textarea>
-                          </div>
-                          <div class="form-group">
-                          Weight
-                            <input v-model="substage_form_obj.weight" placeholder="weight" type="number" minimum="0"></input>
-                          </div>
-                          <div class="col-lg-12 col-sm-12 form-group">
-                          <label>Show Form when Site Type is :</label>
-                        <vselect :options="tags" label="name" :value="[]" v-model="substage_form_obj.selected_tags" :allow-empty="true" :loading="loading"
-                         :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
-                        <template slot="noResult">NO tags Available</template>
-                        <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
-                        No Tags</div></template>
-                        </vselect>
+                      <label for="inputStageName">Stage Name</label>
+                        <input v-model="stage_form_obj_edit.name" class="form-control" placeholder="Stage Name">
+                      </div>
+                      <div class="form-group">
+                       <label for="inputStageDescription">Description</label>
+                        <textarea v-model="stage_form_obj_edit.description" class="form-control" placeholder="Description" rows="3"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <a href="javascript:void(0)" @click="do_update_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a> &nbsp;
+                        <a href="javascript:void(0)" @click="update_stage_done" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
                         </div>
+                </form>
+            </div>
 
-                          <div class="col-lg-12 col-sm-12 form-group">
-                            <label>Form:</label>
-                            <vselect :options="forms" label="title" :value="''" v-model="substage_form_obj.xf" :allow-empty="true" :loading="loading"
-                             :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Form'" :multiple=false track-by="id" :hide-selected="true">
-                            <template slot="noResult">Forms Available</template>
-                            <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
-                            No Forms</div></template>
-                            </vselect>
-                          </div>
+            <div class="widget-info bg-white padding" v-show="reorder_stages_mode">
+                <div class="widget-head">
+                    <h4>Reorder  Stages </h4>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStagesCancel()"><i class="la la-reorder"></i> Cancel Reorder</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStagesSave()"><i class="la la-save"></i> Save Order</a>
+                </div>
+                 <div id="main" class="widget-body">
 
-                            <a @click="save_sub_stage" class="btn btn-primary">Save</a> &nbsp;
-                            <a @click="cancel_sub_stage" class="btn btn-warning">Cancel</a>
-                    </form>
-                    </div>
+                    <div class="drag">
+                        <draggable :list="stages_reorder" class="dragArea">
+                            <div v-for="stage in stages_reorder" class="dragable-stage">{{stage.name}}</div>
+                         </draggable>
+                     </div>
+                 </div>
 
-                    <div class="col-sm-12" v-show="update_substage_mode && substage_detail">
-                    <form class="form">
-                        <div class="col-sm-12" v-show="error">
-                        {{error}}
-                        </div>
-                          <div class="form-group">
-                          Name:
-                            <input v-model="substage_detail.name" class="form-control" placeholder="Sub Stage Name">
-                          </div>
-                          <div class="form-group">
-                          Description
-                            <textarea v-model="substage_detail.description" placeholder="Description"></textarea>
-                          </div>
-                          <div class="form-group">
-                          Weight
-                            <input v-model="substage_detail.weight" placeholder="weight" type="number" minimum="0" step="1"></input>
-                          </div>
-                          <div class="col-lg-12 col-sm-12 form-group">
-                          <label>Show Form when Site Type is :</label>
-                        <vselect :options="tags" label="name" :value="[]" v-model="substage_detail.selected_tags" :allow-empty="true" :loading="loading"
-                         :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
-                        <template slot="noResult">NO tags Available</template>
-                        <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
-                        No Tags</div></template>
-                        </vselect>
-                        </div>
+            </div>
 
-                          <div class="form-group" v-show="!substage_detail.stage_forms && !form">
-                            No Form Assigned Yet Choose One !!
-                          </div>
-
-                          <div class="col-lg-12 col-sm-12 form-group">
-                            <label>Form:</label>
-                            <vselect :options="forms" label="title" :value="''" v-model="form" :allow-empty="true" :loading="loading"
-                             :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Form'" :multiple=false track-by="id" :hide-selected="true">
-                            <template slot="noResult">Forms Available</template>
-                            <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
-                            No Forms</div></template>
-                            </vselect>
-                        </div>
-
-                            <a @click="do_update_sub_stage" class="btn btn-primary">Update</a> &nbsp;
-                            <a @click="cancel_sub_stage" class="btn btn-warning">Cancel</a>
-                    </form>
-                    </div>
-
-                    <div class="col-sm-12" v-if="substage_detail && !update_substage_mode">
-                    <h4> Sub Stage Detail </h4>
-
-                    Name : {{substage_detail.name}} <br>
-                    Description : {{substage_detail.description}} <br>
+        </div>
+        <div class="col-md-4">
+            <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode">
+                <div class="widget-head">
+                    <h4>1. {{substage_detail.name}}</h4>
+                </div>
+                <div class="widget-body">
+                    <p>{{substage_detail.description}}</p>
                     Responses : {{substage_detail.responses_count}} <br>
-
                     Form Assigned : {{form_name}} <br>
                     Weight : {{substage_detail.weight}} <br>
                     Tags :[t1, t2, t3] <br>
-                    <a @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a> &nbsp;
-                    </div>
-
-                    <div class="col-sm-12" v-if="current_stage">
-                        <div class="panel" v-show="!substage_detail && !show_ad_substage_form">
-                        <a class="btn btn-info" @click="add_substage">Add Sub Stage</a></div>
-                        <div class="col-sm-12">
-                            <h2>Stage Detail </h2>
-                            <a @click="update_stage" class="btn btn-primary">Update Stage</a> <br>
-                            Stage :{{current_stage.name}} <br>
-                            Description :{{current_stage.description}}
-
-                            <div v-for="substage, sindex in substages">
-                                <b>#
-                                <span v-text='sindex+1'></span> </b>
-                                <a @click="substageDetail(substage)">{{substage.name}}</a>
+                    <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
+                </div>
+            </div>
+            <div class="margin-top" v-show="update_substage_mode && substage_detail">
+                        <form class="padding-top">
+                            <div class="form-group">
+                                <label for="inputSubStageName">Name <span class="error" v-show="add_sub_error"> {{add_sub_error}} </span></label>
+                                <input type="text" v-model="substage_detail.name" class="form-control" id="inputSubStageName">
                             </div>
-                            <div class="col-sm-12" v-if="substages.length==0 && !show_ad_substage_form">
-                        There are no substages in {{current_stage.name}}
-                        </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="inputSubStageDescription">Description</label>
+                                <textarea class="form-control" v-model="substage_detail.description" id="inputSubStageDescription" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageForm">Form</label>
+                                <vselect :options="forms" label="title" :value="''" v-model="form" :allow-empty="true" :loading="loading"
+                             :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Form'" :multiple=false track-by="id" :hide-selected="true">
+                            <template slot="noResult">Forms Available</template>
+                            <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
+                            No Forms</div></template>
+                            </vselect>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageWeight">Weight</label>
+                                <input type="number" min="0" max="100" v-model="substage_detail.weight" class="form-control" id="inputSubStageWeight">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSubStageTags">Tags</label>
+                                <vselect :options="tags" label="name" :value="[]" v-model="substage_detail.selected_tags" :allow-empty="true" :loading="loading"
+                                     :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
+                                    <template slot="noResult">NO tags Available</template>
+                                    <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
+                                    No Tags</div></template>
+                                </vselect>
 
+                            </div>
+                            <div class="form-group">
+                                <a href="javascript:void(0)" @click="do_update_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a href="javascript:void(0)" @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                            </div>
+
+                        </form>
                     </div>
-
-                    <div class="col-sm-12" >
-                    <h1>Stages </h1>
-                        <div v-for="stage, index in stages">
-                            <b>#
-                            <span v-text='index+1'></span> </b>
-                            <a @click="stageDetail(stage)">{{stage.name}}</a>
+                    <div class="widget-info bg-white padding" v-show="reorder_sub_stages_mode">
+                        <div class="widget-head">
+                            <h4>Reorder  Sub Stages </h4>
+                            <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStagesCancel()"><i class="la la-reorder"></i> Cancel Reorder</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStagesSave()"><i class="la la-save"></i> Save Order</a>
                         </div>
-                        <div class="col-sm-12" v-if="stages.length==0">
-                        There are no Stages ..
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12" >
-                    <h1>Sort Stages </h1>
-                         <div id="main">
+                         <div id="main" class="widget-body">
 
                             <div class="drag">
-                                <draggable :list="stages" class="dragArea">
-                                    <div v-for="stage in stages" class="dragable-stage">{{stage.name}}</div>
+                                <draggable :list="substages" class="dragArea">
+                                    <div v-for="stage in substages" class="dragable-stage">{{stage.name}}</div>
                                  </draggable>
                              </div>
                          </div>
 
                     </div>
-
-                </div>
-            </div>
+        </div>
         </div> `,
     components: {'vselect': VueMultiselect.default,},
   data: {
         stages: [],
+        stages_reorder: [],
         loading: false,
         is_project: configure_settings.is_project,
         pk: configure_settings.id,
         error: '',
+        update_error: '',
+        add_sub_error: '',
+        update_sub_error: '',
         show_ad_stage_form: false,
         show_ad_substage_form: false,
         stage_form_obj: {'name': '', 'description':'', 'id':''},
         substage_form_obj: {'name': '', 'description':'', 'weight':0, tags:[],'xf':''},
         current_stage: '',
         substages: [],
+        substages_reorder: [],
         substage_detail: '',
         current_sub_stage: '',
         update_substage_mode: false,
@@ -210,15 +250,138 @@ window.app = new Vue({
         form: '',
         selected_tags: [],
         stage_form_obj_edit: '',
+        reorder_stages_mode: false,
+        reorder_sub_stages_mode: false,
   },
   methods:{
+      heightLevel: function(){
+          var self = this;
+          Vue.nextTick(function () {
+                  var panelHeight = $(window).height() - $("#header").height() - 79;
+                $(".widget-info" ).each(function() {
+                    $(this).css('min-height', panelHeight);
+                });
+                }.bind(self));
+          },
+
+        reorderStages: function (){
+            var self = this;
+            for(let i=0; i< self.stages.length; i++){
+                self.stages_reorder.push(self.stages[i]);
+            }
+
+            self.reorder_stages_mode = true;
+            self.update_stage_mode = false;
+            self.show_ad_substage_form = false;
+            self.current_stage='';
+            self.substages = [];
+
+        },
+        reorderStagesCancel: function (){
+            var self = this;
+            self.stages_reorder = [];
+
+            self.reorder_stages_mode = false;
+
+        },
+        reorderStagesSave: function (){
+            var self = this;
+                    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+        let data = {'stages':self.stages_reorder};
+        function successCallback (response){
+        self.stages = response.body.data;
+        self.stages_reorder = [];
+        self.reorder_stages_mode = false;
+
+
+        self.error = "";
+            new PNotify({
+          title: 'saved',
+          text: 'Ordering  Saved'
+        });
+
+        }
+
+        function errorCallback (response){
+        console.log(response);
+          new PNotify({
+          title: 'failed',
+          text: 'Failed to Ordering',
+          type: 'error'
+        });
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
+            }
+        }
+       self.$http.post('/forms/api/stages-reorder/', data, options)
+        .then(successCallback, errorCallback);
+        },
+
+        reorderSubStages: function (){
+            var self = this;
+            for(let i=0; i< self.substages.length; i++){
+                self.substages_reorder.push(self.substages[i]);
+            }
+
+            self.reorder_sub_stages_mode = true;
+            self.update_substage_mode = false;
+            self.current_sub_stage='';
+            self.substage_detail='';
+
+        },
+        reorderSubStagesCancel: function (){
+            var self = this;
+            self.substages_reorder = [];
+
+            self.reorder_sub_stages_mode = false;
+
+        },
+        reorderSubStagesSave: function (){
+            var self = this;
+                    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+        let data = {'stages':self.substages_reorder};
+        function successCallback (response){
+        self.substages = response.body.data;
+        self.substages_reorder = [];
+        self.reorder_sub_stages_mode = false;
+
+
+        self.error = "";
+            new PNotify({
+          title: 'saved',
+          text: 'Ordering  Saved'
+        });
+
+        }
+
+        function errorCallback (response){
+        console.log(response);
+          new PNotify({
+          title: 'failed',
+          text: 'Failed to Ordering',
+          type: 'error'
+        });
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
+            }
+        }
+       self.$http.post('/forms/api/substages-reorder/', data, options)
+        .then(successCallback, errorCallback);
+        },
+
         saveNewSubStage: function () {
         var self = this;
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
         self.substage_form_obj.order = self.substages.length;
         function successCallback (response){
-        console.log(response.body);
+
 
         self.error = "";
             new PNotify({
@@ -250,15 +413,15 @@ window.app = new Vue({
 
 
     },
-            update_sub_stage: function (){
+        update_sub_stage: function (){
                 var self = this;
                 console.log("update subupdate_sub_stagestage");
                 self.update_substage_mode = true;
+                self.reorder_sub_stages_mode = false;
             },
-            update_stage: function (){
+        update_stage: function (){
                 var self = this;
-                self.error = "";
-                console.log("update stage");
+                self.update_error = "";
                 self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
                                             self.current_stage.description}
                 self.update_stage_mode = true;
@@ -269,7 +432,7 @@ window.app = new Vue({
             },
             update_stage_done: function (){
                 var self = this;
-                self.error = "";
+                self.update_error = "";
                 self.update_stage_mode = false;
             },
             loadSubStageDetail: function (sub_stage_id) {
@@ -397,7 +560,6 @@ window.app = new Vue({
             self.show_ad_substage_form = false;
             self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':[], 'xf':''};;
             self.current_sub_stage = '';
-            self.substage_detail = '';
         },
 
       saveNewStage: function () {
@@ -452,8 +614,6 @@ window.app = new Vue({
         Vue.set(self.substages, index, response.body);
 
         self.update_substage_mode = false;
-        self.show_ad_substage_form = false;
-        self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':[], 'xf':''};;
         self.current_sub_stage = response.body;
         self.substage_detail = response.body;
         }
@@ -483,7 +643,7 @@ window.app = new Vue({
 
         function successCallback (response){
 
-        self.error = "";
+        self.update_error = "";
             new PNotify({
           title: 'Stage Updated',
           text: 'Stage '+ response.body.name + ' Updated'
@@ -506,9 +666,9 @@ window.app = new Vue({
         });
             if(response.body.error){
             console.log(response.body.error)
-              self.error = response.body.error;
+              self.update_error = response.body.error;
             }else{
-                self.error = "Incorrect Form Data !.";
+                self.update_error = "Incorrect Form Data !.";
 
             }
         }
@@ -535,6 +695,7 @@ window.app = new Vue({
         stageDetail : function (stage){
             var self = this;
             self.current_stage = stage;
+            self.reorder_stages_mode =false;
         },
 
          substageDetail : function (stage){
@@ -546,23 +707,29 @@ window.app = new Vue({
     current_stage: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+    self.reorder_sub_stages_mode = false;
+    self.reorder_stages_mode = false;
       self.substages = [];
       self.substage_detail = '';
       self.loadSubStages(newVal.id);
+      self.heightLevel();
       }
 
     },
     current_sub_stage: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+    self.reorder_sub_stages_mode = false;
       self.substage_detail = '';
       self.loadSubStageDetail(newVal.id);
+      self.heightLevel();
       }
 
     },
     substage_detail: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+        self.reorder_sub_stages_mode = false;
         if(newVal.stage_forms){
             self.form = {'id':newVal.stage_forms.xf.id, 'title':newVal.stage_forms.xf.title};
        }else{
@@ -570,6 +737,7 @@ window.app = new Vue({
       }}else{
       self.form = '';
       }
+      self.heightLevel();
 
     },
   },

@@ -62,6 +62,10 @@
 }
 .large-dropdown-menu{
 	min-width: $large-dropdown-min-width;
+	max-width: $large-dropdown-max-width;
+	.dropdown-item {
+		white-space: unset;
+	}
 }
 // Dividers (basically an `<hr>`) within the dropdown
 .dropdown-divider {
