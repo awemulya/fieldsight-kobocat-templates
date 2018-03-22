@@ -10,6 +10,7 @@ window.app = new Vue({
                 </div>
                 <div class="widget-body">
                     <ul class="stage-list"  v-if="stages.length>0">
+                        <li><a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a></li>
                         <li v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)">{{stage.name}}</a></li>
                     </ul>
                     <ul class="stage-list" v-if="stages.length==0">
@@ -59,7 +60,8 @@ window.app = new Vue({
                 </div>
                 <div class="widget-body overflow-auto">
                     <ul class="stage-list padding-left" >
-                        <li class="active" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
+                    <li v-show="substages.length>0"><a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a></li>
+                    <li class="active" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
                          <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
                     </ul>
 
@@ -133,15 +135,17 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" v-show="reorder_stages_mode">
                 <div class="widget-head">
                     <h4>Reorder  Stages </h4>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStagesCancel()"><i class="la la-reorder"></i> Cancel Reorder</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStagesSave()"><i class="la la-save"></i> Save Order</a>
                 </div>
-                         <div id="main" class="widget-body">
+                 <div id="main" class="widget-body">
 
-                            <div class="drag">
-                                <draggable :list="stages" class="dragArea">
-                                    <div v-for="stage in stages" class="dragable-stage">{{stage.name}}</div>
-                                 </draggable>
-                             </div>
-                         </div>
+                    <div class="drag">
+                        <draggable :list="stages_reorder" class="dragArea">
+                            <div v-for="stage in stages_reorder" class="dragable-stage">{{stage.name}}</div>
+                         </draggable>
+                     </div>
+                 </div>
 
             </div>
 
@@ -200,10 +204,12 @@ window.app = new Vue({
 
                         </form>
                     </div>
-                <div class="widget-info bg-white padding" v-show="reorder_sub_stages_mode">
-                <div class="widget-head">
-                    <h4>Reorder  Sub Stages </h4>
-                </div>
+                    <div class="widget-info bg-white padding" v-show="reorder_sub_stages_mode">
+                        <div class="widget-head">
+                            <h4>Reorder  Sub Stages </h4>
+                            <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStagesCancel()"><i class="la la-reorder"></i> Cancel Reorder</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStagesSave()"><i class="la la-save"></i> Save Order</a>
+                        </div>
                          <div id="main" class="widget-body">
 
                             <div class="drag">
@@ -213,12 +219,13 @@ window.app = new Vue({
                              </div>
                          </div>
 
-            </div>
+                    </div>
         </div>
         </div> `,
     components: {'vselect': VueMultiselect.default,},
   data: {
         stages: [],
+        stages_reorder: [],
         loading: false,
         is_project: configure_settings.is_project,
         pk: configure_settings.id,
@@ -232,6 +239,7 @@ window.app = new Vue({
         substage_form_obj: {'name': '', 'description':'', 'weight':0, tags:[],'xf':''},
         current_stage: '',
         substages: [],
+        substages_reorder: [],
         substage_detail: '',
         current_sub_stage: '',
         update_substage_mode: false,
@@ -242,10 +250,131 @@ window.app = new Vue({
         form: '',
         selected_tags: [],
         stage_form_obj_edit: '',
-        reorder_stages_mode: true,
-        reorder_sub_stages_mode: true,
+        reorder_stages_mode: false,
+        reorder_sub_stages_mode: false,
   },
   methods:{
+      heightLevel: function(){
+          var self = this;
+          Vue.nextTick(function () {
+                  var panelHeight = $(window).height() - $("#header").height() - 79;
+                $(".widget-info" ).each(function() {
+                    $(this).css('min-height', panelHeight);
+                });
+                }.bind(self));
+          },
+
+        reorderStages: function (){
+            var self = this;
+            for(let i=0; i< self.stages.length; i++){
+                self.stages_reorder.push(self.stages[i]);
+            }
+
+            self.reorder_stages_mode = true;
+            self.update_stage_mode = false;
+            self.show_ad_substage_form = false;
+            self.current_stage='';
+            self.substages = [];
+
+        },
+        reorderStagesCancel: function (){
+            var self = this;
+            self.stages_reorder = [];
+
+            self.reorder_stages_mode = false;
+
+        },
+        reorderStagesSave: function (){
+            var self = this;
+                    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+        let data = {'stages':self.stages_reorder};
+        function successCallback (response){
+        self.stages = response.body.data;
+        self.stages_reorder = [];
+        self.reorder_stages_mode = false;
+
+
+        self.error = "";
+            new PNotify({
+          title: 'saved',
+          text: 'Ordering  Saved'
+        });
+
+        }
+
+        function errorCallback (response){
+        console.log(response);
+          new PNotify({
+          title: 'failed',
+          text: 'Failed to Ordering',
+          type: 'error'
+        });
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
+            }
+        }
+       self.$http.post('/forms/api/stages-reorder/', data, options)
+        .then(successCallback, errorCallback);
+        },
+
+        reorderSubStages: function (){
+            var self = this;
+            for(let i=0; i< self.substages.length; i++){
+                self.substages_reorder.push(self.substages[i]);
+            }
+
+            self.reorder_sub_stages_mode = true;
+            self.update_substage_mode = false;
+            self.current_sub_stage='';
+            self.substage_detail='';
+
+        },
+        reorderSubStagesCancel: function (){
+            var self = this;
+            self.substages_reorder = [];
+
+            self.reorder_sub_stages_mode = false;
+
+        },
+        reorderSubStagesSave: function (){
+            var self = this;
+                    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+        let data = {'stages':self.substages_reorder};
+        function successCallback (response){
+        self.substages = response.body.data;
+        self.substages_reorder = [];
+        self.reorder_sub_stages_mode = false;
+
+
+        self.error = "";
+            new PNotify({
+          title: 'saved',
+          text: 'Ordering  Saved'
+        });
+
+        }
+
+        function errorCallback (response){
+        console.log(response);
+          new PNotify({
+          title: 'failed',
+          text: 'Failed to Ordering',
+          type: 'error'
+        });
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
+            }
+        }
+       self.$http.post('/forms/api/substages-reorder/', data, options)
+        .then(successCallback, errorCallback);
+        },
+
         saveNewSubStage: function () {
         var self = this;
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
@@ -288,6 +417,7 @@ window.app = new Vue({
                 var self = this;
                 console.log("update subupdate_sub_stagestage");
                 self.update_substage_mode = true;
+                self.reorder_sub_stages_mode = false;
             },
         update_stage: function (){
                 var self = this;
@@ -565,6 +695,7 @@ window.app = new Vue({
         stageDetail : function (stage){
             var self = this;
             self.current_stage = stage;
+            self.reorder_stages_mode =false;
         },
 
          substageDetail : function (stage){
@@ -576,23 +707,29 @@ window.app = new Vue({
     current_stage: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+    self.reorder_sub_stages_mode = false;
+    self.reorder_stages_mode = false;
       self.substages = [];
       self.substage_detail = '';
       self.loadSubStages(newVal.id);
+      self.heightLevel();
       }
 
     },
     current_sub_stage: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+    self.reorder_sub_stages_mode = false;
       self.substage_detail = '';
       self.loadSubStageDetail(newVal.id);
+      self.heightLevel();
       }
 
     },
     substage_detail: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+        self.reorder_sub_stages_mode = false;
         if(newVal.stage_forms){
             self.form = {'id':newVal.stage_forms.xf.id, 'title':newVal.stage_forms.xf.title};
        }else{
@@ -600,6 +737,7 @@ window.app = new Vue({
       }}else{
       self.form = '';
       }
+      self.heightLevel();
 
     },
   },
