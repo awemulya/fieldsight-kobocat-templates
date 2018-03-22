@@ -7,6 +7,7 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" >
                 <div class="widget-head">
                     <h4>Stages </h4>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
 
                 </div>
@@ -19,7 +20,7 @@ window.app = new Vue({
                         <li><span>There are no Stages.. Please Add Stages</span></li>
                     </ul>
 
-                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
+
 
                     <div class="margin-top" v-show="show_ad_stage_form">
                         <form class="padding-top" >
@@ -52,10 +53,13 @@ window.app = new Vue({
                 <div class="widget-head">
                     <h4>{{current_stage.name}}</h4>
                     <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">Update Stage</a>
+                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
+                    <i class="la la-plus"></i> New Sub Stage</a>
                 </div>
                 <div class="widget-body">
                     <p>{{current_stage.description}}</p>
-                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">Update Stage</a>
+
                 </div>
                 <div class="widget-head margin-top padding-left" v-show="!show_ad_substage_form">
                     <h4 v-show="substages.length>0">Sub Stages</h4>
@@ -68,8 +72,7 @@ window.app = new Vue({
                          <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
                     </ul>
 
-                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
-                    <i class="la la-plus"></i> New Sub Stage</a>
+
 
                     <div class="margin-top" v-show="show_ad_substage_form">
                         <form class="padding-top">
@@ -157,6 +160,8 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode">
                 <div class="widget-head">
                     <h4>1. {{substage_detail.name}}</h4>
+                    <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary">View Material</a>
+                    <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
                 </div>
                 <div class="widget-body">
                     <p>{{substage_detail.description}}</p>
@@ -164,7 +169,7 @@ window.app = new Vue({
                     Form Assigned : {{form_name}} <br>
                     Weight : {{substage_detail.weight}} <br>
                     Tags :[t1, t2, t3] <br>
-                    <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
+
                 </div>
             </div>
             <div class="margin-top" v-show="update_substage_mode && substage_detail">
@@ -223,6 +228,13 @@ window.app = new Vue({
                          </div>
 
                     </div>
+                    <div class="widget-info bg-white padding" v-show="show_em">
+                    <h4>Educational Material</h4>
+                    <a href="javascript:void(0)" @click="hideEm" class="btn btn-primary">close</a>
+                    <a href="javascript:void(0)" @click="hideEm" class="btn btn-primary">Edit</a>
+                    {{em}}
+
+                    </div>
         </div>
         </div> `,
     components: {'vselect': VueMultiselect.default,},
@@ -255,6 +267,8 @@ window.app = new Vue({
         stage_form_obj_edit: '',
         reorder_stages_mode: false,
         reorder_sub_stages_mode: false,
+        show_em :false,
+        em :'',
   },
   methods:{
       heightLevel: function(){
@@ -436,7 +450,6 @@ window.app = new Vue({
     },
         update_sub_stage: function (){
                 var self = this;
-                console.log("update subupdate_sub_stagestage");
                 self.update_substage_mode = true;
                 self.reorder_sub_stages_mode = false;
             },
@@ -722,6 +735,46 @@ window.app = new Vue({
          substageDetail : function (stage){
             var self = this;
             self.current_sub_stage = stage;
+        },
+        loadEm : function(){
+            var self = this;
+            self.show_em = true;
+            self.show_ad_substage_form = false;
+            self.update_substage_mode = false;
+            self.reorder_stages_mode = false;
+            if(self.substage_detail.has_em){
+                self.em = self.substage_detail.em;
+            }else{
+                self.em = '';
+            }
+        },
+        hideEm : function(){
+            var self = this;
+            self.show_em = false;
+            self.show_ad_substage_form = false;
+            self.update_substage_mode = false;
+            self.reorder_stages_mode = false;
+                self.em = '';
+
+        },
+        getEm : function(id){
+            var self = this;
+            self.loading = true;
+            var options = {};
+
+            function successCallback(response) {
+                self.em = response.body;
+                self.loading = false;
+            }
+
+            function errorCallback() {
+                self.loading = false;
+                console.log('failed');
+            }
+            self.$http.get('/forms/api/get_em/'+id+'/', {
+                params: options
+            }).then(successCallback, errorCallback);
+
         },
   },
   watch: {
