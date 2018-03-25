@@ -249,16 +249,18 @@ xhr.send(JSON.stringify(self.data()));
                 ]
               });
               $('.photo-item img').on('click',function(){
-                var title = $(this).attr('img-title');
-                var src = $(this).attr('src');
-                var img = '<img src="' + src + '" class="img-responsive"/>';
-                var html = '';
-                html += img;
-                $('#myModalLabel').modal();
-                $('#myModalLabel').on('shown.bs.modal', function(){
-                  $('#myModalLabel .modal-header .modal-title').html(title);
-                  $('#myModalLabel .modal-body').html(html);
-                })
+                    var title = $(this).attr('img-title');
+                    var submitted_by = $(this).attr('submission_by');
+                    var submission_url = $(this).attr('submission_url');
+                    var src = $(this).attr('src');
+                    var img = '<img src="' + src + '" class="img-responsive"/>';
+                    var html = '';
+                    html += img;    
+                    $('#myModalLabel').modal();
+                    $('#myModalLabel').on('shown.bs.modal', function(){
+                      $('#myModalLabel .modal-header .modal-title').html('By: '+submitted_by +'<a href="'+ submission_url +'"> (View Submission) </a>');
+                      $('#myModalLabel .modal-body').html(html);
+                    })
                 $('#myModalLabel').on('hidden.bs.modal', function(){
                   $('#myModalLabel .modal-header .modal-title').html('');
                   $('#myModalLabel .modal-body').html('');
