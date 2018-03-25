@@ -412,7 +412,7 @@ self.loadProjectDonors = function(){
 
   
   self.loadProjectManagers();
-  self.loadProjectDonors();
+//  self.loadProjectDonors();
 
 
   self.loadAllSites = function(){
@@ -1536,7 +1536,6 @@ if (self.level == "0"){
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         user = new User(item);
                         self.alluserid.push(user);
-                        console.log(user.id());
                         return user;
 
                     });
