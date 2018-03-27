@@ -176,7 +176,7 @@ xhr.send(JSON.stringify(self.data()));
 
                  self.scheduleForm({'xf_title':'Schedule Forms', 'level':'1', 'forms':[], 'selected': ko.observable(false)});
                  var mappedScheduleData = ko.utils.arrayMap(response.schedule, function(item) {
-                            datas = {'id': item.id, 'xf_title': item.xf__title, 'level':'2', 'forms':[], 'selected': ko.observable(false)};
+                            datas = {'id': item.id, 'xf_title': item.schedule__name, 'level':'2', 'forms':[], 'selected': ko.observable(false)};
                             return datas;
                         });
                  self.scheduleForm().forms.push.apply(self.scheduleForm().forms, mappedScheduleData);
@@ -184,7 +184,7 @@ xhr.send(JSON.stringify(self.data()));
                  self.stageForm({'xf_title':'Stage Forms', 'level':'1', 'forms':[], 'selected': ko.observable(false)});
                  var mappedStageData = ko.utils.arrayMap(response.stage, function(item) {
                         var sub_stages = ko.utils.arrayMap(item.sub_stages, function(subitem) {
-                            sub_datas = {'id': subitem.stage_forms__id, 'xf_title': subitem.stage_forms__xf__title, 'forms':[], 'level':'3', 'selected': ko.observable(false)};
+                            sub_datas = {'id': subitem.stage_forms__id, 'xf_title': subitem.name, 'forms':[], 'level':'3', 'selected': ko.observable(false)};
                             return sub_datas;
                         });
                         stage_data = {'id': item.id, 'xf_title': item.title, 'level':'2', 'forms':sub_stages, 'selected': ko.observable(false)};                      
