@@ -221,8 +221,8 @@ window.app = new Vue({
                          <div id="main" class="widget-body">
 
                             <div class="drag">
-                                <draggable :list="substages" class="dragArea">
-                                    <div v-for="stage in substages" class="dragable-stage">{{stage.name}}</div>
+                                <draggable :list="substages_reorder" class="dragArea">
+                                    <div v-for="stage in substages_reorder" class="dragable-stage">{{stage.name}}</div>
                                  </draggable>
                              </div>
                          </div>
