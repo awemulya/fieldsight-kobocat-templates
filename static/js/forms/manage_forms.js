@@ -160,7 +160,8 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode">
                 <div class="widget-head">
                     <h4>1. {{substage_detail.name}}</h4>
-                    <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary">View Material</a>
+                    <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary" v-show="substage_detail.has_em">View Material</a>
+                    <a href="javascript:void(0)" @click="newEm" class="btn btn-primary" v-show="!substage_detail.has_em">New Material</a>
                     <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
                 </div>
                 <div class="widget-body">
@@ -231,13 +232,55 @@ window.app = new Vue({
                     <div class="widget-info bg-white padding" v-show="show_em">
                     <h4>Educational Material</h4>
                     <a href="javascript:void(0)" @click="hideEm" class="btn btn-primary">close</a>
-                    <a href="javascript:void(0)" @click="hideEm" class="btn btn-primary">Edit</a>
-                    {{em}}
+                    <a href="javascript:void(0)" @click="updateEm" class="btn btn-primary">Edit</a>
+                        <div v-show="em.is_pdf"> <a target="_blank" v-bind:href="em.pdf"> Pdf File </a> </div>
+                        <div> Title : <span>{{em.title}}</span> </div>
+                        <div> Text : <span>{{em.text}}</span> </div>
+                        <div v-for="i in em.em_images" v-show="em.em_images.length>0">
+                         Images :
+                           <img v-bind:src="i.image">
+                         </div>
 
+                    </div>
+                    <div class="margin-top" v-show="new_em">
+                        <form class="padding-top">
+
+                        <div class="form-group">
+                                <label for="title">Title <span class="error" v-show="true"> Error </span></label>
+                                <input type="text" v-model="new_em_obj.title" class="form-control" id="inputSubStageName">
+                        </div>
+                        <div class="form-group">
+                                <label for="text">Description</label>
+                                <textarea class="form-control" v-model="new_em_obj.text" id="text" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+
+                          <ul>
+                            <li v-for="file in new_em_obj.files">{{file.name}} - Error: {{file.error}}, Success: {{file.success}}</li>
+                          </ul>
+                          <file-upload
+                          :multiple="true"
+                            ref="upload"
+                            v-model="new_em_obj.files"
+                            :post-action="'/forms/api/em/files/'+ substage_detail.id + '/'"
+                            :put-action="'/forms/api/em/files/'+ substage_detail.id + '/'"
+                            @input-file="inputFile"
+                            @input-filter="inputFilter"
+                          >
+                          Upload Pdf and/ Or Images
+                          </file-upload>
+                          <button v-show="!$refs.upload || !$refs.upload.active && new_em_obj.files.length>0" @click.prevent="$refs.upload.active = true" type="button">Start upload Files</button>
+                          <button v-show="$refs.upload && $refs.upload.active" @click.prevent="$refs.upload.active = false" type="button">Stop upload</button>
+                          </div>
+                          <div class="form-group">
+                                <a href="javascript:void(0)" @click="do_update_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a href="javascript:void(0)" @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                            </div>
+                      </form>
                     </div>
         </div>
         </div> `,
-    components: {'vselect': VueMultiselect.default,},
+    components: {'vselect': VueMultiselect.default},
   data: {
         stages: [],
         stages_reorder: [],
@@ -269,8 +312,53 @@ window.app = new Vue({
         reorder_sub_stages_mode: false,
         show_em :false,
         em :'',
+        new_em :false,
+        new_em_obj : {'title':'', 'text':'', 'files':[]},
+        files: [],
   },
+
   methods:{
+     inputFile: function (newFile, oldFile) {
+      if (newFile && oldFile && !newFile.active && oldFile.active) {
+        // Get response data
+        console.log('response', newFile.response)
+        if (newFile.xhr) {
+          //  Get the response status code
+          console.log('status', newFile.xhr.status)
+        }
+      }
+    },
+    /**
+     * Pretreatment
+     * @param  Object|undefined   newFile   Read and write
+     * @param  Object|undefined   oldFile   Read only
+     * @param  Function           prevent   Prevent changing
+     * @return undefined
+     */
+    inputFilter: function (newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        // Filter non-image file
+        if (!/\.(jpeg|jpe|jpg|gif|png|webp|pdf)$/i.test(newFile.name)) {
+          return prevent()
+        }
+      }
+
+      // Create a blob field
+      newFile.blob = ''
+      let URL = window.URL || window.webkitURL
+      if (URL && URL.createObjectURL) {
+        newFile.blob = URL.createObjectURL(newFile.file)
+      }
+    },
+        updateEm: function(){
+            var self = this;
+            self.new_em = true;
+        },
+        newEm: function(){
+            var self = this;
+            self.new_em = true;
+            self.new_em_obj = {'title':'', 'text':'', 'files':[]};
+        },
       heightLevel: function(){
           var self = this;
           Vue.nextTick(function () {
@@ -460,16 +548,16 @@ window.app = new Vue({
                                             self.current_stage.description}
                 self.update_stage_mode = true;
             },
-            update_sub_done: function (){
-                var self = this;
-                self.update_substage_mode = false;
-            },
-            update_stage_done: function (){
-                var self = this;
-                self.update_error = "";
-                self.update_stage_mode = false;
-            },
-            loadSubStageDetail: function (sub_stage_id) {
+        update_sub_done: function (){
+            var self = this;
+            self.update_substage_mode = false;
+        },
+        update_stage_done: function (){
+            var self = this;
+            self.update_error = "";
+            self.update_stage_mode = false;
+        },
+        loadSubStageDetail: function (sub_stage_id) {
             var self = this;
             self.loading = true;
             var options = {};
@@ -754,7 +842,7 @@ window.app = new Vue({
             self.show_ad_substage_form = false;
             self.update_substage_mode = false;
             self.reorder_stages_mode = false;
-                self.em = '';
+            self.em = '';
 
         },
         getEm : function(id){
