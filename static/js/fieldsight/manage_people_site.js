@@ -412,7 +412,7 @@ self.loadProjectDonors = function(){
 
   
   self.loadProjectManagers();
-//  self.loadProjectDonors();
+ self.loadProjectDonors();
 
 
   self.loadAllSites = function(){
