@@ -157,7 +157,7 @@ window.app = new Vue({
 
         </div>
         <div class="col-md-4">
-            <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode">
+            <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode &&  !new_em">
                 <div class="widget-head">
                     <h4>1. {{substage_detail.name}}</h4>
                     <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary" v-show="substage_detail.has_em">View Material</a>
@@ -244,6 +244,14 @@ window.app = new Vue({
                     </div>
                     <div class="margin-top" v-show="new_em">
                         <form class="padding-top">
+                        <div class="form-group">
+
+                            <div>
+                                <span>Upload PDF</span>
+                                <div v-show="new_em_obj.is_pdf"> <a target="_blank" v-bind:href="new_em_obj.pdf"> Pdf File </a> </div>
+                                <input type="file" accept="application/pdf"  @change="onPDFChange">
+                              </div>
+                        </div>
 
                         <div class="form-group">
                                 <label for="title">Title <span class="error" v-show="true"> Error </span></label>
@@ -254,27 +262,26 @@ window.app = new Vue({
                                 <textarea class="form-control" v-model="new_em_obj.text" id="text" rows="3"></textarea>
                         </div>
                         <div class="form-group">
+                            <div v-if="new_em_obj.em_images.length>0"> Selected Files </div>
+                                <div v-for="i in new_em_obj.em_images" v-if="new_em_obj.em_images.length>0">
+                                    <img :src="i.image" />
 
-                          <ul>
-                            <li v-for="file in new_em_obj.files">{{file.name}} - Error: {{file.error}}, Success: {{file.success}}</li>
-                          </ul>
-                          <file-upload
-                          :multiple="true"
-                            ref="upload"
-                            v-model="new_em_obj.files"
-                            :post-action="'/forms/api/em/files/'+ substage_detail.id + '/'"
-                            :put-action="'/forms/api/em/files/'+ substage_detail.id + '/'"
-                            @input-file="inputFile"
-                            @input-filter="inputFilter"
-                          >
-                          Upload Pdf and/ Or Images
-                          </file-upload>
-                          <button v-show="!$refs.upload || !$refs.upload.active && new_em_obj.files.length>0" @click.prevent="$refs.upload.active = true" type="button">Start upload Files</button>
-                          <button v-show="$refs.upload && $refs.upload.active" @click.prevent="$refs.upload.active = false" type="button">Stop upload</button>
-                          </div>
+                                </div>
+                            <div v-else>
+                                No Files selected yet
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <span>Upload Images</span>
+                                <input type="file" multiple="true" @change="onImageChange" accept="image/*">
+                              </div>
+                        </div>
+
                           <div class="form-group">
-                                <a href="javascript:void(0)" @click="do_update_sub_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
-                                <a href="javascript:void(0)" @click="cancel_sub_stage" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                                <a href="javascript:void(0)" @click="save_em" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
+                                <a href="javascript:void(0)" @click="cancel_em" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
                             </div>
                       </form>
                     </div>
@@ -313,43 +320,123 @@ window.app = new Vue({
         show_em :false,
         em :'',
         new_em :false,
-        new_em_obj : {'title':'', 'text':'', 'files':[]},
-        files: [],
+        new_em_obj : {'title':'', 'text':'', 'em_images':[], 'pdf':''},
+        image: '',
   },
 
   methods:{
-     inputFile: function (newFile, oldFile) {
-      if (newFile && oldFile && !newFile.active && oldFile.active) {
-        // Get response data
-        console.log('response', newFile.response)
-        if (newFile.xhr) {
-          //  Get the response status code
-          console.log('status', newFile.xhr.status)
-        }
-      }
+    onImageChange(e) {
+    var self = this;
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+        return;
+        if(files.length){
+             self.uploadEmFiles(files, true);
+        };
     },
-    /**
-     * Pretreatment
-     * @param  Object|undefined   newFile   Read and write
-     * @param  Object|undefined   oldFile   Read only
-     * @param  Function           prevent   Prevent changing
-     * @return undefined
-     */
-    inputFilter: function (newFile, oldFile, prevent) {
-      if (newFile && !oldFile) {
-        // Filter non-image file
-        if (!/\.(jpeg|jpe|jpg|gif|png|webp|pdf)$/i.test(newFile.name)) {
-          return prevent()
-        }
-      }
+    onPDFChange(e) {
+    var self = this;
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+        return;
+        if(files.length){
 
-      // Create a blob field
-      newFile.blob = ''
-      let URL = window.URL || window.webkitURL
-      if (URL && URL.createObjectURL) {
-        newFile.blob = URL.createObjectURL(newFile.file)
-      }
+            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+            let options = {headers: {'X-CSRFToken':csrf, 'Content-Type': 'application/x-www-form-urlencoded'}};
+
+            var formdata = new FormData();
+              formdata.append('is_pdf', true);
+              formdata.append('pdf', files[0]);
+
+            function successCallback (response){
+            console.log(response);
+                self.new_em_obj =response.body.em;
+                self.error = "";
+                    new PNotify({
+                  title: 'saved',
+                  text: 'PDf  Saved '
+                });
+
+            }
+
+            function errorCallback (response){
+            console.log(response);
+              new PNotify({
+              title: 'failed',
+              text: 'Failed to Save PDF',
+              type: 'error'
+            });
+
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
+                }
+            }
+       self.$http.post('/forms/api/em/files/'+ self.substage_detail.id +'/', formdata, options)
+        .then(successCallback, errorCallback);
+            }
+
     },
+    uploadEmFiles(files, is_pdf){
+        var self = this;
+        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+            let options = {headers: {'X-CSRFToken':csrf, 'Content-Type': 'application/x-www-form-urlencoded'}};
+            var formdata = new FormData();
+            for( let i=0; i< files.length; i++){
+                formdata.append('new_images_'+String(i), files[i])
+            }
+            function successCallback (response){
+            self.new_em_obj =response.body.em;
+                self.error = "";
+                    new PNotify({
+                  title: 'saved',
+                  text: 'Images  Saved '
+                });
+
+            }
+
+            function errorCallback (response){
+            console.log(response);
+              new PNotify({
+              title: 'failed',
+              text: 'Failed to Save Images',
+              type: 'error'
+            });
+
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
+                }
+            }
+       self.$http.post('/forms/api/em/files/'+ self.substage_detail.id +'/', formdata, options)
+        .then(successCallback, errorCallback);
+
+    },
+    createImage(file) {
+    var self = this;
+      var image = new Image();
+      var reader = new FileReader();
+//      var vm = this;
+
+//      reader.onload = (e) => {
+//        self.image = e.target.result;
+//      };
+//      reader.readAsDataURL(file);
+
+    },
+    removeImage: function (e) {
+    var self = this;
+      self.image = '';
+    },
+
+    addImage: function (e) {
+    var self = this;
+    self.new_em_obj.em_images.push(self.image);
+      self.image = '';
+    },
+
         updateEm: function(){
             var self = this;
             self.new_em = true;
@@ -357,8 +444,52 @@ window.app = new Vue({
         newEm: function(){
             var self = this;
             self.new_em = true;
-            self.new_em_obj = {'title':'', 'text':'', 'files':[]};
+            self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
         },
+
+        cancel_em: function(){
+            var self = this;
+            self.new_em = false;
+            self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
+        },
+
+        save_em: function(){
+             var self = this;
+            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+            let options = {headers: {'X-CSRFToken':csrf, 'media_type':'application/x-www-form-urlencoded'}};
+            let data = self.new_em_obj;
+            function successCallback (response){
+                self.stages = response.body.data;
+                self.stages_reorder = [];
+                self.reorder_stages_mode = false;
+                self.error = "";
+                    new PNotify({
+                  title: 'saved',
+                  text: 'Ordering  Saved'
+                });
+
+            }
+
+            function errorCallback (response){
+            console.log(response);
+              new PNotify({
+              title: 'failed',
+              text: 'Failed to Save Em',
+              type: 'error'
+            });
+                if(response.body.error){
+                console.log(response.body.error)
+                }else{
+
+                }
+            }
+       self.$http.post('/forms/api/em/files/'+ self.substage_detail.id +'/', data, options)
+        .then(successCallback, errorCallback);
+//            self.new_em = false;
+//            self.new_em_obj = {'title':'', 'text':'', 'files':[]};
+
+        },
+
       heightLevel: function(){
           var self = this;
           Vue.nextTick(function () {
@@ -409,7 +540,7 @@ window.app = new Vue({
         },
         reorderStagesSave: function (){
             var self = this;
-                    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
         let data = {'stages':self.stages_reorder};
         function successCallback (response){
@@ -890,6 +1021,10 @@ window.app = new Vue({
     },
     substage_detail: function(newVal, oldVal) {
     var self = this;
+    self.show_em = false;
+    self.em = '';
+    self.new_em = false;
+    self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
     if (newVal){
         self.reorder_sub_stages_mode = false;
         if(newVal.stage_forms){
