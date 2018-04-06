@@ -168,7 +168,7 @@ textarea.form-control{
       <div class="history-response col-sm-4 col-md-4 col-xs-12" data-bind="with:model">
           
           <button class="btn btn-head-response" data-bind="click:history"> {% trans 'View History ' %}</button>
-         <button class="btn btn-head-response" data-bind="click:downloadPDF()"> {% trans 'Download PDF ' %}</button>
+         <button class="btn btn-head-response" onClick="downloadPDF()"> {% trans 'Download PDF ' %}</button>
           
           <span class="title-sm space " style="display:inline-block" >{% trans "current-status:" %}
           </span>
