@@ -61,7 +61,7 @@ function SitesViewModel() {
             success: function (response) {
                 
                var mappedData = ko.utils.arrayMap(response, function(item) {
-                        response = JSON.parse(item.get_site_submission_count);
+                        response = item.get_site_submission_count;
                         item.get_site_submission_count = response;
                         item.rejected = response.rejected;
                         item.flagged = response.flagged;
