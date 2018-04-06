@@ -353,10 +353,7 @@ var ins = location.hash.split("#/")[1];
  vm = new StatusViewModel(fxf, ins);
 
  ko.applyBindings(vm);
- var url = "/fieldsight/response/report/"+location.hash.split("#/")[1]+"/";
-var pdfbutton = '<a href="'+url+'" target="_blank"><button class="btn btn-head-response" onClick="downloadPDF()">Download PDF</button></a>';
-      
-$(pdfbutton).prependTo("#buttonholder");
+
 });
 
 </script>
