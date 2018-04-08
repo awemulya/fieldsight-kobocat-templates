@@ -39,6 +39,16 @@ window.app = new Vue({
                                     v-model="stage_form_obj.description"></textarea>
                             </div>
                             <div class="form-group">
+                                <label for="inputSubStageTags">Types</label>
+                                <vselect :options="tags" label="name" :value="[]" v-model="stage_form_obj.tags" :allow-empty="true" :loading="loading"
+                                     :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
+                                    <template slot="noResult">NO tags Available</template>
+                                    <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
+                                    No Tags</div></template>
+                                </vselect>
+
+                            </div>
+                            <div class="form-group">
                                 <a  href="javascript:void(0)" @click="save_stage" title=""  class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
                                 <a  href="javascript:void(0)" @click="cancel_stage" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
                             </div>
@@ -120,7 +130,7 @@ window.app = new Vue({
 
                 </div>
             </div>
-            <div class="margin-top" v-show="update_stage_mode">
+            <div class="widget-info bg-white padding" v-show="update_stage_mode">
                 <form class="padding-top">
                     <div class="error" v-show="update_error">
                     {{update_error}}
@@ -133,6 +143,16 @@ window.app = new Vue({
                        <label for="inputStageDescription">Description</label>
                         <textarea v-model="stage_form_obj_edit.description" class="form-control" placeholder="Description" rows="3"></textarea>
                       </div>
+                      <div class="form-group">
+                                <label for="inputSubStageTags">Types</label>
+                                <vselect :options="tags" label="name" :value="[]" v-model="stage_form_obj_edit.tags" :allow-empty="true" :loading="loading"
+                                     :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
+                                    <template slot="noResult">NO tags Available</template>
+                                    <template slot="afterList" slot-scope="props"><div v-show="tags.length==0" class="wrapper-sm bg-danger">
+                                    No Tags</div></template>
+                                </vselect>
+
+                        </div>
                       <div class="form-group">
                         <a href="javascript:void(0)" @click="do_update_stage" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a> &nbsp;
                         <a href="javascript:void(0)" @click="update_stage_done" class="btn btn-sm btn-warning"><i class="la la-cancel"></i>Cancel</a>
@@ -289,7 +309,7 @@ window.app = new Vue({
         update_sub_error: '',
         show_ad_stage_form: false,
         show_ad_substage_form: false,
-        stage_form_obj: {'name': '', 'description':'', 'id':''},
+        stage_form_obj: {'name': '', 'description':'', 'id':'','tags':[]},
         substage_form_obj: {'name': '', 'description':'', 'weight':0, tags:[],'xf':''},
         current_stage: '',
         substages: [],
@@ -300,7 +320,7 @@ window.app = new Vue({
         update_stage_mode: false,
         sub_stage_form: '',
         forms: [],
-        tags: [{'id': 1, 'name':'Tag 1'}, {'id': 2, 'name':'Tag 2'}, {'id': 3, 'name':'Tag 3'}],
+        tags: [],
         form: '',
         selected_tags: [],
         stage_form_obj_edit: '',
@@ -314,6 +334,30 @@ window.app = new Vue({
   },
 
   methods:{
+  loadSiteTypes : function(){
+      var self = this;
+      if(self.is_project == 0){
+
+        return
+      }
+        var options = {};
+
+        function successCallback(response) {
+            self.tags = response.body;
+            self.loading = false;
+        }
+
+            function errorCallback() {
+                self.loading = false;
+                console.log('failed');
+            }
+            self.$http.get('/fieldsight/api/site-types/'+self.pk+'/', {
+                params: options
+            }).then(successCallback, errorCallback);
+
+
+
+  },
     onImageChange(e) {
     var self = this;
       var files = e.target.files || e.dataTransfer.files;
@@ -659,11 +703,26 @@ window.app = new Vue({
                 self.update_substage_mode = true;
                 self.reorder_sub_stages_mode = false;
             },
+        loadTagsFromArray: function (tags){
+            var tags_array = [];
+            var self = this;
+            for (var i = 0; i < self.tags.length; i++) {
+                    if (tags.indexOf(self.tags[i].id) != -1) {
+                        tags_array.push(self.tags[i]);
+                    }
+                }
+
+                return tags_array;
+
+        },
         update_stage: function (){
                 var self = this;
                 self.update_error = "";
+                var tags = [];
+                tags = self.loadTagsFromArray(self.current_stage.tags);
+
                 self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
-                                            self.current_stage.description}
+                                            self.current_stage.description,'tags':tags}
                 self.update_stage_mode = true;
             },
         update_sub_done: function (){
@@ -751,7 +810,7 @@ window.app = new Vue({
         add_stage : function (){
             var self = this;
             self.error = "";
-            self.stage_form_obj = {'name': '', 'description':'', 'id':''};
+            self.stage_form_obj = {'name': '', 'description':'', 'id':'', 'tags':[]};
             self.show_ad_stage_form = true;
         },
 
@@ -807,6 +866,10 @@ window.app = new Vue({
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
         self.stage_form_obj.order = self.stages.length;
+        var tags = self.stage_form_obj.tags.map(function (a) {
+                    return parseInt(a.id);
+                });
+        self.stage_form_obj.tags = tags;
         function successCallback (response){
 
         self.error = "";
@@ -819,6 +882,7 @@ window.app = new Vue({
         }
 
         function errorCallback (response){
+        console.log(response);
           new PNotify({
           title: 'failed',
           text: 'Failed to Save Stage',
@@ -881,7 +945,15 @@ window.app = new Vue({
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
 
+        var tags = self.stage_form_obj_edit.tags.map(function (a) {
+                    return parseInt(a.id);
+                });
+        self.stage_form_obj_edit.tags = tags;
+
+        console.log(self.stage_form_obj_edit);
+
         function successCallback (response){
+        console.log(response);
 
         self.update_error = "";
             new PNotify({
@@ -1039,6 +1111,7 @@ window.app = new Vue({
     var self= this;
     self.loadStages();
     self.loadKoboForms();
+    self.loadSiteTypes();
   },
 
   filters: {
