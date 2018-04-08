@@ -1,3 +1,5 @@
+
+
 Vue.use(VueMultiselect);
 window.app = new Vue({
   el: '#app',
@@ -7,8 +9,8 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" >
                 <div class="widget-head">
                     <h4>Stages </h4>
-                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
-                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
 
                 </div>
                 <div class="widget-body">
@@ -51,11 +53,11 @@ window.app = new Vue({
 
             <div class="widget-info bg-white padding" v-if="current_stage">
                 <div class="widget-head">
-                    <h4>{{current_stage.name}}</h4>
-                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
-                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">Update Stage</a>
-                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary margin-top" v-show="!show_ad_substage_form">
-                    <i class="la la-plus"></i> New Sub Stage</a>
+                    <h4>{{current_stage.name | slice}}</h4>
+                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form"><i class="la la-edit"></i>Edit</a>
+                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">
+                    <i class="la la-plus"></i> New</a>
                 </div>
                 <div class="widget-body">
                     <p>{{current_stage.description}}</p>
@@ -160,9 +162,9 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode &&  !new_em">
                 <div class="widget-head">
                     <h4>1. {{substage_detail.name}}</h4>
-                    <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary" v-show="substage_detail.has_em">View Material</a>
-                    <a href="javascript:void(0)" @click="newEm" class="btn btn-primary" v-show="!substage_detail.has_em">New Material</a>
-                    <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary">Update Sub Stage</a>
+                    <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary  btn-sm" v-show="substage_detail.has_em"><i class="la la-eye"></i> View Material</a>
+                    <a href="javascript:void(0)" @click="newEm" class="btn btn-primary btn-sm" v-show="!substage_detail.has_em"><i class="la la-plus"></i> New Material</a>
+                    <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary  btn-sm"><i class="la la-edit"></i> Edit</a>
                 </div>
                 <div class="widget-body">
                     <p>{{substage_detail.description}}</p>
@@ -229,47 +231,35 @@ window.app = new Vue({
                          </div>
 
                     </div>
-                    <div class="widget-info bg-white padding" v-show="show_em">
-                    <h4>Educational Material</h4>
-                    <a href="javascript:void(0)" @click="hideEm" class="btn btn-primary">close</a>
-                    <a href="javascript:void(0)" @click="updateEm" class="btn btn-primary">Edit</a>
-                        <div v-show="em.is_pdf"> <a target="_blank" v-bind:href="em.pdf"> Pdf File </a> </div>
-                        <div> Title : <span>{{em.title}}</span> </div>
-                        <div> Text : <span>{{em.text}}</span> </div>
-                        <div v-for="i in em.em_images" v-show="em.em_images.length>0">
-                         Images :
-                           <img v-bind:src="i.image">
-                         </div>
 
-                    </div>
-                    <div class="margin-top" v-show="new_em">
+                    <div class="widget-info bg-white padding" v-show="new_em">
                         <form class="padding-top">
                         <div class="form-group">
 
                             <div>
-                                <span>Upload PDF</span>
+                                <span><strong>PDF</strong></span>
                                 <div v-show="new_em_obj.is_pdf"> <a target="_blank" v-bind:href="new_em_obj.pdf"> Pdf File </a> </div>
                                 <input type="file" accept="application/pdf"  @change="onPDFChange">
                               </div>
                         </div>
 
                         <div class="form-group">
-                                <label for="title">Title <span class="error" v-show="true"> Error </span></label>
-                                <input type="text" v-model="new_em_obj.title" class="form-control" id="inputSubStageName">
+                                <label for="title">Title </label>
+                                <input type="text" v-model="new_em_obj.title" class="form-control" id="inputSubStageName" @change="save_em">
+                                 <div class="invalid-feedback is-invalid" v-show="false">Eror occ</div>
                         </div>
                         <div class="form-group">
                                 <label for="text">Description</label>
-                                <textarea class="form-control" v-model="new_em_obj.text" id="text" rows="3"></textarea>
+                                <textarea class="form-control" v-model="new_em_obj.text" id="text" rows="3" @change="save_em"></textarea>
                         </div>
                         <div class="form-group">
-                            <div v-if="new_em_obj.em_images.length>0"> Selected Files </div>
-                                <div v-for="i in new_em_obj.em_images" v-if="new_em_obj.em_images.length>0">
-                                    <img :src="i.image" />
+                            <div v-if="new_em_obj.em_images.length>0"><strong>Current Images</strong> </div>
+                                <div class="row">
+                                    <div class="col-sm-6" v-for="i in new_em_obj.em_images" v-if="new_em_obj.em_images.length>0">
+                                        <img :src="i.image" class="margin-top"/>
 
+                                    </div>
                                 </div>
-                            <div v-else>
-                                No Files selected yet
-                            </div>
                         </div>
 
                         <div class="form-group">
@@ -280,8 +270,7 @@ window.app = new Vue({
                         </div>
 
                           <div class="form-group">
-                                <a href="javascript:void(0)" @click="save_em" class="btn btn-sm btn-primary"><i class="la la-save"></i> Save</a>
-                                <a href="javascript:void(0)" @click="cancel_em" class="btn btn-sm btn-warning"><i class="la la-close"></i> Cancel</a>
+                                <a href="javascript:void(0)" @click="cancel_em" class="btn btn-sm btn-warning"><i class="la la-close"></i> Close</a>
                             </div>
                       </form>
                     </div>
@@ -456,16 +445,14 @@ window.app = new Vue({
         save_em: function(){
              var self = this;
             let csrf = $('[name = "csrfmiddlewaretoken"]').val();
-            let options = {headers: {'X-CSRFToken':csrf, 'media_type':'application/x-www-form-urlencoded'}};
+            let options = {headers: {'X-CSRFToken':csrf}};
             let data = self.new_em_obj;
             function successCallback (response){
-                self.stages = response.body.data;
-                self.stages_reorder = [];
-                self.reorder_stages_mode = false;
+            self.new_em_obj = response.body.em;
                 self.error = "";
                     new PNotify({
-                  title: 'saved',
-                  text: 'Ordering  Saved'
+                  title: 'Material Saved',
+                  text: 'material Detail Saved'
                 });
 
             }
@@ -483,7 +470,7 @@ window.app = new Vue({
 
                 }
             }
-       self.$http.post('/forms/api/em/files/'+ self.substage_detail.id +'/', data, options)
+       self.$http.post('/forms/api/em/'+ self.substage_detail.id +'/', data, options)
         .then(successCallback, errorCallback);
 //            self.new_em = false;
 //            self.new_em_obj = {'title':'', 'text':'', 'files':[]};
@@ -595,7 +582,7 @@ window.app = new Vue({
         },
         reorderSubStagesSave: function (){
             var self = this;
-                    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
         let data = {'stages':self.substages_reorder};
         function successCallback (response){
@@ -957,23 +944,23 @@ window.app = new Vue({
         },
         loadEm : function(){
             var self = this;
-            self.show_em = true;
+            self.new_em = true;
             self.show_ad_substage_form = false;
             self.update_substage_mode = false;
             self.reorder_stages_mode = false;
             if(self.substage_detail.has_em){
-                self.em = self.substage_detail.em;
+                self.getEm(self.substage_detail.id);
             }else{
-                self.em = '';
+                self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
             }
         },
         hideEm : function(){
             var self = this;
-            self.show_em = false;
+            self.new_em = false;
             self.show_ad_substage_form = false;
             self.update_substage_mode = false;
             self.reorder_stages_mode = false;
-            self.em = '';
+            self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
 
         },
         getEm : function(id){
@@ -982,7 +969,7 @@ window.app = new Vue({
             var options = {};
 
             function successCallback(response) {
-                self.em = response.body;
+                self.new_em_obj = response.body;
                 self.loading = false;
             }
 
@@ -1053,5 +1040,16 @@ window.app = new Vue({
     self.loadStages();
     self.loadKoboForms();
   },
+
+  filters: {
+  slice: function(value) {
+    if (!value) return ''
+    value = value.toString()
+    if(value.length>13){
+    return value.charAt(0).toUpperCase() + value.slice(1,12) + ".."
+    }
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  }
+}
 
 })
