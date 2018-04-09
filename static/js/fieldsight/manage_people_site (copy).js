@@ -1,4 +1,3 @@
-
 var csrf_token ="";
 var group = "";
 
@@ -187,7 +186,6 @@ var Region =function (data, project){
   self = this;
   self.id = ko.observable();
   self.name = ko.observable();
-  self.identifier = ko.observable();
   self.selected = ko.observable(false);
   
   for (var i in data){
@@ -338,7 +336,7 @@ var ProjectVM = function(level, pk){
   self.sites = ko.observableArray();
   self.site = ko.observableArray();
   self.allsites = ko.observableArray();
-  
+  self.search_key = ko.observable();
   self.allsiteid = ko.observableArray();
   self.allsiteid([]);
   self.all_selected_sites = ko.observableArray();
@@ -412,7 +410,7 @@ self.loadProjectDonors = function(){
 
   
   self.loadProjectManagers();
- self.loadProjectDonors();
+  self.loadProjectDonors();
 
 
   self.loadAllSites = function(){
@@ -657,7 +655,6 @@ function multiemailvalidate(entry) {
     self.all_selected_regions([]);
     self.loadRegionalSites = ko.observable();
     self.showsites = ko.observable(false);
-    self.region_search_key = ko.observable();
       self.loadAllRegions = function(){
       App.showProcessing();
         $.ajax({
@@ -738,13 +735,13 @@ self.setRegionSelected = function(region){
    
   };
 
-  self.region_search_key.subscribe(function (newValue) {
+  self.search_key.subscribe(function (newValue) {
    
     if (!newValue) {
         self.regions(self.allRegions());
     } else {
         filter_data = ko.utils.arrayFilter(self.allRegions(), function(item) {
-            return (((item.name() != null) ? ko.utils.stringStartsWith(item.name().toLowerCase(), newValue):false) || ko.utils.stringStartsWith(item.identifier().toLowerCase(), newValue.toLowerCase()));
+            return ko.utils.stringStartsWith(item.name().toLowerCase(), newValue.toLowerCase());
         });
         self.regions(filter_data);
     }
@@ -754,50 +751,39 @@ self.setRegionSelected = function(region){
 
 
     self.assignselectedreviewer = function(){
-         
-            
-            self.doAssign('Reviewer');
-         
+          group = 'Reviewer';
+          self.doAssign();
     };
     self.assignselectedsupervisor = function(){
-       
-           
-            self.doAssign('Site Supervisor');
-       
+        group = 'Site Supervisor';
+        self.doAssign();
     };
 
-    self.doAssign = function(group){
+    self.doAssign = function(){
     App.showProcessing();
 
-     if (!all_selected_users().length){
-      alert("No Users Selected to Assign to.");
-      App.hideProcessing();
-      return false;
-    }
-    if(type == "region"){
-
-    if (!self.all_selected_regions().length){
-      alert("No Regions Selected to Assign to.");
-      App.hideProcessing();
-      return false;
-    }
-    
-    self.new_role({'group':group, 'users':[], 'regions':[]});
-    
-    
-
-    ko.utils.arrayMap(self.all_selected_regions(), function(item) {
-                    console.log(item.id());
-                    self.new_role().regions.push(item.id);
-                    });
-    }
-    else{
     if (!self.all_selected_sites().length){
       alert("No Sites Selected to Assign to.");
       App.hideProcessing();
       return false;
     }
     
+     if (!all_selected_users().length){
+      alert("No Users Selected to Assign to.");
+      App.hideProcessing();
+      return false;
+    }
+    // if(type == "region"){
+    // self.new_role({'group':group, 'users':[], 'regions':[]});
+    
+    
+
+    // ko.utils.arrayMap(self.all_selected_regions(), function(item) {
+    //                 console.log(item.id());
+    //                 self.new_role().regions.push(item.id);
+    //                 });
+    // }
+    // else{
     self.new_role({'group':group, 'users':[], 'sites':[]});
     
     
@@ -806,7 +792,7 @@ self.setRegionSelected = function(region){
                     console.log(item.id());
                     self.new_role().sites.push(item.id);
                     });
-    }
+    // }
 
     
     ko.utils.arrayMap(all_selected_users(), function(item) {
@@ -839,7 +825,6 @@ self.setRegionSelected = function(region){
 
        App.remotePost(url, ko.toJS(self.new_role()), success, failure);  
 };
-    
 
     if(type == "region"){
       self.loadAllRegions();
@@ -1536,6 +1521,7 @@ if (self.level == "0"){
                var mappedData = ko.utils.arrayMap(response, function(item) {
                         user = new User(item);
                         self.alluserid.push(user);
+                        console.log(user.id());
                         return user;
 
                     });

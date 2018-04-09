@@ -144,21 +144,31 @@ textarea.form-control{
     <div class='row'>
       <div class="header-response col-sm-8 col-md-8 col-xs-12">
        {% if fxf.project %}
+              {% if is_readonly %}
+              <a href="{% url 'fieldsight:project_dashboard_lite' fxf.project.pk %}">Dashboard</a> |              
+              {% else %}
               <a href="{% url 'fieldsight:project-dashboard' fxf.project.pk %}">Dashboard</a> |
+              {% endif %}
               <a href="{% url 'forms:project-responses' fxf.project.pk %}">Responses</a> |
               <a href="{% url 'forms:project_html_export' fxf.pk %}">{{ fxf.xf.title }} All Submissions</a>
+              
           {% endif %}
 
         {% if fxf.site %}
+              {% if is_readonly %}
+              <a href="{% url 'fieldsight:site_dashboard_lite' fxf.site.pk %}">Dashboard</a> |              
+              {% else %}
               <a href="{% url 'fieldsight:site-dashboard' fxf.site.pk %}">Dashboard</a> |
+              {% endif %}
               <a href="{% url 'forms:site-responses' fxf.site.pk %}">Responses</a> |
               <a href="{% url 'forms:formpack_html_export' fxf.pk %}">{{ fxf.xf.title }} All Submissions</a>
         {% endif %} 
       </div>
       
-      <div class="history-response col-sm-4 col-md-4 col-xs-12" data-bind="with:model">
+      <div id="buttonholder" class="history-response col-sm-4 col-md-4 col-xs-12" data-bind="with:model">
           
           <button class="btn btn-head-response" data-bind="click:history"> {% trans 'View History ' %}</button>
+         
           
           <span class="title-sm space " style="display:inline-block" >{% trans "current-status:" %}
           </span>
@@ -264,7 +274,7 @@ textarea.form-control{
   </div>
 </div>
 </div>
-
+{% if not is_readonly %}
   <h3>{% trans 'Review submission' %} </h3>
   {% csrf_token %}
   
@@ -318,7 +328,7 @@ textarea.form-control{
     
     <div class="gap"></div>
 </div>
-
+{% endif %}
 {% endblock %}
 
 {% block javascript %}
@@ -336,12 +346,14 @@ textarea.form-control{
 <script>
 
 $(document).ready(function() {
+
 var fxf = "{{fxf.pk}}";
 var ins = location.hash.split("#/")[1];
 
  vm = new StatusViewModel(fxf, ins);
 
  ko.applyBindings(vm);
+
 });
 
 </script>
@@ -493,6 +505,12 @@ $(document).ready(function(){
         .ajaxStop(function() {
             $(this).hide();
         });
+
+var url = "/fieldsight/response/report/"+location.hash.split("#/")[1]+"/";
+var pdfbutton = '<a href="'+url+'" target="_blank"><button class="btn btn-head-response">Download PDF</button></a>';
+      
+$(pdfbutton).prependTo("#buttonholder");
+
 });
 </script>
 {% endblock %}

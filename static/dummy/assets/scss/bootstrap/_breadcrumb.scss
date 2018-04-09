@@ -3,6 +3,7 @@
   margin-bottom: 1rem;
   list-style: none;
   background-color: $breadcrumb-bg;
+  font-size: 12px;
   @include border-radius($border-radius);
   @include clearfix;
 }

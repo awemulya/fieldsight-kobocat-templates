@@ -26,6 +26,11 @@
         21 : type21,
         22 : type22,
         23 : type23,
+        24 : type24,
+        25 : type25,
+        26 : type26,
+        27 : type27,
+        28 : type28,
         412: type412,
         421: type421,
         422: type422,
@@ -168,7 +173,32 @@
               content = "<b>TASK INFO : </b>"+data.extra_message + ' in <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
                return content;
         }
+    function type24(data){
+          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added in <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
+                return content;
 
+        }
+    function type25(data){
+          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as <b>Donor</b> of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
+                return content;
+
+        }
+
+    function type26(data){
+          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as the Project Manager in '+ data.extra_message +' projects of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
+              return content;
+    }
+
+    function type27(data){
+           content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as Reviewer in '+ data.extra_message +' sites of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
+              return content;
+
+    }
+    function type28(data){
+          content = '<b><a href="' + data.get_source_url + '">'+ data.source_name +'</a></b> was added as Site Supervisor in '+ data.extra_message +' sites of <b><a href="' +  data.get_event_url + '">' + data.get_event_name + '</a></b> by <b><a href="' +  data.get_extraobj_url + '">' + data.get_extraobj_name + '</a></b>.';
+                return content;
+
+    }
 
 
 

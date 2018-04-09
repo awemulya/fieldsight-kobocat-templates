@@ -102,7 +102,8 @@ function StageViewModel(url1, url2) {
              });
     console.log(selectedFormids);
     
-    self.data({'fs_ids':selectedFormids});
+
+    self.data({'fs_ids':selectedFormids, 'csrfmiddlewaretoken':csrf_token});
     
 
     var success =  function (response) {
@@ -125,7 +126,34 @@ function StageViewModel(url1, url2) {
 
             };
           console.log(csrf_token);
-       App.remotePost(url1, ko.toJS(self.data()), success, failure);  
+       // App.remotePost(url1, ko.toJS(self.data()), success, failure); 
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url1, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.setRequestHeader('X-CSRFToken', csrf_token);
+xhr.responseType = 'blob';
+xhr.send(JSON.stringify(self.data())); 
+    xhr.onload = function(e) {
+        if (this.status == 200) {
+            // Create a new Blob object using the response data of the onload object
+            var blob = new Blob([this.response], {type: 'image/pdf'});
+            //Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
+            let a = document.createElement("a");
+            a.style = "display: none";
+            document.body.appendChild(a);
+            //Create a DOMString representing the blob and point the link element towards it
+            let url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = 'Custom_Report.pdf';
+            //programatically click the link to trigger the download
+            a.click();
+            //release the reference to the file by revoking the Object URL
+            window.URL.revokeObjectURL(url);
+        }else{
+            //deal with your error state here
+        }
+    };
 };
 
 
@@ -148,7 +176,7 @@ function StageViewModel(url1, url2) {
 
                  self.scheduleForm({'xf_title':'Schedule Forms', 'level':'1', 'forms':[], 'selected': ko.observable(false)});
                  var mappedScheduleData = ko.utils.arrayMap(response.schedule, function(item) {
-                            datas = {'id': item.id, 'xf_title': item.xf__title, 'level':'2', 'forms':[], 'selected': ko.observable(false)};
+                            datas = {'id': item.id, 'xf_title': item.schedule__name, 'level':'2', 'forms':[], 'selected': ko.observable(false)};
                             return datas;
                         });
                  self.scheduleForm().forms.push.apply(self.scheduleForm().forms, mappedScheduleData);
@@ -156,7 +184,7 @@ function StageViewModel(url1, url2) {
                  self.stageForm({'xf_title':'Stage Forms', 'level':'1', 'forms':[], 'selected': ko.observable(false)});
                  var mappedStageData = ko.utils.arrayMap(response.stage, function(item) {
                         var sub_stages = ko.utils.arrayMap(item.sub_stages, function(subitem) {
-                            sub_datas = {'id': subitem.stage_forms__id, 'xf_title': subitem.stage_forms__xf__title, 'forms':[], 'level':'3', 'selected': ko.observable(false)};
+                            sub_datas = {'id': subitem.stage_forms__id, 'xf_title': subitem.name, 'forms':[], 'level':'3', 'selected': ko.observable(false)};
                             return sub_datas;
                         });
                         stage_data = {'id': item.id, 'xf_title': item.title, 'level':'2', 'forms':sub_stages, 'selected': ko.observable(false)};                      
@@ -221,16 +249,18 @@ function StageViewModel(url1, url2) {
                 ]
               });
               $('.photo-item img').on('click',function(){
-                var title = $(this).attr('img-title');
-                var src = $(this).attr('src');
-                var img = '<img src="' + src + '" class="img-responsive"/>';
-                var html = '';
-                html += img;
-                $('#myModalLabel').modal();
-                $('#myModalLabel').on('shown.bs.modal', function(){
-                  $('#myModalLabel .modal-header .modal-title').html(title);
-                  $('#myModalLabel .modal-body').html(html);
-                })
+                    var title = $(this).attr('img-title');
+                    var submitted_by = $(this).attr('submission_by');
+                    var submission_url = $(this).attr('submission_url');
+                    var src = $(this).attr('src');
+                    var img = '<img src="' + src + '" class="img-responsive"/>';
+                    var html = '';
+                    html += img;    
+                    $('#myModalLabel').modal();
+                    $('#myModalLabel').on('shown.bs.modal', function(){
+                      $('#myModalLabel .modal-header .modal-title').html('By: '+submitted_by +'<a href="'+ submission_url +'"> (View Submission) </a>');
+                      $('#myModalLabel .modal-body').html(html);
+                    })
                 $('#myModalLabel').on('hidden.bs.modal', function(){
                   $('#myModalLabel .modal-header .modal-title').html('');
                   $('#myModalLabel .modal-body').html('');

@@ -24,6 +24,12 @@ img{
 .padding-top{
 	padding-top: 15px;
 }
+.padding-left{
+	padding-left: 15px;
+}
+.padding-right{
+	padding-right: 15px;
+}
 .margin{
 	margin: 15px;
 }
@@ -41,7 +47,7 @@ ul{
 .main-header{
 	background: $app-primary;
 	position: relative;
-	z-index: 999;
+	z-index: 1040;
 }
 
 a.logo {
@@ -153,6 +159,11 @@ position: relative;
 .notification-highlight-excerpt {
     margin-bottom: 0;
     line-height: 1.3;
+	font-size: 13px;
+	font-weight: 300;
+	a{
+		font-weight: 600;
+	}
 }
 
 .notification-highlight-time {
@@ -320,6 +331,14 @@ ul.sidebar-menu{
 		}
 		.panel-heading-right{
 			float: right;
+			.form-control-sm{
+				display: inline-block;
+				width: auto;
+				margin: 13px 13px 13px 0;
+				padding: 3px 8px;
+				font-size: 12px;
+				height: 24px;
+			}
 		}
 		.nav-tabs{
 			border: 0;
@@ -353,6 +372,7 @@ ul.sidebar-menu{
 		padding: 15px;
 		padding-top: 0;
 		background: #FFF;
+		position: relative;
 		&:before{
 			content: '';
 			display: table;
@@ -441,7 +461,7 @@ overflow: hidden;
 	background: #eff2f7;
 	padding: 30px 15px;
 	text-align: center;
-	//min-height: 80px;
+	min-height: 286px;
 	.logo{
 		//float: left;
 		width: 100px;
@@ -557,6 +577,7 @@ float: left;
 margin-right: 15px;
     border: 5px solid #eaeaea;
 	border-top: 0;
+	background: #FFF;
 }
 .org-profile-basic-info{
 	@media(min-width: 992px){
@@ -593,6 +614,9 @@ margin-right: 15px;
 			font-weight: 600;
 			margin: 0 0 15px 0;
 			float: left;
+			a{
+				color: $body-color;
+			}
 		}
 		>a{
 			float: right;
@@ -606,6 +630,14 @@ margin-right: 15px;
 		text-align: justify;
 		color: #666;
 		margin: 0;
+	}
+	.widget-body{
+		position: relative;
+		overflow: hidden;
+		&.overflow-auto{
+			overflow: auto;
+
+		}
 	}
 }
 
@@ -664,6 +696,14 @@ margin-right: 15px;
 	.widget-body{
 		height: 181px;
 		overflow: hidden;
+		
+	}
+}
+
+.widget-scolling-large-list{
+	.widget-body{
+		height: 450px;
+		overflow: hidden;
 	}
 }
 
@@ -678,7 +718,7 @@ ul.contact-info-list{
 			position: absolute;
 			left: 0;
 			font-size: 17px;
-			top: 3px;
+			top: 4px;
 		}
 	}
 }
@@ -721,7 +761,7 @@ overflow: hidden;
 
 }
 
-.max-513-scolling{
+.max-513-scrolling{
 max-height: 513px;
 overflow: hidden;
 }
@@ -747,6 +787,7 @@ margin-right: 0.9rem;
 
 .site-item-wrap .logo img{
 border: 10px solid #FFF;
+background: #FFF;
 }
 
 .site-item-wrap .basic-info h4{
@@ -892,4 +933,297 @@ margin-right: 15px;
 
 .substage-form-action{
 float: left;
+}
+
+.checkbox-listing{
+	>ul{
+		li{
+			ul{
+				padding-left: 15px;
+				margin-bottom: 15px;
+				li{
+					padding: 5px 0;
+				}
+			}
+		}
+	}
+	/* Base for label styling */
+	[type="checkbox"]:not(:checked),
+	[type="checkbox"]:checked {
+	  position: absolute;
+	  left: -9999px;
+	}
+	[type="checkbox"]:not(:checked) + label,
+	[type="checkbox"]:checked + label {
+	  position: relative;
+	  padding-left: 1.95em;
+	  cursor: pointer;
+	}
+
+	/* checkbox aspect */
+	[type="checkbox"]:not(:checked) + label:before,
+	[type="checkbox"]:checked + label:before {
+	  content: '';
+	  position: absolute;
+	  left: 0; top: 0;
+	  width: 1.25em; height: 1.25em;
+	  border: 2px solid #ccc;
+	  background: #fff;
+	  box-shadow: inset 0 1px 3px rgba(0,0,0,.1);
+	}
+	/* checked mark aspect */
+	[type="checkbox"]:not(:checked) + label:after,
+	[type="checkbox"]:checked + label:after {
+	  content: '\2713';
+	  position: absolute;
+	  top: .3em; left: .275em;
+	  font-size: 1em;
+	  line-height: 0.8;
+	  color: #00628E;
+	  transition: all .2s;
+	  font-family: Helvetica, Arial, sans-serif;
+	}
+	/* checked mark aspect changes */
+	[type="checkbox"]:not(:checked) + label:after {
+	  opacity: 0;
+	  transform: scale(0);
+	}
+	[type="checkbox"]:checked + label:after {
+	  opacity: 1;
+	  transform: scale(1);
+	}
+	/* disabled checkbox */
+	[type="checkbox"]:disabled:not(:checked) + label:before,
+	[type="checkbox"]:disabled:checked + label:before {
+	  box-shadow: none;
+	  border-color: #bbb;
+	  background-color: #ddd;
+	}
+	[type="checkbox"]:disabled:checked + label:after {
+	  color: #999;
+	}
+	[type="checkbox"]:disabled + label {
+	  color: #aaa;
+	}
+	/* accessibility */
+	[type="checkbox"]:checked:focus + label:before,
+	[type="checkbox"]:not(:checked):focus + label:before {
+	  border: 2px dotted #00628E;
+	}
+
+	/* hover style just for information */
+	label:hover:before {
+	  border: 2px solid #00628E!important;
+	}
+
+}
+
+
+
+
+.map-radio-wrap{
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	z-index: 5;
+	border: 4px solid rgba(0,0,0,0.05);
+	.radio{
+		float: left;
+		display: inline-block;
+		padding: 8px 8px;
+		background: rgba(255,255,255,0.7);
+		label{
+			margin: 0;
+			font-size: 13px;
+			font-weight: 600;
+		}
+	}
+	&:after{
+		content: '';
+		display: table;
+		clear: both;
+	}
+	[type="radio"]:checked,
+	[type="radio"]:not(:checked) {
+	    position: absolute;
+	    left: -9999px;
+	}
+	[type="radio"]:checked + label,
+	[type="radio"]:not(:checked) + label
+	{
+	    position: relative;
+	    padding-left: 28px;
+	    cursor: pointer;
+	    line-height: 20px;
+	    display: inline-block;
+	    color: #666;
+	}
+	[type="radio"]:checked + label:before,
+	[type="radio"]:not(:checked) + label:before {
+	    content: '';
+	    position: absolute;
+	    left: 0;
+	    top: 0;
+	    width: 18px;
+	    height: 18px;
+	    border: 1px solid #ddd;
+	    border-radius: 100%;
+	    background: #fff;
+	}
+	[type="radio"]:checked + label:after,
+	[type="radio"]:not(:checked) + label:after {
+	    content: '';
+	    width: 12px;
+	    height: 12px;
+	    background: $app-primary;
+	    position: absolute;
+	    top: 3px;
+	    left: 3px;
+	    border-radius: 100%;
+	    -webkit-transition: all 0.2s ease;
+	    transition: all 0.2s ease;
+	}
+	[type="radio"]:not(:checked) + label:after {
+	    opacity: 0;
+	    -webkit-transform: scale(0);
+	    transform: scale(0);
+	}
+	[type="radio"]:checked + label:after {
+	    opacity: 1;
+	    -webkit-transform: scale(1);
+	    transform: scale(1);
+	}
+}
+
+
+
+.photo-holder{
+	height: 175px;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	img{
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		max-width: 150%;
+	}
+	a{
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0,0,0,0.6);
+		text-align: center;
+		color: #FFF;
+		text-transform: uppercase;
+		font-size: 18px;
+		padding: 40% 0;
+		font-weight: 500;
+		z-index: 5;
+		@include transition(all 0.3s ease-in-out);
+		&:hover, &:focus{
+			background: rgba(0,0,0,0.8);
+		}
+	}
+}
+
+
+ul.stage-list{
+	li{
+		position: relative;
+		margin-top: 8px;
+		text-transform: capitalize;
+		&:first-child{
+			margin-top: 0;
+		}
+		span{
+			display: inline-block;
+			padding: 4px 8px;
+			background: rgba(0,0,0,0.2);
+			margin-right: 5px;
+			font-size: 14px;
+			text-algin: center;
+			font-weight: 500;
+		}
+		&:hover, &:focus{
+			cursor: pointer;
+			span{
+				background: rgba(0,0,0,0.3);
+			}
+		}
+		&.active{
+			color: #00628E;
+			font-weight: 500;
+			span{
+				background: #00628E;
+				color: #FFF;
+			}
+		}
+	}
+}
+
+
+ul.stage-list li.active span{
+background: #00628E;
+color: #FFF;
+}
+
+.selectize-control{
+	.option{
+	 	.title {
+			display: block;
+			font-weight: 600;
+		}
+		.date{
+			font-size: 12px;
+			display: block;
+			color: #a0a0a0;
+		}
+	}
+}
+
+.selectize-control.multi .selectize-input>div, .selectize-control.multi .selectize-input>div.active{
+background: $app-primary;
+color: #FFF;
+}
+
+
+.dragable-stage{
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,eeeeee+100;Grey+Flat */
+	background: #eeeeee; /* Old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 0%, #eeeeee 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #eeeeee 0%,#eeeeee 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #eeeeee 0%,#eeeeee 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+	border: 1px solid rgba(0,0,0,0.06);
+	margin-top: 10px;
+	padding: 10px;
+	padding-left: 35px;
+	position: relative;
+	text-transform: capitalize;
+	@include hover-focus{
+		cursor: move;
+	}
+	&:before{
+		content: "\f123";
+		font-family: LineAwesome;
+		position: absolute;
+		left: 10px;
+	}
+	&.sortable-chosen{
+		color: #FFF;
+		background: $app-primary;
+	}
+}
+
+
+.dragArea{
+	.dragable-stage{
+		&:first-child{
+			margin-top: 0;
+		}
+	}
 }

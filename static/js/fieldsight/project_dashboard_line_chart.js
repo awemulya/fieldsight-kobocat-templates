@@ -119,6 +119,7 @@ var myChart = new Chart(ctx, {
                         },
                         scaleLabel:{
                             display: true,
+                            labelString: 'Date',
                             backgroundColor: 'rgba(255,255,255,0.2)',
                             fontColor: "#000"
                         }

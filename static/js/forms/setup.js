@@ -1108,7 +1108,7 @@ self.saveSchedule = function(){
     }
       schedule.xf = self.current_form().form();
       schedule.name = self.current_form().name();
-      schedule.schedule_level = self.current_form().schedule_level();
+      schedule.schedule_level_id = self.current_form().schedule_level();
       schedule.date_range_start = self.current_form().date_range_start().toISOString().slice(0,10);
       schedule.date_range_end= self.current_form().date_range_end().toISOString().slice(0,10);
       schedule.selected_days= self.current_form().selected_days();
