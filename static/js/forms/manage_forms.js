@@ -16,7 +16,8 @@ window.app = new Vue({
                 <div class="widget-body">
                     <ul class="stage-list"  v-if="stages.length>0">
 
-                        <li v-bind:class="{ active: activeStage(stage) }" v-for="stage, index in stages"><span>{{index+1}}.</span> <a href="javascript:void(0)" @click="stageDetail(stage)" >{{stage.name}}</a></li>
+                        <li v-bind:class="{ active: activeStage(stage) }" v-for="stage, index in stages"><span>{{index+1}}.</span>
+                         <a href="javascript:void(0)" @click="stageDetail(stage)" >{{stage.name}}</a></li>
                     </ul>
                     <ul class="stage-list" v-if="stages.length==0">
                         <li><span>There are no Stages.. Please Add Stages</span></li>
@@ -144,13 +145,13 @@ window.app = new Vue({
                         <textarea v-model="stage_form_obj_edit.description" class="form-control" placeholder="Description" rows="3"></textarea>
                       </div>
                       <div class="form-group">
-                                <label for="inputSubStageTags">Types</label>
-                                <vselect :options="tags" label="name" :value="[]" v-model="stage_form_obj_edit.tags" :allow-empty="true" :loading="loading"
-                                     :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
-                                    <template slot="noResult">NO tags Available</template>
-                                    <template slot="afterList" slot-scope="props"><div v-show="tags.length==0" class="wrapper-sm bg-danger">
-                                    No Tags</div></template>
-                                </vselect>
+                        <label for="inputSubStageTags">Types</label>
+                        <vselect :options="tags" label="name" :value="[]" v-model="stage_form_obj_edit.tags" :allow-empty="true" :loading="loading"
+                             :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
+                            <template slot="noResult">NO tags Available</template>
+                            <template slot="afterList" slot-scope="props"><div v-show="tags.length==0" class="wrapper-sm bg-danger">
+                            No Tags</div></template>
+                        </vselect>
 
                         </div>
                       <div class="form-group">
@@ -704,6 +705,7 @@ window.app = new Vue({
                 self.reorder_sub_stages_mode = false;
             },
         loadTagsFromArray: function (tags){
+            if(!tags || tags=="null") return []
             var tags_array = [];
             var self = this;
             for (var i = 0; i < self.tags.length; i++) {
@@ -720,6 +722,7 @@ window.app = new Vue({
                 self.update_error = "";
                 var tags = [];
                 tags = self.loadTagsFromArray(self.current_stage.tags);
+                console.log(tags);
 
                 self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
                                             self.current_stage.description,'tags':tags}
@@ -1007,7 +1010,9 @@ window.app = new Vue({
         stageDetail : function (stage){
             var self = this;
             self.current_stage = stage;
-            self.reorder_stages_mode =false;
+//            let tags = self.tags.filter(tag => stage.tags.indexOf(tag.id) != -1);
+//            self.current_stage.tags = tags;
+            self.reorder_stages_mode = false;
         },
 
          substageDetail : function (stage){
@@ -1063,6 +1068,7 @@ window.app = new Vue({
     self.reorder_stages_mode = false;
       self.substages = [];
       self.substage_detail = '';
+      self.update_stage_mode = false;
       self.loadSubStages(newVal.id);
       self.heightLevel();
       }
