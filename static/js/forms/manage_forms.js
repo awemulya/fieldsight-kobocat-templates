@@ -71,6 +71,9 @@ window.app = new Vue({
                     <i class="la la-plus"></i> New</a>
                 </div>
                 <div class="widget-body">
+                    <div class="col-sm-12" v-show="current_stage.tags">
+                       Types:  <label v-for="tag in current_stage.tags"> &nbsp; {{tag.name}}, </label>
+                    </div>
                     <p>{{current_stage.description}}</p>
 
                 </div>
@@ -112,7 +115,7 @@ window.app = new Vue({
                             </div>
                             <div class="form-group">
                                 <label for="inputSubStageTags">Tags</label>
-                                <vselect :options="tags" label="name" :value="[]" v-model="substage_form_obj.selected_tags" :allow-empty="true" :loading="loading"
+                                <vselect :options="tags" label="name" :value="[]" v-model="substage_form_obj.tags" :allow-empty="true" :loading="loading"
                                      :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
                                     <template slot="noResult">NO tags Available</template>
                                     <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
@@ -192,7 +195,9 @@ window.app = new Vue({
                     Responses : {{substage_detail.responses_count}} <br>
                     Form Assigned : {{form_name}} <br>
                     Weight : {{substage_detail.weight}} <br>
-                    Tags :[t1, t2, t3] <br>
+                    <div class="col-sm-12" v-show="substage_detail.tags">
+                       Types:  <label v-for="tag in substage_detail.tags"> &nbsp; {{tag.name}}, </label>
+                    </div>
 
                 </div>
             </div>
@@ -220,10 +225,10 @@ window.app = new Vue({
                                 <input type="number" min="0" max="100" v-model="substage_detail.weight" class="form-control" id="inputSubStageWeight">
                             </div>
                             <div class="form-group">
-                                <label for="inputSubStageTags">Tags</label>
-                                <vselect :options="tags" label="name" :value="[]" v-model="substage_detail.selected_tags" :allow-empty="true" :loading="loading"
+                                <label for="inputSubStageTags">Types</label>
+                                <vselect :options="tags" label="name" :value="[]" v-model="substage_detail.tags" :allow-empty="true" :loading="loading"
                                      :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
-                                    <template slot="noResult">NO tags Available</template>
+                                    <template slot="noResult">NO Types Available</template>
                                     <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
                                     No Tags</div></template>
                                 </vselect>
@@ -471,309 +476,311 @@ window.app = new Vue({
       self.image = '';
     },
 
-        updateEm: function(){
-            var self = this;
-            self.new_em = true;
-        },
-        newEm: function(){
-            var self = this;
-            self.new_em = true;
-            self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
-        },
+    updateEm: function(){
+        var self = this;
+        self.new_em = true;
+    },
+    newEm: function(){
+        var self = this;
+        self.new_em = true;
+        self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
+    },
 
-        cancel_em: function(){
-            var self = this;
-            self.new_em = false;
-            self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
-        },
+    cancel_em: function(){
+        var self = this;
+        self.new_em = false;
+        self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
+    },
 
-        save_em: function(){
-             var self = this;
-            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
-            let options = {headers: {'X-CSRFToken':csrf}};
-            let data = self.new_em_obj;
-            function successCallback (response){
-            self.new_em_obj = response.body.em;
-                self.error = "";
-                    new PNotify({
-                  title: 'Material Saved',
-                  text: 'material Detail Saved'
-                });
-
-            }
-
-            function errorCallback (response){
-            console.log(response);
-              new PNotify({
-              title: 'failed',
-              text: 'Failed to Save Em',
-              type: 'error'
+    save_em: function(){
+         var self = this;
+        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+        let data = self.new_em_obj;
+        function successCallback (response){
+        self.new_em_obj = response.body.em;
+            self.error = "";
+                new PNotify({
+              title: 'Material Saved',
+              text: 'material Detail Saved'
             });
-                if(response.body.error){
-                console.log(response.body.error)
-                }else{
 
-                }
+        }
+
+        function errorCallback (response){
+        console.log(response);
+          new PNotify({
+          title: 'failed',
+          text: 'Failed to Save Em',
+          type: 'error'
+        });
+            if(response.body.error){
+            console.log(response.body.error)
+            }else{
+
             }
-       self.$http.post('/forms/api/em/'+ self.substage_detail.id +'/', data, options)
-        .then(successCallback, errorCallback);
+        }
+   self.$http.post('/forms/api/em/'+ self.substage_detail.id +'/', data, options)
+    .then(successCallback, errorCallback);
 //            self.new_em = false;
 //            self.new_em_obj = {'title':'', 'text':'', 'files':[]};
 
-        },
+    },
 
-      heightLevel: function(){
-          var self = this;
-          Vue.nextTick(function () {
-                  var panelHeight = $(window).height() - $("#header").height() - 79;
-                $(".widget-info" ).each(function() {
-                    $(this).css('min-height', panelHeight);
-                });
-                }.bind(self));
-          },
-          activeStage: function(stage){
-            var self = this;
-            if(self.current_stage.hasOwnProperty("id")){
-            return self.current_stage.id == stage.id;
+    heightLevel: function(){
+      var self = this;
+      Vue.nextTick(function () {
+              var panelHeight = $(window).height() - $("#header").height() - 79;
+            $(".widget-info" ).each(function() {
+                $(this).css('min-height', panelHeight);
+            });
+            }.bind(self));
+      },
+    activeStage: function(stage){
+    var self = this;
+    if(self.current_stage.hasOwnProperty("id")){
+    return self.current_stage.id == stage.id;
 
-            }
-            return false;
+    }
+    return false;
 
-          },
-          activeSubStage: function(stage){
-            var self = this;
-            if(self.current_sub_stage.hasOwnProperty("id")){
-            return self.current_sub_stage.id == stage.id;
+  },
+    activeSubStage: function(stage){
+    var self = this;
+    if(self.current_sub_stage.hasOwnProperty("id")){
+    return self.current_sub_stage.id == stage.id;
 
-            }
-            return false;
+    }
+    return false;
 
-          },
+  },
 
-        reorderStages: function (){
-            var self = this;
-            for(let i=0; i< self.stages.length; i++){
-                self.stages_reorder.push(self.stages[i]);
-            }
-
-            self.reorder_stages_mode = true;
-            self.update_stage_mode = false;
-            self.show_ad_substage_form = false;
-            self.current_stage='';
-            self.substages = [];
-
-        },
-        reorderStagesCancel: function (){
-            var self = this;
-            self.stages_reorder = [];
-
-            self.reorder_stages_mode = false;
-
-        },
-        reorderStagesSave: function (){
-            var self = this;
-            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
-        let options = {headers: {'X-CSRFToken':csrf}};
-        let data = {'stages':self.stages_reorder};
-        function successCallback (response){
-        self.stages = response.body.data;
-        self.stages_reorder = [];
-        self.reorder_stages_mode = false;
-
-
-        self.error = "";
-            new PNotify({
-          title: 'saved',
-          text: 'Ordering  Saved'
-        });
-
-        }
-
-        function errorCallback (response){
-        console.log(response);
-          new PNotify({
-          title: 'failed',
-          text: 'Failed to Ordering',
-          type: 'error'
-        });
-            if(response.body.error){
-            console.log(response.body.error)
-            }else{
-
-            }
-        }
-       self.$http.post('/forms/api/stages-reorder/', data, options)
-        .then(successCallback, errorCallback);
-        },
-
-        reorderSubStages: function (){
-            var self = this;
-            for(let i=0; i< self.substages.length; i++){
-                self.substages_reorder.push(self.substages[i]);
-            }
-
-            self.reorder_sub_stages_mode = true;
-            self.update_substage_mode = false;
-            self.current_sub_stage='';
-            self.substage_detail='';
-
-        },
-        reorderSubStagesCancel: function (){
-            var self = this;
-            self.substages_reorder = [];
-
-            self.reorder_sub_stages_mode = false;
-
-        },
-        reorderSubStagesSave: function (){
-            var self = this;
-            let csrf = $('[name = "csrfmiddlewaretoken"]').val();
-        let options = {headers: {'X-CSRFToken':csrf}};
-        let data = {'stages':self.substages_reorder};
-        function successCallback (response){
-        self.substages = response.body.data;
-        self.substages_reorder = [];
-        self.reorder_sub_stages_mode = false;
-
-
-        self.error = "";
-            new PNotify({
-          title: 'saved',
-          text: 'Ordering  Saved'
-        });
-
-        }
-
-        function errorCallback (response){
-        console.log(response);
-          new PNotify({
-          title: 'failed',
-          text: 'Failed to Ordering',
-          type: 'error'
-        });
-            if(response.body.error){
-            console.log(response.body.error)
-            }else{
-
-            }
-        }
-       self.$http.post('/forms/api/substages-reorder/', data, options)
-        .then(successCallback, errorCallback);
-        },
-
-        saveNewSubStage: function () {
+    reorderStages: function (){
         var self = this;
-        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
-        let options = {headers: {'X-CSRFToken':csrf}};
-        self.substage_form_obj.order = self.substages.length;
-        function successCallback (response){
-
-
-        self.error = "";
-            new PNotify({
-          title: 'Sub Stage Saved',
-          text: 'Sub Stage '+ response.body.name + ' Saved'
-        });
-        self.substages.push(response.body);
-            self.show_ad_substage_form = false;
-
+        for(let i=0; i< self.stages.length; i++){
+            self.stages_reorder.push(self.stages[i]);
         }
 
-        function errorCallback (response){
-        console.log(response);
-          new PNotify({
-          title: 'failed',
-          text: 'Failed to Save Sub Stage',
-          type: 'error'
-        });
-            if(response.body.error){
-            console.log(response.body.error)
-              self.error = response.bodyText;
-            }else{
-                self.error = "Form Contains Invalid Inputs";
-
-            }
-        }
-       self.$http.post('/forms/api/sub-stage-detail-create/'+self.current_stage.id+'/', self.substage_form_obj, options)
-        .then(successCallback, errorCallback);
-
+        self.reorder_stages_mode = true;
+        self.update_stage_mode = false;
+        self.show_ad_substage_form = false;
+        self.current_stage='';
+        self.substages = [];
 
     },
-        update_sub_stage: function (){
-                var self = this;
-                self.update_substage_mode = true;
-                self.reorder_sub_stages_mode = false;
-            },
-        loadTagsFromArray: function (tags){
-            if(!tags || tags=="null") return []
-            var tags_array = [];
+    reorderStagesCancel: function (){
+        var self = this;
+        self.stages_reorder = [];
+
+        self.reorder_stages_mode = false;
+
+    },
+    reorderStagesSave: function (){
+        var self = this;
+        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+    let options = {headers: {'X-CSRFToken':csrf}};
+    let data = {'stages':self.stages_reorder};
+    function successCallback (response){
+    self.stages = response.body.data;
+    self.stages_reorder = [];
+    self.reorder_stages_mode = false;
+
+
+    self.error = "";
+        new PNotify({
+      title: 'saved',
+      text: 'Ordering  Saved'
+    });
+
+    }
+
+    function errorCallback (response){
+    console.log(response);
+      new PNotify({
+      title: 'failed',
+      text: 'Failed to Ordering',
+      type: 'error'
+    });
+        if(response.body.error){
+        console.log(response.body.error)
+        }else{
+
+        }
+    }
+   self.$http.post('/forms/api/stages-reorder/', data, options)
+    .then(successCallback, errorCallback);
+    },
+
+    reorderSubStages: function (){
+        var self = this;
+        for(let i=0; i< self.substages.length; i++){
+            self.substages_reorder.push(self.substages[i]);
+        }
+
+        self.reorder_sub_stages_mode = true;
+        self.update_substage_mode = false;
+        self.current_sub_stage='';
+        self.substage_detail='';
+
+    },
+    reorderSubStagesCancel: function (){
+        var self = this;
+        self.substages_reorder = [];
+
+        self.reorder_sub_stages_mode = false;
+
+    },
+    reorderSubStagesSave: function (){
+        var self = this;
+        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+    let options = {headers: {'X-CSRFToken':csrf}};
+    let data = {'stages':self.substages_reorder};
+    function successCallback (response){
+    self.substages = response.body.data;
+    self.substages_reorder = [];
+    self.reorder_sub_stages_mode = false;
+
+
+    self.error = "";
+        new PNotify({
+      title: 'saved',
+      text: 'Ordering  Saved'
+    });
+
+    }
+
+    function errorCallback (response){
+    console.log(response);
+      new PNotify({
+      title: 'failed',
+      text: 'Failed to Ordering',
+      type: 'error'
+    });
+        if(response.body.error){
+        console.log(response.body.error)
+        }else{
+
+        }
+    }
+   self.$http.post('/forms/api/substages-reorder/', data, options)
+    .then(successCallback, errorCallback);
+    },
+
+    saveNewSubStage: function () {
+    var self = this;
+    let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+    let options = {headers: {'X-CSRFToken':csrf}};
+    self.substage_form_obj.order = self.substages.length;
+    var tags = self.substage_form_obj.tags.map(function (a) {
+                    return parseInt(a.id);
+                });
+    self.substage_form_obj.tags = tags;
+    function successCallback (response){
+
+
+    self.error = "";
+        new PNotify({
+      title: 'Sub Stage Saved',
+      text: 'Sub Stage '+ response.body.name + ' Saved'
+    });
+    self.substages.push(response.body);
+        self.show_ad_substage_form = false;
+
+    }
+
+    function errorCallback (response){
+    console.log(response);
+      new PNotify({
+      title: 'failed',
+      text: 'Failed to Save Sub Stage',
+      type: 'error'
+    });
+        if(response.body.error){
+        console.log(response.body.error)
+          self.error = response.bodyText;
+        }else{
+            self.error = "Form Contains Invalid Inputs";
+
+        }
+    }
+   self.$http.post('/forms/api/sub-stage-detail-create/'+self.current_stage.id+'/', self.substage_form_obj, options)
+    .then(successCallback, errorCallback);
+
+
+},
+    update_sub_stage: function (){
             var self = this;
-            for (var i = 0; i < self.tags.length; i++) {
-                    if (tags.indexOf(self.tags[i].id) != -1) {
-                        tags_array.push(self.tags[i]);
-                    }
+            self.update_substage_mode = true;
+            self.reorder_sub_stages_mode = false;
+        },
+    loadTagsFromArray: function (tags){
+        if(!tags || tags=="null") return []
+        var tags_array = [];
+        var self = this;
+        for (var i = 0; i < self.tags.length; i++) {
+                if (tags.indexOf(self.tags[i].id) != -1) {
+                    tags_array.push(self.tags[i]);
                 }
+            }
 
-                return tags_array;
+            return tags_array;
 
-        },
-        update_stage: function (){
-                var self = this;
-                self.update_error = "";
-                var tags = [];
-                tags = self.loadTagsFromArray(self.current_stage.tags);
-                console.log(tags);
-
-                self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
-                                            self.current_stage.description,'tags':tags}
-                self.update_stage_mode = true;
-            },
-        update_sub_done: function (){
-            var self = this;
-            self.update_substage_mode = false;
-        },
-        update_stage_done: function (){
+    },
+    update_stage: function (){
             var self = this;
             self.update_error = "";
-            self.update_stage_mode = false;
+            var tags = [];
+            self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
+                                        self.current_stage.description,'tags':self.current_stage.tags}
+            self.update_stage_mode = true;
         },
-        loadSubStageDetail: function (sub_stage_id) {
-            var self = this;
-            self.loading = true;
-            var options = {};
+    update_sub_done: function (){
+        var self = this;
+        self.update_substage_mode = false;
+    },
+    update_stage_done: function (){
+        var self = this;
+        self.update_error = "";
+        self.update_stage_mode = false;
+    },
+    loadSubStageDetail: function (sub_stage_id) {
+        var self = this;
+        self.loading = true;
+        var options = {};
 
-            function successCallback(response) {
-                self.substage_detail = response.body;
-                self.loading = false;
-            }
+        function successCallback(response) {
+            self.substage_detail = response.body;
+            self.substage_detail.tags = self.loadTagsFromArray(response.body.tags);
+            self.loading = false;
+        }
 
-            function errorCallback() {
-                self.loading = false;
-                console.log('failed');
-            }
-            self.$http.get('/forms/api/sub-stage-detail/'+sub_stage_id+'/', {
-                params: options
-            }).then(successCallback, errorCallback);
-        },
-        loadSubStages: function (stage_id) {
-            var self = this;
-            self.loading = true;
-            var options = {};
+        function errorCallback() {
+            self.loading = false;
+            console.log('failed');
+        }
+        self.$http.get('/forms/api/sub-stage-detail/'+sub_stage_id+'/', {
+            params: options
+        }).then(successCallback, errorCallback);
+    },
+    loadSubStages: function (stage_id) {
+        var self = this;
+        self.loading = true;
+        var options = {};
 
-            function successCallback(response) {
-                self.substages = response.body;
-                self.loading = false;
-            }
+        function successCallback(response) {
+            self.substages = response.body;
+            self.loading = false;
+        }
 
-            function errorCallback() {
-                self.loading = false;
-                console.log('failed');
-            }
-            self.$http.get('/forms/api/sub-stage-list/'+stage_id+'/', {
-                params: options
-            }).then(successCallback, errorCallback);
-        },
-        loadKoboForms: function () {
+        function errorCallback() {
+            self.loading = false;
+            console.log('failed');
+        }
+        self.$http.get('/forms/api/sub-stage-list/'+stage_id+'/', {
+            params: options
+        }).then(successCallback, errorCallback);
+    },
+    loadKoboForms: function () {
             var self = this;
             self.loading = true;
             var options = {};
@@ -791,7 +798,7 @@ window.app = new Vue({
                 params: options
             }).then(successCallback, errorCallback);
         },
-        loadStages: function () {
+    loadStages: function () {
             var self = this;
             self.loading = true;
             var options = {};
@@ -810,21 +817,21 @@ window.app = new Vue({
             }).then(successCallback, errorCallback);
         },
 
-        add_stage : function (){
+    add_stage : function (){
             var self = this;
             self.error = "";
             self.stage_form_obj = {'name': '', 'description':'', 'id':'', 'tags':[]};
             self.show_ad_stage_form = true;
         },
 
-        add_substage : function (){
+    add_substage : function (){
             var self = this;
             self.error = "";
-
-            self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':[], 'xf':''};
+            self.update_stage_mode = false;
+            self.substage_form_obj = {'name': '', 'description':'', 'id':'', 'weight':0, 'tags':self.current_stage.tags, 'xf':''};
             self.show_ad_substage_form = true;
         },
-        save_sub_stage : function (){
+    save_sub_stage : function (){
             var self = this;
             self.error = "";
             if(self.substage_form_obj.name.length >0){
@@ -839,24 +846,24 @@ window.app = new Vue({
 
             }
         },
-        do_update_sub_stage : function (){
+    do_update_sub_stage : function (){
             var self = this;
             self.error = "";
             self.saveExistingSubStage();
 
         },
-        do_update_stage : function (){
+    do_update_stage : function (){
             var self = this;
             self.error = "";
             self.saveExistingStage();
 
         },
-        cancel_stage : function (){
+    cancel_stage : function (){
             var self = this;
             self.show_ad_stage_form = false;
             self.stage_form_obj = {'name': '', 'description':'', 'id':''};
         },
-        cancel_sub_stage : function (){
+    cancel_sub_stage : function (){
             var self = this;
             self.update_substage_mode = false;
             self.show_ad_substage_form = false;
@@ -864,7 +871,7 @@ window.app = new Vue({
             self.current_sub_stage = '';
         },
 
-      saveNewStage: function () {
+    saveNewStage: function () {
         var self = this;
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
@@ -908,6 +915,12 @@ window.app = new Vue({
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf}};
         self.substage_detail.xf = self.form;
+
+        var tags = self.substage_detail.tags.map(function (a) {
+                    return parseInt(a.id);
+                });
+        self.substage_detail.tags = tags;
+
         function successCallback (response){
 
         self.error = "";
@@ -917,8 +930,10 @@ window.app = new Vue({
         });
         var index = self.substages.findIndex(x => x.id==response.body.id);
 
+        var updated_substage = response.body;
+        updated_substage.tags = self.loadTagsFromArray(response.body.tags);
 
-        Vue.set(self.substages, index, response.body);
+        Vue.set(self.substages, index, updated_substage);
 
         self.update_substage_mode = false;
         self.current_sub_stage = response.body;
@@ -991,74 +1006,74 @@ window.app = new Vue({
 
 
     },
-        save_stage : function (){
-            var self = this;
-            if(!self.stage_form_obj.name){
-            self.error = "Stage Name required";
-            return;
-            }
-            self.error = "";
-            if(!self.stage_form_obj.id){
-                self.saveNewStage();
-              }else{
-              console.log("Update stage ");
-    //            self.editStage(show_ad_stage_form);
-              }
+    save_stage : function (){
+        var self = this;
+        if(!self.stage_form_obj.name){
+        self.error = "Stage Name required";
+        return;
+        }
+        self.error = "";
+        if(!self.stage_form_obj.id){
+            self.saveNewStage();
+          }else{
+          console.log("Update stage ");
+//            self.editStage(show_ad_stage_form);
+          }
 //          self.error = '';
 //            self.show_ad_stage_form = false;
-        },
-        stageDetail : function (stage){
-            var self = this;
-            self.current_stage = stage;
-//            let tags = self.tags.filter(tag => stage.tags.indexOf(tag.id) != -1);
-//            self.current_stage.tags = tags;
-            self.reorder_stages_mode = false;
-        },
+    },
+    stageDetail : function (stage){
+        var self = this;
+        self.current_stage = stage;
+            let tags = self.loadTagsFromArray(stage.tags);
+            self.current_stage.tags = tags;
+        self.reorder_stages_mode = false;
+    },
 
-         substageDetail : function (stage){
-            var self = this;
-            self.current_sub_stage = stage;
-        },
-        loadEm : function(){
-            var self = this;
-            self.new_em = true;
-            self.show_ad_substage_form = false;
-            self.update_substage_mode = false;
-            self.reorder_stages_mode = false;
-            if(self.substage_detail.has_em){
-                self.getEm(self.substage_detail.id);
-            }else{
-                self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
-            }
-        },
-        hideEm : function(){
-            var self = this;
-            self.new_em = false;
-            self.show_ad_substage_form = false;
-            self.update_substage_mode = false;
-            self.reorder_stages_mode = false;
+    substageDetail : function (stage){
+        var self = this;
+        self.current_sub_stage = stage;
+    },
+    loadEm : function(){
+        var self = this;
+        self.new_em = true;
+        self.show_ad_substage_form = false;
+        self.update_substage_mode = false;
+        self.reorder_stages_mode = false;
+        if(self.substage_detail.has_em){
+            self.getEm(self.substage_detail.id);
+        }else{
             self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
+        }
+    },
+    hideEm : function(){
+        var self = this;
+        self.new_em = false;
+        self.show_ad_substage_form = false;
+        self.update_substage_mode = false;
+        self.reorder_stages_mode = false;
+        self.new_em_obj = {'title':'', 'text':'', 'em_images':[], 'pdf':''};
 
-        },
-        getEm : function(id){
-            var self = this;
-            self.loading = true;
-            var options = {};
+    },
+    getEm : function(id){
+        var self = this;
+        self.loading = true;
+        var options = {};
 
-            function successCallback(response) {
-                self.new_em_obj = response.body;
-                self.loading = false;
-            }
+        function successCallback(response) {
+            self.new_em_obj = response.body;
+            self.loading = false;
+        }
 
-            function errorCallback() {
-                self.loading = false;
-                console.log('failed');
-            }
-            self.$http.get('/forms/api/get_em/'+id+'/', {
-                params: options
-            }).then(successCallback, errorCallback);
+        function errorCallback() {
+            self.loading = false;
+            console.log('failed');
+        }
+        self.$http.get('/forms/api/get_em/'+id+'/', {
+            params: options
+        }).then(successCallback, errorCallback);
 
-        },
+    },
   },
   watch: {
     current_stage: function(newVal, oldVal) {
