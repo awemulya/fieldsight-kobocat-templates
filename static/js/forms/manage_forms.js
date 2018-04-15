@@ -7,19 +7,20 @@ window.app = new Vue({
     <div class="row">
         <div class="col-md-4">
             <div class="widget-info bg-white padding" >
-                <div class="widget-head">
+                <div class="widget-head" v-show="!show_ad_stage_form">
                     <h4>Stages </h4>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" @click="deployStages()"><i class="la la-warning"></i> Deploy</a>
 
                 </div>
                 <div class="widget-body">
-                    <ul class="stage-list"  v-if="stages.length>0">
+                    <ul class="stage-list"  v-if="!show_ad_stage_form && stages.length>0">
 
                         <li v-bind:class="{ active: activeStage(stage) }" v-for="stage, index in stages"><span>{{index+1}}.</span>
                          <a href="javascript:void(0)" @click="stageDetail(stage)" >{{stage.name}}</a></li>
                     </ul>
-                    <ul class="stage-list" v-if="stages.length==0">
+                    <ul class="stage-list" v-if="!show_ad_stage_form && stages.length==0">
                         <li><span>There are no Stages.. Please Add Stages</span></li>
                     </ul>
 
@@ -62,13 +63,14 @@ window.app = new Vue({
         </div>
         <div class="col-md-4">
 
-            <div class="widget-info bg-white padding" v-if="current_stage">
+            <div class="widget-info bg-white padding" v-if="current_stage && !show_ad_stage_form && !update_stage_mode ">
                 <div class="widget-head">
                     <h4>{{current_stage.name | slice}}</h4>
-                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
-                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form"><i class="la la-edit"></i>Edit</a>
-                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form">
+                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode"><i class="la la-edit"></i>Edit</a>
+                    <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode">
                     <i class="la la-plus"></i> New</a>
+                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" v-show="!show_ad_substage_form && !update_stage_mode" @click="deploySubStages()"><i class="la la-warning"></i> Deploy</a>
                 </div>
                 <div class="widget-body">
                     <div class="col-sm-12" v-show="current_stage.tags && current_stage.tags.length>0">
@@ -82,7 +84,7 @@ window.app = new Vue({
                     <h4 v-show="substages.length==0">No SubStages In this Stage</h4>
                 </div>
                 <div class="widget-body overflow-auto">
-                    <ul class="stage-list padding-left" >
+                    <ul class="stage-list padding-left" v-show="!show_ad_substage_form && !update_stage_mode">
 
                     <li v-bind:class="{ active: activeSubStage(substage) }" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
                          <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
@@ -130,11 +132,10 @@ window.app = new Vue({
 
                         </form>
                     </div>
-
-
                 </div>
+
             </div>
-            <div class="widget-info bg-white padding" v-show="update_stage_mode">
+            <div class="widget-info bg-white padding" v-show="update_stage_mode &&  !show_ad_stage_form">
                 <form class="padding-top">
                     <div class="error" v-show="update_error">
                     {{update_error}}
@@ -164,7 +165,7 @@ window.app = new Vue({
                 </form>
             </div>
 
-            <div class="widget-info bg-white padding" v-show="reorder_stages_mode">
+            <div class="widget-info bg-white padding" v-show="reorder_stages_mode && !show_ad_stage_form">
                 <div class="widget-head">
                     <h4>Reorder  Stages </h4>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderStagesCancel()"><i class="la la-reorder"></i> Cancel Reorder</a>
@@ -183,7 +184,7 @@ window.app = new Vue({
 
         </div>
         <div class="col-md-4">
-            <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode &&  !new_em">
+            <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode &&  !new_em && !show_ad_stage_form && !show_ad_substage_form">
                 <div class="widget-head">
                     <h4>1. {{substage_detail.name}}</h4>
                     <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary  btn-sm" v-show="substage_detail.has_em"><i class="la la-eye"></i> View Material</a>
@@ -201,7 +202,7 @@ window.app = new Vue({
 
                 </div>
             </div>
-            <div class="margin-top" v-show="update_substage_mode && substage_detail">
+            <div class="margin-top" v-show="update_substage_mode && substage_detail && !show_ad_stage_form">
                         <form class="padding-top">
                             <div class="form-group">
                                 <label for="inputSubStageName">Name <span class="error" v-show="add_sub_error"> {{add_sub_error}} </span></label>
@@ -241,7 +242,7 @@ window.app = new Vue({
 
                         </form>
                     </div>
-                    <div class="widget-info bg-white padding" v-show="reorder_sub_stages_mode">
+                    <div class="widget-info bg-white padding" v-show="reorder_sub_stages_mode && !show_ad_stage_form">
                         <div class="widget-head">
                             <h4>Reorder  Sub Stages </h4>
                             <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary margin-top" @click="reorderSubStagesCancel()"><i class="la la-reorder"></i> Cancel Reorder</a>
@@ -258,7 +259,7 @@ window.app = new Vue({
 
                     </div>
 
-                    <div class="widget-info bg-white padding" v-show="new_em">
+                    <div class="widget-info bg-white padding" v-show="new_em && !show_ad_stage_form">
                         <form class="padding-top">
                         <div class="form-group">
 
@@ -1073,6 +1074,12 @@ window.app = new Vue({
             params: options
         }).then(successCallback, errorCallback);
 
+    },
+    deployStages: function(){
+    var self = this;
+    },
+    deploySubStages: function(){
+    var self = this;
     },
   },
   watch: {
