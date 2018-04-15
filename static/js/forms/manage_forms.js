@@ -71,7 +71,7 @@ window.app = new Vue({
                     <i class="la la-plus"></i> New</a>
                 </div>
                 <div class="widget-body">
-                    <div class="col-sm-12" v-show="current_stage.tags">
+                    <div class="col-sm-12" v-show="current_stage.tags && current_stage.tags.length>0">
                        Types:  <label v-for="tag in current_stage.tags"> &nbsp; {{tag.name}}, </label>
                     </div>
                     <p>{{current_stage.description}}</p>
@@ -195,7 +195,7 @@ window.app = new Vue({
                     Responses : {{substage_detail.responses_count}} <br>
                     Form Assigned : {{form_name}} <br>
                     Weight : {{substage_detail.weight}} <br>
-                    <div class="col-sm-12" v-show="substage_detail.tags">
+                    <div class="col-sm-12" v-show="substage_detail.tags && substage_detail.tags.length>0">
                        Types:  <label v-for="tag in substage_detail.tags"> &nbsp; {{tag.name}}, </label>
                     </div>
 
