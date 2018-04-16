@@ -56,9 +56,10 @@
   list-style: none;
   background-color: $dropdown-bg;
   background-clip: padding-box;
-  //border: $dropdown-border-width solid $dropdown-border-color;
+  border: $dropdown-border-width solid $dropdown-border-color;
   @include border-radius($border-radius);
   @include box-shadow($dropdown-box-shadow);
+  //border-top: 0;
 }
 .large-dropdown-menu{
 	min-width: $large-dropdown-min-width;
@@ -91,6 +92,7 @@
     color: $dropdown-link-hover-color;
     text-decoration: none;
     background-color: $dropdown-link-hover-bg;
+    
   }
 
   &.active,
@@ -98,6 +100,13 @@
     color: $dropdown-link-active-color;
     text-decoration: none;
     background-color: $dropdown-link-active-bg;
+    a{
+      color: $white;
+    }
+
+    .notification-highlight-time{
+      color: rgba(255,255,255,0.3);
+    }
   }
 
   &.disabled,
