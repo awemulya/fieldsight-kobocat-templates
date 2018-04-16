@@ -1,3 +1,4 @@
+Vue.use(VueHighcharts);
 
 
 window.app = new Vue({
@@ -83,5 +84,178 @@ window.app = new Vue({
     var self= this;
     self.loadDatas();
   },
+
+})
+
+window.app = new Vue({
+  el: '#graphs',
+  template: `
+    <div class="row">
+        <div class="col-md-6">
+							<div class="widget-info margin-top bg-white padding">
+								<div class="widget-head">
+									<h4>Form Submissions</h4>
+								</div>
+								<div class="widget-body">
+									 <highcharts :options="submissions_data" ref="highcharts"></highcharts>
+                                       <!-- <button @click="updateCredits">update credits</button> -->
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="widget-info margin-top bg-white padding">
+								<div class="widget-head">
+									<h4>Site Progress</h4>
+								</div>
+								<div class="widget-body">
+									 <highcharts :options="progress_data" ref="highcharts"></highcharts>
+                                        <!-- <button @click="updateCredits">update credits</button> -->
+								</div>
+							</div>
+						</div>
+
+    </div> `,
+  data: {
+        progress_data: {},
+        submissions_data :{},
+        loading: false,
+        project_id: configure_settings.project_id,
+        scrolled: false,
+  },
+
+  methods:{
+    loadDatas : function (){
+    var self = this;
+
+    var self = this;
+    self.loading = true;
+    var options = {};
+
+
+
+    function successCallback(response) {
+        self.progress_data = {
+                chart: {
+                    type: 'column'
+                },
+              title: {
+                text: 'Site Progress',
+                x: -20 //center
+              },
+              subtitle: {
+                text: '',
+                x: -20
+              },
+              xAxis: {
+                categories: response.body.pl
+              },
+              yAxis: {
+                title: {
+                  text: 'Progress'
+                },
+                plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+                }]
+              },
+              tooltip: {
+                valueSuffix: ' Site(s)'
+              },
+              credits: {
+                enabled : false
+                },
+              legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0,
+                enabled: false,
+              },
+              series: [{
+                name: 'Progress',
+                data: response.body.pd,
+              },]
+            };
+
+        self.submissions_data = {
+              title: {
+                text: 'Form Submissions',
+                x: -20 //center
+              },
+              subtitle: {
+                text: 'Number of form submissions in different timeline',
+                x: -20
+              },
+              xAxis: {
+                categories: response.body.sl
+              },
+              yAxis: {
+                title: {
+                  text: 'Submissions'
+                },
+                plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+                }]
+              },
+              credits: {
+                enabled : false
+                },
+              tooltip: {
+            //    valueSuffix: '°C'
+              },
+              legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0,
+                enabled: false,
+              },
+              series: [{
+                name: 'No OF Submissions',
+                data: response.body.sd,
+              }]
+            };
+        self.loading = false;
+    }
+
+    function errorCallback(errorResponse) {
+        self.loading = false;
+        console.log(errorResponse);
+    }
+    self.$http.get('/fieldsight/api/project_graphs/'+self.project_id+'/', {
+        params: options
+    }).then(successCallback, errorCallback);
+
+    },
+    updateCredits: function() {
+    	var chart = this.$refs.highcharts.chart;
+      chart.credits.update({
+        style: {
+          color: '#' + (Math.random() * 0xffffff | 0).toString(16)
+        }
+      });
+    },
+    handleScroll: function () {
+        var self = this;
+        if(window.scrollY>500){
+//            console.log(window.scrollY);
+            if(! self.loading){
+                self.loadDatas();
+            }
+        }
+        self.scrolled = window.scrollY > 0;
+  },
+  },
+  created(){
+    var self= this;
+
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+  window.removeEventListener('scroll', this.handleScroll);
+    }
 
 })
