@@ -13,6 +13,8 @@
     padding: $table-cell-padding;
     vertical-align: top;
     border-top: $table-border-width solid $table-border-color;
+    min-width: 150px;
+    font-size: 15px;
   }
 
   thead th {
@@ -62,7 +64,7 @@
   thead {
     th,
     td {
-      border-bottom-width: (2 * $table-border-width);
+      border-bottom-width: (1 * $table-border-width);
     }
   }
 }
@@ -159,6 +161,15 @@
 // will display normally.
 
 .table-responsive {
+  display: block;
+    width: 100%;
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar; // See https://github.com/twbs/bootstrap/pull/10057
+
+    // Prevent double border on horizontal scroll due to use of `display: block;`
+    &.table-bordered {
+      border: 0;
+    }
   @include media-breakpoint-down(md) {
     display: block;
     width: 100%;

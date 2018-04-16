@@ -47,7 +47,6 @@
 .leaflet-container .leaflet-tile-pane img,
 .leaflet-container img.leaflet-image-layer {
 	max-width: none !important;
-	max-height: none !important;
 	}
 
 .leaflet-container.leaflet-touch-zoom {
@@ -56,10 +55,7 @@
 	}
 .leaflet-container.leaflet-touch-drag {
 	-ms-touch-action: pinch-zoom;
-	/* Fallback for FF which doesn't support pinch-zoom */
-	touch-action: none;
-	touch-action: pinch-zoom;
-}
+	}
 .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
 	-ms-touch-action: none;
 	touch-action: none;
@@ -232,8 +228,7 @@
 .leaflet-image-layer,
 .leaflet-pane > svg path,
 .leaflet-tile-container {
-	/*pointer-events: none;*/
-	pointer-events: visible;
+	pointer-events: none;
 	}
 
 .leaflet-marker-icon.leaflet-interactive,

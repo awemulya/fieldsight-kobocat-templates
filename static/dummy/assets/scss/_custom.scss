@@ -33,8 +33,16 @@ img{
 .margin{
 	margin: 15px;
 }
+.margin-right{
+	margin-right: 15px;
+}
 .margin-top{
 	margin-top: 15px;
+}
+
+.margin-top-sm{
+	margin-top: 10px;
+
 }
 .margin-bottom{
 	margin-bottom: 15px;
@@ -446,6 +454,7 @@ a.mini-stat{
 .mini-stat-info {
     font-size: 12px;
     padding-top: 2px;
+    text-transform: capitalize;
 	span {
 		display: block;
 		font-size: 24px;
@@ -692,15 +701,16 @@ margin-right: 15px;
 	}
 }
 
-.widget-scolling-list{
+.widget-scrolling-list{
 	.widget-body{
-		height: 181px;
+		/*height: 181px;*/
+		height: 207px;
 		overflow: hidden;
 		
 	}
 }
 
-.widget-scolling-large-list{
+.widget-scrolling-large-list{
 	.widget-body{
 		height: 450px;
 		overflow: hidden;
@@ -839,7 +849,7 @@ border-bottom: 0;
 }
 
 .collapse.show{
-border-top: 1px solid rgba(0,0,0,0.125);
+/*border-top: 1px solid rgba(0,0,0,0.125);*/
 }
 
 .stage-name{
@@ -1098,16 +1108,17 @@ float: left;
 
 
 .photo-holder{
-	height: 175px;
+	height: 165px;
 	overflow: hidden;
 	position: relative;
 	width: 100%;
 	img{
 		position: absolute;
-		left: 0;
+		left: -45%;
 		top: 0;
 		bottom: 0;
-		max-width: 150%;
+		max-width: 185%;
+    	
 	}
 	a{
 		position: absolute;
@@ -1227,3 +1238,50 @@ color: #FFF;
 		}
 	}
 }
+
+.tab-custom-height{
+	&.tab-content{
+		>.active{
+			/*min-height: 390px;*/
+			min-height: 200px;
+		}
+	}
+}
+
+.meta-item{
+	p{
+		color: #333;
+		font-size: 13px;
+	}
+}
+
+.tabular-report{
+	td, th{
+		font-size: 13px;
+    	padding: .35rem;
+    }
+}
+
+
+.contact-info-item{
+    font-size: 14px;
+    color: #666;
+    padding: 20px;
+    padding-left: 45px;
+    position: relative;
+    background: rgba(0,0,0,0.05);
+    i{
+	    position: absolute;
+	    left: 12px;
+	    font-size: 17px;
+	    top: 24px;
+	}
+}
+
+.event-present{
+	background: $event-present;
+}
+
+.event-absent{
+	background: $event-absent;
+	}

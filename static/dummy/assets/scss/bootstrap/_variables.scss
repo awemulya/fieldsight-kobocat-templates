@@ -113,6 +113,21 @@ $theme-colors: (
   dark: $gray-800
 ) !default;
 
+$tbl-cell-colors: (
+  inactive: $gray-200,
+  primary: lighten($app-primary, 30%),
+  secondary: $gray-600,
+  success: lighten($green, 30%),
+  info: lighten($cyan, 30%),
+  warning: lighten($yellow, 30%),
+  danger: lighten($red, 30%),
+  light: $gray-100,
+  dark: $gray-800
+) !default;
+
+$event-present : $green;
+$event-absent: $red;
+
 // Set a specific jump point for requesting color jumps
 $theme-color-interval: 8% !default;
 
@@ -311,9 +326,9 @@ $table-hover-bg:                rgba($black,.075) !default;
 $table-active-bg:               $table-hover-bg !default;
 
 $table-border-width:            $border-width !default;
-$table-border-color:            $gray-200 !default;
+$table-border-color:            rgba(0,0,0,0.1) !default;
 
-$table-head-bg:                 $gray-200 !default;
+$table-head-bg:                 $gray-400 !default;
 $table-head-color:              $gray-700 !default;
 
 $table-inverse-bg:              $gray-900 !default;
@@ -494,12 +509,12 @@ $form-feedback-invalid-color: theme-color("danger") !default;
 // Dropdown menu container and contents.
 
 $dropdown-min-width:             10rem !default;
-$large-dropdown-min-width:       260px !default; //10rem !default;
+$large-dropdown-min-width:       360px !default; //10rem !default;
 $large-dropdown-max-width:       360px !default; //10rem !default;
 $dropdown-padding-y:             .5rem !default;
 $dropdown-spacer:                .125rem !default;
 $dropdown-bg:                    $white !default;
-$dropdown-border-color:          rgba($black,.15) !default;
+$dropdown-border-color:          rgba($black,.05) !default;
 $dropdown-border-width:          $border-width !default;
 $dropdown-divider-bg:            $gray-200 !default;
 $dropdown-box-shadow:            0 .5rem 1rem rgba($black,.175) !default;
