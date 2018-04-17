@@ -4,7 +4,7 @@ Vue.use(VueHighcharts);
 window.app = new Vue({
   el: '#peoples',
   template: `
-    <div class="widget-info widget-scolling-large-list margin-top bg-white padding" data-mh="eq111">
+    <div class="widget-info widget-scrolling-large-list margin-top bg-white padding" data-mh="eq111">
         <div class="widget-head">
             <h4> People </h4>
             <a class="btn btn-xs btn-primary" :href="new_people_url"><i class="la la-plus"></i></a>
