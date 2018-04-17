@@ -23,7 +23,7 @@ window.app = new Vue({
 			</form>
 		    </div>
 
-		    <a href="#" class="project-item-wrap clearfix" v-for="u in peoples">
+		    <a href="#" class="project-item-wrap margin-top clearfix" v-for="u in peoples">
 			<div class="project-logo">
 				<img :src="u.image" alt="" width="50" height="50">
 			</div>
@@ -74,6 +74,13 @@ window.app = new Vue({
     }).then(successCallback, errorCallback);
 
     },
+    heightLevel: function(){
+      var self = this;
+      Vue.nextTick(function () {
+              $(".widget-scrolling-large-list > .widget-body, .widget-scrolling-list > .widget-body").
+              niceScroll({cursorborder:"",cursorcolor:"#00628e"});
+            }.bind(self));
+      },
     searchChange : function (){
         var self = this;
         self.loadDatas();
@@ -83,6 +90,7 @@ window.app = new Vue({
   created(){
     var self= this;
     self.loadDatas();
+    self.heightLevel();
   },
 
 })
@@ -242,17 +250,25 @@ window.app = new Vue({
         var self = this;
         if(window.scrollY>500){
 //            console.log(window.scrollY);
-            if(! self.loading){
+            if(!self.loading && !self.submissions_data.hasOwnProperty("title")){
                 self.loadDatas();
             }
         }
         self.scrolled = window.scrollY > 0;
   },
+  heightLevel: function(){
+      var self = this;
+      Vue.nextTick(function () {
+              $(".widget-scrolling-large-list > .widget-body, .widget-scrolling-list > .widget-body").
+              niceScroll({cursorborder:"",cursorcolor:"#00628e"});
+            }.bind(self));
+      },
   },
   created(){
     var self= this;
 
     window.addEventListener('scroll', this.handleScroll);
+    self.heightLevel();
   },
   destroyed () {
   window.removeEventListener('scroll', this.handleScroll);
