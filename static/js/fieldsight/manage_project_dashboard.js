@@ -290,12 +290,16 @@ window.app = new Vue({
                   <div class="table-responsive">
                       <table class="table table-bordered table-hover tabular-report">
                         <thead class="thead-default">
-                          <tr v-for="header in headers">
+                          <tr>
+                          <template v-for="header in headers">
                             <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }} - {{ header['name'] }}</th>
                             <th v-else scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['name'] }}</th>
+                          </template>
                           </tr>
-                          <tr v-for="sub_header in sub_headers">
+                          <tr>
+                          <template v-for="sub_header in sub_headers">
                             <th scope="col">{{ sub_header[0] }} - {{ sub_header[1] }}</th>
+                          </template>
                           </tr>
                         </thead>
                         <tbody>
