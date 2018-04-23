@@ -36,8 +36,7 @@ function RegionViewModel(project) {
                     });
                 self.allRegions(mappedData);
                 self.regions(mappedData);
-
-            },
+                },
             error: function (errorThrown) {
                 App.hideProcessing();
                 console.log(errorThrown);
