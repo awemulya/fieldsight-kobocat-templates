@@ -298,7 +298,7 @@ window.app = new Vue({
                           </tr>
                           <tr>
                           <template v-for="sub_header in sub_headers">
-                            <th scope="col">{{ sub_header[0] }} - {{ sub_header[1] }}</th>
+                            <th scope="col">{{ sub_header[1] }} - {{ sub_header[0] }} </th>
                           </template>
                           </tr>
                         </thead>
