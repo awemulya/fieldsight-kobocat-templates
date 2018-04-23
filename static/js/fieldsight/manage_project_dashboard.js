@@ -306,8 +306,12 @@ window.app = new Vue({
 
                           <tr v-for="row in rows">
                           <template v-for="cell in row">
-                            <th v-if="typeof cell === 'string'" class="cell-inactive">{{ cell }}</th>
-                            <th v-else class="cell-inactive">{{ cell[0] }} / {{ cell[1] }}</th>
+                            <template v-if="typeof cell === 'string'">
+                              <th class="cell-inactive">{{ cell }}</th>
+                            </template>
+                            <template v-else>
+                              <th :class="cell[2]">{{ cell[0] }} / {{ cell[1] }}</th>
+                            </template>
                           </template>
                           </tr>
                         
