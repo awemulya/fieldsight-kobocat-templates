@@ -10,8 +10,8 @@ window.app = new Vue({
                 <div class="widget-head" v-show="!show_ad_stage_form">
                     <h4>Stages </h4>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
-                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
-                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" @click="deployStages()"><i class="la la-warning"></i> Deploy</a>
+                    <a v-if="stages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a v-if="stages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" @click="deployStages()"><i class="la la-warning"></i> Deploy</a>
 
                 </div>
                 <div class="widget-body">
@@ -66,11 +66,11 @@ window.app = new Vue({
             <div class="widget-info bg-white padding" v-if="current_stage && !show_ad_stage_form && !update_stage_mode ">
                 <div class="widget-head">
                     <h4>{{current_stage.name | slice}}</h4>
-                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
+                    <a  href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode && substages.length>0" @click="reorderSubStages()"><i class="la la-reorder"></i> Reorder</a>
                     <a  href="javascript:void(0)" @click="update_stage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode"><i class="la la-edit"></i>Edit</a>
                     <a href="javascript:void(0)" @click="add_substage" class="btn btn-sm btn-primary" v-show="!show_ad_substage_form && !update_stage_mode">
                     <i class="la la-plus"></i> New</a>
-                    <a  v-show="substages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" v-show="!show_ad_substage_form && !update_stage_mode" @click="deploySubStages()"><i class="la la-warning"></i> Deploy</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" v-show="!show_ad_substage_form && !update_stage_mode && substages.length>0" @click="deploySubStages()"><i class="la la-warning"></i> Deploy</a>
                 </div>
                 <div class="widget-body">
                     <div class="col-sm-12" v-show="current_stage.tags && current_stage.tags.length>0">
@@ -186,10 +186,11 @@ window.app = new Vue({
         <div class="col-md-4">
             <div class="widget-info bg-white padding" v-show="substage_detail && !update_substage_mode &&  !new_em && !show_ad_stage_form && !show_ad_substage_form">
                 <div class="widget-head">
-                    <h4>1. {{substage_detail.name}}</h4>
+                    <h4>{{substage_detail.order+1}} {{substage_detail.name}} </h4>
                     <a href="javascript:void(0)" @click="loadEm" class="btn btn-primary  btn-sm" v-show="substage_detail.has_em"><i class="la la-eye"></i> View Material</a>
                     <a href="javascript:void(0)" @click="newEm" class="btn btn-primary btn-sm" v-show="!substage_detail.has_em"><i class="la la-plus"></i> New Material</a>
                     <a href="javascript:void(0)" @click="update_sub_stage" class="btn btn-primary  btn-sm"><i class="la la-edit"></i> Edit</a>
+                    <a href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" v-show="!show_ad_substage_form && !update_stage_mode && has_form && !substage_detail.is_deployed" @click="deploySubStage()"><i class="la la-warning"></i> Deploy</a>
                 </div>
                 <div class="widget-body">
                     <p>{{substage_detail.description}}</p>
@@ -1075,11 +1076,46 @@ window.app = new Vue({
         }).then(successCallback, errorCallback);
 
     },
+
     deployStages: function(){
-    var self = this;
+        var self = this;
     },
+
     deploySubStages: function(){
-    var self = this;
+        var self = this;
+    },
+
+    deploySubStage: function(){
+        var self = this;
+        var api_url = '/forms/api/set-deploy-sub-stage/' + self.is_project + '/' + self.pk+'/' + self.current_sub_stage.id + '/'
+        console.log(self.current_sub_stage.id);
+
+        self.loading = true;
+        var options = {};
+
+        function successCallback(response) {
+            self.current_sub_stage = response.body;
+            self.loading = false;
+            new PNotify({
+                  title: 'Sub Stage Deployed',
+                  text: 'Sub Stage Deployed'
+                });
+        }
+
+        function errorCallback(errorThrown) {
+            self.loading = false;
+
+            console.log(errorThrown);
+             new PNotify({
+                  title: 'Failed',
+                  text: 'Sub Stage Deployed Failed'
+                });
+        }
+        self.$http.get(api_url, {
+            params: options
+        }).then(successCallback, errorCallback);
+
+
     },
   },
   watch: {
@@ -1132,6 +1168,14 @@ window.app = new Vue({
             return self.substage_detail.stage_forms.xf.title;
             }
         return "No Form Assigned Yet";
+    },
+
+    has_form: function() {
+        var self = this;
+        if(self.substage_detail.stage_forms){
+            return true;
+            }
+        return false;
     },
 
     },
