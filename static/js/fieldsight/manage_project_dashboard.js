@@ -275,3 +275,108 @@ window.app = new Vue({
     }
 
 })
+
+
+window.app = new Vue({
+  el: '#stagedatas',
+  template: `
+    <div class="col-md-12">
+              <div class="widget-info margin-top bg-white padding">
+                <div class="widget-head">
+                  <h4>Tabular Report</h4>
+                  <a class="btn btn-xs btn-primary" href="#"><i class="la la-plus"></i></a>
+                </div>
+                <div class="widget-body">
+                  <div class="table-responsive">
+                      <table class="table table-bordered table-hover tabular-report">
+                        <thead class="thead-default">
+                          <tr>
+                          <template v-for="header in headers">
+                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }} - {{ header['name'] }}</th>
+                            <th v-else scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['name'] }}</th>
+                          </template>
+                          </tr>
+                          <tr>
+                          <template v-for="sub_header in sub_headers">
+                            <th scope="col">{{ sub_header[1] }} - {{ sub_header[0] }} </th>
+                          </template>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <tr v-for="row in rows">
+                          <template v-for="cell in row">
+                            <template v-if="typeof cell === 'string'">
+                              <th class="cell-inactive">{{ cell }}</th>
+                            </template>
+                            <template v-else>
+                              <th :class="cell[2]">{{ cell[0] }} / {{ cell[1] }}</th>
+                            </template>
+                          </template>
+                          </tr>
+                        
+                        </tbody>
+                      </table>
+                  </div>
+                </div>
+              </div>
+            </div>`,
+  data: {
+        headers: [],
+        sub_headers :[],
+        rows :[],
+        loading: false,
+        project_id: configure_settings.project_id,
+     },
+
+  methods:{
+    loadDatas : function (){
+    var self = this;
+
+    var self = this;
+    self.loading = true;
+    if(self.search_key){
+        var options = {'name':self.search_key};
+
+    }else{
+        var options = {};
+
+    }
+
+    function successCallback(response) {
+        self.headers = response.body.content.head_cols;
+        self.sub_headers = response.body.content.sub_stages;
+        self.rows = response.body.content.rows;
+        self.loading = false;
+    }
+
+    function errorCallback() {
+        self.loading = false;
+        console.log('failed');
+    }
+
+    self.$http.get('/fieldsight/ProjectDashboardStageResponsesStatus/'+self.project_id+'/', {
+        params: options
+    }).then(successCallback, errorCallback);
+
+    },
+    heightLevel: function(){
+      var self = this;
+      Vue.nextTick(function () {
+              $(".widget-scrolling-large-list > .widget-body, .widget-scrolling-list > .widget-body").
+              niceScroll({cursorborder:"",cursorcolor:"#00628e"});
+            }.bind(self));
+      },
+    searchChange : function (){
+        var self = this;
+        self.loadDatas();
+
+    },
+  },
+  created(){
+    var self= this;
+    self.loadDatas();
+    self.heightLevel();
+  },
+
+})
