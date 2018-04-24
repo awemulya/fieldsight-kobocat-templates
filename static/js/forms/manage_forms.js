@@ -8,7 +8,7 @@ window.app = new Vue({
         <div class="col-md-4">
             <div class="widget-info bg-white padding" >
                 <div class="widget-head" v-show="!show_ad_stage_form">
-                    <h4>Stages </h4>
+                    <h4>Stages <span class="la la-bars pull-right">Weight </span> </h4>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
                     <a v-if="stages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
                     <a v-if="stages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" @click="deployStages()"><i class="la la-warning"></i> Deploy</a>
@@ -18,7 +18,7 @@ window.app = new Vue({
                     <ul class="stage-list"  v-if="!show_ad_stage_form && stages.length>0">
 
                         <li v-bind:class="{ active: activeStage(stage) }" v-for="stage, index in stages"><span>{{index+1}}.</span>
-                         <a href="javascript:void(0)" @click="stageDetail(stage)" >{{stage.name}}</a></li>
+                         <a href="javascript:void(0)" @click="stageDetail(stage)" >{{stage.name}}</a> <span class=" la la-bars pull-right">{{stage.weight_calculated}} % </span></li>
                     </ul>
                     <ul class="stage-list" v-if="!show_ad_stage_form && stages.length==0">
                         <li><span>There are no Stages.. Please Add Stages</span></li>
@@ -80,14 +80,16 @@ window.app = new Vue({
 
                 </div>
                 <div class="widget-head margin-top padding-left" v-show="!show_ad_substage_form">
-                    <h4 v-show="substages.length>0">Sub Stages</h4>
-                    <h4 v-show="substages.length==0">No SubStages In this Stage</h4>
+                    <h4 v-if="substages.length>0">Sub Stages <span class="pull-right">Weight </span></h4>
+                    <h4 v-if="substages.length==0">No SubStages In this Stage </h4>
                 </div>
                 <div class="widget-body overflow-auto">
                     <ul class="stage-list padding-left" v-show="!show_ad_substage_form && !update_stage_mode">
 
                     <li v-bind:class="{ active: activeSubStage(substage) }" v-for="substage, sindex in substages"><span>{{sindex+1}}.</span>
-                         <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a></li>
+                         <a  href="javascript:void(0)" @click="substageDetail(substage)">{{substage.name}}</a>
+                         <i class="la la-bars pull-right">{{substage.weight}}</i>
+                     </li>
                     </ul>
 
 
@@ -807,6 +809,16 @@ window.app = new Vue({
 
             function successCallback(response) {
                 self.stages = response.body;
+                let total = 0
+                self.stages.map(function (a) {
+                        total += parseInt(a.sub_stage_weight);
+                });
+                for(let i=0; i< self.stages.length; i++){
+                    self.stages[i].weight_calculated = Math.round((self.stages[i].sub_stage_weight) /
+                            (total)* Math.pow(10, 2))
+
+                }
+
                 self.loading = false;
             }
 
@@ -1079,10 +1091,65 @@ window.app = new Vue({
 
     deployStages: function(){
         var self = this;
+        var api_url = '/forms/api/set-deploy-all-stages/' + self.is_project + '/' + self.pk+'/'
+
+        self.loading = true;
+        var options = {};
+
+        function successCallback(response) {
+            console.log(response);
+
+            new PNotify({
+                  title: 'Stages Deployed',
+                  text: 'Stages Deployed'
+                });
+        }
+
+        function errorCallback(errorThrown) {
+            self.loading = false;
+
+            console.log(errorThrown);
+             new PNotify({
+                  title: 'Failed',
+                  text: 'Stages Deployed Failed'
+                });
+        }
+        self.$http.get(api_url, {
+            params: options
+        }).then(successCallback, errorCallback);
     },
 
     deploySubStages: function(){
         var self = this;
+        var api_url = '/forms/api/set-deploy-main-stage/' + self.is_project + '/' + self.pk+'/' + self.current_stage.id + '/'
+
+        self.loading = true;
+        var options = {};
+
+        function successCallback(response) {
+            console.log(response);
+            self.current_stage = response.body;
+            let tags = self.loadTagsFromArray(response.body.tags);
+            self.current_stage.tags = tags;
+            self.loading = false;
+            new PNotify({
+                  title: 'Stage Deployed',
+                  text: 'Stage Deployed'
+                });
+        }
+
+        function errorCallback(errorThrown) {
+            self.loading = false;
+
+            console.log(errorThrown);
+             new PNotify({
+                  title: 'Failed',
+                  text: 'Stage Deployed Failed'
+                });
+        }
+        self.$http.get(api_url, {
+            params: options
+        }).then(successCallback, errorCallback);
     },
 
     deploySubStage: function(){
