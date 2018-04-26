@@ -287,7 +287,7 @@ window.app = new Vue({
                   <a class="btn btn-xs btn-primary" href="#"><i class="la la-plus"></i></a>
                 </div>
                 <div class="widget-body">
-                  <template v-if="sub_headers">
+                  <template v-if="sub_headers.length > 0">
                   <div class="table-responsive">
                       <table class="table table-bordered table-hover tabular-report">
                         <thead class="thead-default">
