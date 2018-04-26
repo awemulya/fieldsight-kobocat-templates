@@ -287,18 +287,19 @@ window.app = new Vue({
                   <a class="btn btn-xs btn-primary" href="#"><i class="la la-plus"></i></a>
                 </div>
                 <div class="widget-body">
+                  <template v-if="sub_headers.length > 0 && rows.length > 0 ">
                   <div class="table-responsive">
                       <table class="table table-bordered table-hover tabular-report">
                         <thead class="thead-default">
                           <tr>
                           <template v-for="header in headers">
-                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }} - {{ header['name'] }}</th>
+                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }}</th>
                             <th v-else scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['name'] }}</th>
                           </template>
                           </tr>
                           <tr>
                           <template v-for="sub_header in sub_headers">
-                            <th scope="col">{{ sub_header[1] }} - {{ sub_header[0] }} </th>
+                            <th scope="col">{{ sub_header[1] }}</th>
                           </template>
                           </tr>
                         </thead>
@@ -310,7 +311,7 @@ window.app = new Vue({
                               <th class="cell-inactive">{{ cell }}</th>
                             </template>
                             <template v-else>
-                              <th :class="cell[2]">{{ cell[0] }} / {{ cell[1] }}</th>
+                              <th :class="cell[2]">{{ cell[1] }}</th>
                             </template>
                           </template>
                           </tr>
@@ -318,6 +319,10 @@ window.app = new Vue({
                         </tbody>
                       </table>
                   </div>
+                  </template>
+                  <template v-else>
+                    <span>No Data</span>
+                  </template>
                 </div>
               </div>
             </div>`,
