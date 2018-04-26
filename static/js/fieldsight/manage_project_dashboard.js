@@ -280,7 +280,7 @@ window.app = new Vue({
 window.app = new Vue({
   el: '#stagedatas',
   template: `
-    <div class="col-md-12">
+    <div class="row"><div class="col-md-12">
               <div class="widget-info margin-top bg-white padding">
                 <div class="widget-head">
                   <h4>Tabular Report</h4>
@@ -325,6 +325,7 @@ window.app = new Vue({
                   </template>
                 </div>
               </div>
+            </div>
             </div>`,
   data: {
         headers: [],
