@@ -320,6 +320,9 @@ window.app = new Vue({
                       </table>
                   </div>
                   </template>
+                  <template v-else>
+                    <span>No Data.</span>
+                  </template>
                 </div>
               </div>
             </div>`,
