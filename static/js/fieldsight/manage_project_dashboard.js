@@ -327,7 +327,7 @@ window.app = new Vue({
               </div>
             </div>`,
   data: {
-        status: "Loading"
+        status: "Loading",
         headers: [],
         sub_headers :[],
         rows :[],
