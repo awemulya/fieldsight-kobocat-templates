@@ -40,41 +40,43 @@ progressText = ['0%','0-20%','20-40%','40-60%','60-80%','80-100%', '100%'];
 //end array legend
 
 //console.log(data.features.length);
-        //if(data.features.length!=0){
-           //map = L.map("map",{layers:osm}).fitBounds(markers); 
-       // }
-        //else{
-            map = L.map("map",{layers:osm}).setView([27, 85], 6);;
-        //}
+//if(data.features.length!=0){
+//map = L.map("map",{layers:osm}).fitBounds(markers); 
+// }
+//else{
+map = L.map("map",{layers:osm}).setView([27, 85], 6);;
+//}
 
 
 
-   site_response = new L.geoJson(coordinates, {
-            pointToLayer: function(feature, latlng) {
-                 console.log(feature);
-                
-                    icon = L.icon({
-                                iconSize: [25, 25],
-                                iconAnchor: [13, 27],
-                                popupAnchor:  [1, -24],
-                                iconUrl: static_url+'images/marker-red.png'
-                    });
-// console.log(latlng);                
-lonlat={'lat': latlng['lng'], 'lng': latlng['lat']}
-                var marker = L.marker(lonlat, {icon: icon});
+site_response = new L.geoJson(coordinates, {
+    pointToLayer: function(feature, latlng) {
+        console.log(feature);
 
-               
-return marker;
-            }, 
+        icon = L.icon({
+            iconSize: [25, 25],
+            iconAnchor: [13, 27],
+            popupAnchor:  [1, -24],
+            iconUrl: static_url+'images/marker-red.png'
+        });
+        // console.log(latlng);                
+        lonlat={'lat': latlng['lng'], 'lng': latlng['lat']}
+        var marker = L.marker(lonlat, {icon: icon});
 
-            onEachFeature: function(feature, layer) {
-            layer.bindPopup("Submitted By:"+feature.properties.submitted_by+"<br><a href="+'/forms/forms/'+feature.properties.fs_uuid+'#/'+feature.properties.id+" target='_blank'>View Submission</a>");
 
-                console.log(layer);
-            }
-                }).addTo(map);
-   
-            map.fitBounds(site_response.getBounds());
+        return marker;
+    }, 
+
+    onEachFeature: function(feature, layer) {
+        layer.bindPopup("Submitted By:"+feature.properties.submitted_by+"<br><a href="+'/forms/forms/'+feature.properties.fs_uuid+'#/'+feature.properties.id+" target='_blank'>View Submission</a>");
+
+        console.log(layer);
+    }
+}).addTo(map);
+
+if (coordinates.length > 0) {
+    map.fitBounds(site_response.getBounds());
+}
 
 console.log(map);
 
@@ -85,3 +87,7 @@ map.on('click',function(){
     $('.address-popop').html('');
     //$('.contact-popup').html('');
 });
+
+if (initGeoLayers) {
+    initGeoLayers();
+}
