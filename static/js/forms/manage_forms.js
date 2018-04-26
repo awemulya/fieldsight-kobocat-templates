@@ -8,7 +8,7 @@ window.app = new Vue({
         <div class="col-md-4">
             <div class="widget-info bg-white padding" >
                 <div class="widget-head" v-show="!show_ad_stage_form">
-                    <h4>Stages <span class="la la-bars pull-right">Weight </span> </h4>
+                    <h4>Stages</h4>
                     <a href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="add_stage"><i class="la la-plus"></i> New Stage</a>
                     <a v-if="stages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-primary" @click="reorderStages()"><i class="la la-reorder"></i> Reorder</a>
                     <a v-if="stages.length>0" href="javascript:void(0)"  title="" class="btn btn-sm btn-warning" @click="deployStages()"><i class="la la-warning"></i> Deploy</a>
@@ -344,6 +344,7 @@ window.app = new Vue({
   },
 
   methods:{
+
   loadSiteTypes : function(){
       var self = this;
       if(self.is_project == 0){
@@ -392,7 +393,6 @@ window.app = new Vue({
               formdata.append('pdf', files[0]);
 
             function successCallback (response){
-            console.log(response);
                 self.new_em_obj =response.body.em;
                 self.error = "";
                     new PNotify({
@@ -403,7 +403,6 @@ window.app = new Vue({
             }
 
             function errorCallback (response){
-            console.log(response);
               new PNotify({
               title: 'failed',
               text: 'Failed to Save PDF',
@@ -679,6 +678,7 @@ window.app = new Vue({
                     return parseInt(a.id);
                 });
     self.substage_form_obj.tags = tags;
+
     function successCallback (response){
 
 
@@ -688,7 +688,25 @@ window.app = new Vue({
       text: 'Sub Stage '+ response.body.name + ' Saved'
     });
     self.substages.push(response.body);
-        self.show_ad_substage_form = false;
+
+    let index = self.stages.findIndex(x => x.id==self.current_stage.id);
+    let stage = self.stages[index];
+    stage.sub_stage_weight += response.body.weight;
+
+    let total = 0
+        self.stages.map(function (a) {
+                total += parseInt(a.sub_stage_weight);
+        });
+        console.log(total);
+        for(let i=0; i< self.stages.length; i++){
+            self.stages[i].weight_calculated = Math.round((self.stages[i].sub_stage_weight) /
+                    (total)* Math.pow(10, 2))
+
+        }
+
+
+
+    self.show_ad_substage_form = false;
 
     }
 
@@ -735,7 +753,10 @@ window.app = new Vue({
             self.update_error = "";
             var tags = [];
             self.stage_form_obj_edit = {'name':self.current_stage.name, 'id': self.current_stage.id, 'description':
-                                        self.current_stage.description,'tags':self.current_stage.tags}
+                                        self.current_stage.description,'tags':self.current_stage.tags,
+                                         'weight_calculated':self.current_stage.weight_calculated,
+                                         'sub_stage_weight':self.current_stage.sub_stage_weight,
+                                         };
             self.update_stage_mode = true;
         },
     update_sub_done: function (){
@@ -901,6 +922,8 @@ window.app = new Vue({
           title: 'Stage Saved',
           text: 'Stage '+ response.body.name + ' Saved'
         });
+        console.log(response.body);
+        response.body.weight_calculated = 0;
         self.stages.push(response.body);
         self.show_ad_stage_form = false;
         }
@@ -982,9 +1005,13 @@ window.app = new Vue({
                 });
         self.stage_form_obj_edit.tags = tags;
 
-        console.log(self.stage_form_obj_edit);
+        var backup_sub_stage_weight_calculated = self.stage_form_obj_edit.weight_calculated;
+        var backup_sub_stage_weight = self.stage_form_obj_edit.sub_stage_weight;
+
+//        delete Object.getPrototypeOf(self.stage_form_obj_edit).sub_stage_weight;
 
         function successCallback (response){
+
         console.log(response);
 
         self.update_error = "";
@@ -995,11 +1022,19 @@ window.app = new Vue({
         var index = self.stages.findIndex(x => x.id==response.body.id);
 
 
+        response.body.weight_calculated = backup_sub_stage_weight_calculated;
+        response.body.sub_stage_weight = backup_sub_stage_weight;
+        console.log(response.body);
+
+
         Vue.set(self.stages, index, response.body);
 
         self.update_stage_mode = false;
         self.stage_form_obj_edit = '';
-        self.current_stage = response.body;
+//        self.current_stage = self.stages[index];
+//        let tags = self.loadTagsFromArray(response.body.tags);
+//            self.current_stage.tags = tags;
+            self.stageDetail(self.stages[index]);
         }
 
         function errorCallback (response){
@@ -1008,6 +1043,7 @@ window.app = new Vue({
           text: 'Failed to Update Stage',
           type: 'error'
         });
+        console.log(response.body);
             if(response.body.error){
             console.log(response.body.error)
               self.update_error = response.body.error;
@@ -1031,16 +1067,13 @@ window.app = new Vue({
             self.saveNewStage();
           }else{
           console.log("Update stage ");
-//            self.editStage(show_ad_stage_form);
           }
-//          self.error = '';
-//            self.show_ad_stage_form = false;
     },
     stageDetail : function (stage){
         var self = this;
-        self.current_stage = stage;
             let tags = self.loadTagsFromArray(stage.tags);
-            self.current_stage.tags = tags;
+        self.current_stage = Object.assign({}, stage);
+        self.current_stage.tags = tags;
         self.reorder_stages_mode = false;
     },
 
@@ -1189,6 +1222,7 @@ window.app = new Vue({
     current_stage: function(newVal, oldVal) {
     var self = this;
     if (newVal){
+//    console.log(newVal.tags);
     self.reorder_sub_stages_mode = false;
     self.reorder_stages_mode = false;
       self.substages = [];
