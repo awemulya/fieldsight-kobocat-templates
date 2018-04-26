@@ -292,13 +292,13 @@ window.app = new Vue({
                         <thead class="thead-default">
                           <tr>
                           <template v-for="header in headers">
-                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }} - {{ header['name'] }}</th>
+                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }}</th>
                             <th v-else scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['name'] }}</th>
                           </template>
                           </tr>
                           <tr>
                           <template v-for="sub_header in sub_headers">
-                            <th scope="col">{{ sub_header[1] }} - {{ sub_header[0] }} </th>
+                            <th scope="col">{{ sub_header[1] }}</th>
                           </template>
                           </tr>
                         </thead>
@@ -310,7 +310,7 @@ window.app = new Vue({
                               <th class="cell-inactive">{{ cell }}</th>
                             </template>
                             <template v-else>
-                              <th :class="cell[2]">{{ cell[0] }} / {{ cell[1] }}</th>
+                              <th :class="cell[2]">{{ cell[1] }}</th>
                             </template>
                           </template>
                           </tr>
