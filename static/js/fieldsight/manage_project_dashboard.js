@@ -354,8 +354,10 @@ window.app = new Vue({
         self.sub_headers = response.body.content.sub_stages;
         self.rows = response.body.content.rows;
         self.loading = false;
-        if (response.body.content.sub_stages.length !> 0){
-          status="No Data";
+        if (response.body.content.sub_stages.length > 0){
+          status="loaded";
+        }else{
+          status="No Data"
         }
     }
 
