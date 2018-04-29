@@ -1,6 +1,76 @@
 
+var bus = new Vue();
 
 Vue.use(VueMultiselect);
+
+Vue.component('Modal', {
+  template: '#modal-template',
+  props: ['show'],
+  methods: {
+    close: function () {
+      this.$emit('close');
+    }
+  },
+  mounted: function () {
+    document.addEventListener("keydown", (e) => {
+      if (this.show && e.keyCode == 27) {
+        this.close();
+      }
+    });
+  }
+});
+
+Vue.component('NewShowTimeModal', {
+  template: '#new-show-time-modal-template',
+  props: ['show'],
+  data: function () {
+    return {
+      new_type_id: '',
+      new_type_name: '',
+      error: '',
+    };
+  },
+  methods: {
+    close: function () {
+    var self = this;
+      self.$emit('close');
+      self.pk = '';
+      self.is_project = '';
+      self.new_type_id = '';
+      self.new_type_name = '';
+    },
+    saveNewEntry: function () {
+       var self = this;
+        let csrf = $('[name = "csrfmiddlewaretoken"]').val();
+        let options = {headers: {'X-CSRFToken':csrf}};
+        let body = {};
+        body.project = self.pk;
+        body.identifier = self.new_type_id;
+        body.name = self.new_type_name;
+        function successCallback (response){
+             bus.$emit('new_entry', response.body)
+            self.close();
+        }
+
+        function errorCallback (response){
+            console.log(response);
+            self.error = "Failed to save site type.";
+        }
+       self.$http.post('/fieldsight/api/site-types/', body, options).then(successCallback, errorCallback);
+    }
+  },
+  created() {
+    var self = this;
+    bus.$on('new_entry_for', function(pk, is_project){
+         self.pk = pk;
+         self.is_project = is_project;
+        }.bind(self));
+
+
+  },
+});
+
+
 window.app = new Vue({
   el: '#app',
   template: `
@@ -15,6 +85,7 @@ window.app = new Vue({
 
                 </div>
                 <div class="widget-body">
+
                     <ul class="stage-list"  v-if="!show_ad_stage_form && stages.length>0">
 
                         <li v-bind:class="{ active: activeStage(stage) }" v-for="stage, index in stages"><span>{{index+1}}.</span>
@@ -40,13 +111,15 @@ window.app = new Vue({
                                 <textarea class="form-control" id="inputStageDescription" rows="3"
                                     v-model="stage_form_obj.description"></textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="inputSubStageTags">Types</label>
+                            <div class="form-group" v-show="is_project==1">
+                                <label for="inputSubStageTags">Site Types   </label>
+
                                 <vselect :options="tags" label="name" :value="[]" v-model="stage_form_obj.tags" :allow-empty="true" :loading="loading"
-                                     :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
-                                    <template slot="noResult">NO tags Available</template>
-                                    <template slot="afterList" slot-scope="props"><div v-show="forms.length==0" class="wrapper-sm bg-danger">
-                                    No Tags</div></template>
+                                     :select-label="''" :show-labels="false" :internal-search="true"
+                                       :placeholder="'Select Site Types'" :multiple=true track-by="id" :hide-selected="true" :close-on-select="false">
+                                    <template slot="noResult">NO Types Available</template>
+                                        <template slot="afterList" slot-scope="props">
+                                        <a  href="javascript:void(0)" @click="newType()" class="btn btn-sm btn-primary"><i class="la la-plus"></i>Add</a></template>
                                 </vselect>
 
                             </div>
@@ -80,7 +153,7 @@ window.app = new Vue({
 
                 </div>
                 <div class="widget-head margin-top padding-left" v-show="!show_ad_substage_form">
-                    <h4 v-if="substages.length>0">Sub Stages <span class="pull-right">Weight </span></h4>
+                    <h4 v-if="substages.length>0">Sub Stages</h4>
                     <h4 v-if="substages.length==0">No SubStages In this Stage </h4>
                 </div>
                 <div class="widget-body overflow-auto">
@@ -117,7 +190,7 @@ window.app = new Vue({
                                 <label for="inputSubStageWeight">Weight</label>
                                 <input type="number" min="0" max="100" v-model="substage_form_obj.weight" class="form-control" id="inputSubStageWeight">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-show="is_project==1">
                                 <label for="inputSubStageTags">Tags</label>
                                 <vselect :options="tags" label="name" :value="[]" v-model="substage_form_obj.tags" :allow-empty="true" :loading="loading"
                                      :select-label="''" :show-labels="false" :internal-search="true"  :placeholder="'Select Tags'" :multiple=true track-by="id" :hide-selected="true">
@@ -305,6 +378,7 @@ window.app = new Vue({
                       </form>
                     </div>
         </div>
+        <new-show-time-modal :show="newShowTimeModal" @close="newShowTimeModal = false"></new-show-time-modal>
         </div> `,
     components: {'vselect': VueMultiselect.default},
   data: {
@@ -341,6 +415,7 @@ window.app = new Vue({
         new_em :false,
         new_em_obj : {'title':'', 'text':'', 'em_images':[], 'pdf':''},
         image: '',
+        newShowTimeModal : false,
   },
 
   methods:{
@@ -367,6 +442,12 @@ window.app = new Vue({
             }).then(successCallback, errorCallback);
 
 
+
+  },
+  newType: function(){
+    var self = this;
+    self.newShowTimeModal = true;
+    bus.$emit('new_entry_for', self.pk, self.is_project);
 
   },
     onImageChange(e) {
@@ -1285,6 +1366,10 @@ window.app = new Vue({
     self.loadStages();
     self.loadKoboForms();
     self.loadSiteTypes();
+    bus.$on('new_entry', function(new_entry){
+        self.tags.push(new_entry);
+        self.stage_form_obj.tags.push(new_entry);
+        }.bind(self));
   },
 
   filters: {
