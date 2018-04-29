@@ -1204,97 +1204,120 @@ window.app = new Vue({
     },
 
     deployStages: function(){
-        var self = this;
-        var api_url = '/forms/api/set-deploy-all-stages/' + self.is_project + '/' + self.pk+'/'
+                var self = this;
 
-        self.loading = true;
-        var options = {};
+        self.$dialog.confirm('All Existing Stages Will be Deleted')
+            .then(function () {
 
-        function successCallback(response) {
-            console.log(response);
 
-            new PNotify({
-                  title: 'Stages Deployed',
-                  text: 'Stages Deployed'
-                });
-        }
+            var api_url = '/forms/api/set-deploy-all-stages/' + self.is_project + '/' + self.pk+'/'
 
-        function errorCallback(errorThrown) {
-            self.loading = false;
+            self.loading = true;
+            var options = {};
 
-            console.log(errorThrown);
-             new PNotify({
-                  title: 'Failed',
-                  text: 'Stages Deployed Failed'
-                });
-        }
-        self.$http.get(api_url, {
-            params: options
-        }).then(successCallback, errorCallback);
+            function successCallback(response) {
+                console.log(response);
+
+                new PNotify({
+                      title: 'Stages Deployed',
+                      text: 'Stages Deployed'
+                    });
+            }
+
+            function errorCallback(errorThrown) {
+                self.loading = false;
+
+                console.log(errorThrown);
+                 new PNotify({
+                      title: 'Failed',
+                      text: 'Stages Deployed Failed'
+                    });
+            }
+            self.$http.get(api_url, {
+                params: options
+            }).then(successCallback, errorCallback);
+        })
+        .catch(function () {
+            console.log('Clicked on cancel')
+        });
     },
 
     deploySubStages: function(){
         var self = this;
-        var api_url = '/forms/api/set-deploy-main-stage/' + self.is_project + '/' + self.pk+'/' + self.current_stage.id + '/'
+        self.$dialog.confirm('All Existing SubStages Will be Deleted')
+            .then(function () {
 
-        self.loading = true;
-        var options = {};
 
-        function successCallback(response) {
-            console.log(response);
-            self.current_stage = response.body;
-            let tags = self.loadTagsFromArray(response.body.tags);
-            self.current_stage.tags = tags;
-            self.loading = false;
-            new PNotify({
-                  title: 'Stage Deployed',
-                  text: 'Stage Deployed'
-                });
-        }
+                var api_url = '/forms/api/set-deploy-main-stage/' + self.is_project + '/' + self.pk+'/' + self.current_stage.id + '/'
 
-        function errorCallback(errorThrown) {
-            self.loading = false;
+                self.loading = true;
+                var options = {};
 
-            console.log(errorThrown);
-             new PNotify({
-                  title: 'Failed',
-                  text: 'Stage Deployed Failed'
-                });
-        }
-        self.$http.get(api_url, {
-            params: options
-        }).then(successCallback, errorCallback);
+                function successCallback(response) {
+                    console.log(response);
+                    self.current_stage = response.body;
+                    let tags = self.loadTagsFromArray(response.body.tags);
+                    self.current_stage.tags = tags;
+                    self.loading = false;
+                    new PNotify({
+                          title: 'Stage Deployed',
+                          text: 'Stage Deployed'
+                        });
+                }
+
+                function errorCallback(errorThrown) {
+                    self.loading = false;
+
+                    console.log(errorThrown);
+                     new PNotify({
+                          title: 'Failed',
+                          text: 'Stage Deployed Failed'
+                        });
+                }
+                self.$http.get(api_url, {
+                    params: options
+                }).then(successCallback, errorCallback);
+    })
+        .catch(function () {
+            console.log('Clicked on cancel')
+        });
     },
 
     deploySubStage: function(){
         var self = this;
-        var api_url = '/forms/api/set-deploy-sub-stage/' + self.is_project + '/' + self.pk+'/' + self.current_sub_stage.id + '/'
-        console.log(self.current_sub_stage.id);
+        self.$dialog.confirm('Please Confirm Deployment')
+            .then(function () {
+            var api_url = '/forms/api/set-deploy-sub-stage/' + self.is_project + '/' + self.pk+'/' + self.current_sub_stage.id + '/'
+            console.log(self.current_sub_stage.id);
 
-        self.loading = true;
-        var options = {};
+            self.loading = true;
+            var options = {};
 
-        function successCallback(response) {
-            self.current_sub_stage = response.body;
-            self.loading = false;
-            new PNotify({
-                  title: 'Sub Stage Deployed',
-                  text: 'Sub Stage Deployed'
-                });
-        }
+            function successCallback(response) {
+                self.current_sub_stage = response.body;
+                self.loading = false;
+                new PNotify({
+                      title: 'Sub Stage Deployed',
+                      text: 'Sub Stage Deployed'
+                    });
+            }
 
-        function errorCallback(errorThrown) {
-            self.loading = false;
+            function errorCallback(errorThrown) {
+                self.loading = false;
 
-            console.log(errorThrown);
-             new PNotify({
-                  title: 'Failed',
-                  text: 'Sub Stage Deployed Failed'
-                });
-        }
-        self.$http.get(api_url, {
-            params: options
-        }).then(successCallback, errorCallback);
+                console.log(errorThrown);
+                 new PNotify({
+                      title: 'Failed',
+                      text: 'Sub Stage Deployed Failed'
+                    });
+            }
+            self.$http.get(api_url, {
+                params: options
+            }).then(successCallback, errorCallback);
+        })
+        .catch(function () {
+            console.log('Clicked on cancel')
+        });
 
 
     },
