@@ -293,7 +293,7 @@ window.app = new Vue({
                         <thead class="thead-default">
                           <tr>
                           <template v-for="header in headers">
-                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_order'] }}</th>
+                            <th v-if="header['stage_order']" scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['stage_name'] }}</th>
                             <th v-else scope="col" :colspan="header['colspan']" :rowspan="header['rowspan']">{{ header['name'] }}</th>
                           </template>
                           </tr>

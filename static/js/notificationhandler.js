@@ -1,6 +1,6 @@
 
     var data = "";
-    var speed = 500;
+    var speed = 200;
     var types = {
         0 : type0,
         1 : type1,
