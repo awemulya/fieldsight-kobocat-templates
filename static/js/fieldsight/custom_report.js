@@ -100,10 +100,17 @@ function StageViewModel(url1, url2) {
                     });           
                 }  
              });
-    console.log(selectedFormids);
+    // console.log(selectedFormids);
     
+    var startdate = document.getElementById("startdate").value;
+    var enddate = document.getElementById("enddate").value;
+    
+    if (new Date(startdate) > new Date(enddate)){
+      alert("Start Date cannot be greater than end date.");
+      return false;
+    }
 
-    self.data({'fs_ids':selectedFormids, 'csrfmiddlewaretoken':csrf_token});
+    self.data({'fs_ids':selectedFormids, 'startdate':startdate, 'enddate':enddate, 'csrfmiddlewaretoken':csrf_token});
     
 
     var success =  function (response) {
@@ -131,10 +138,10 @@ function StageViewModel(url1, url2) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url1, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-xhr.setRequestHeader('X-CSRFToken', csrf_token);
-xhr.responseType = 'blob';
-xhr.send(JSON.stringify(self.data())); 
-    xhr.onload = function(e) {
+      xhr.setRequestHeader('X-CSRFToken', csrf_token);
+      xhr.responseType = 'blob';
+      xhr.send(JSON.stringify(self.data())); 
+      xhr.onload = function(e) {
         if (this.status == 200) {
             // Create a new Blob object using the response data of the onload object
             var blob = new Blob([this.response], {type: 'image/pdf'});
