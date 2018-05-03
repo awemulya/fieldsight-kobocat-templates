@@ -272,6 +272,34 @@ function dateparser(date){
     clean_date = months[month] +', '+ d.getUTCDate() +', '+ d.getUTCFullYear() +', '+ time.toLowerCase()+'.';
     return clean_date;
 }
+
+function dateTimeParser(date){
+     let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+   
+      var d = new Date(date);
+
+      if (offSetTime.length > 3){
+
+        offset_hours = offSetTime.slice(5, 7);
+        offset_minutes = offSetTime.slice(8, 10);
+        offset_type = offSetTime.slice(4, 5);
+
+
+        if (offset_type == "+"){ 
+            d.setUTCHours(d.getUTCHours() + parseInt(offset_hours));
+            d.setUTCMinutes(d.getUTCMinutes() + parseInt(offset_minutes));
+         }else{
+            d.setUTCHours(d.getUTCHours() - parseInt(offset_hours));
+            d.setUTCMinutes(d.getUTCMinutes() - parseInt(offset_minutes));
+         }
+       }
+          month = d.getUTCMonth();
+          time=d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
+          clean_date = months[month] +' '+ d.getUTCDate() +', '+ d.getUTCFullYear();
+          time = time.toLowerCase()
+          return {date:clean_date, time:time};
+      }
+
   
 
 
