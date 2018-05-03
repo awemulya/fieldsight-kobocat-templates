@@ -1,0 +1,29 @@
+.attributes {
+    display: table;
+    margin: 0 0 16px 0;
+}
+
+.form-group {
+    display: table-row;
+    align-items: center;
+}
+
+.form-group label {
+    display: table-cell;
+    margin: 0;
+    padding: 0;
+}
+
+.form-group .form-control {
+    display: table-cell;
+    margin: 4px 16px;
+}
+
+.form-group .select-attr {
+    display: table-cell;
+    margin: 0 4px;
+}
+
+form label {
+    font-weight: normal;
+}
