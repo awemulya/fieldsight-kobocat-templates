@@ -21,7 +21,11 @@ window.app = new Vue({
                     </ul>
 
                   </div>
-                  <a v-if="load_next_url" v-on:click="loadDatas" href="#" class=" btn btn-sm btn-xs btn-primary">Load more</a>
+                  <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                      <button v-if="load_next_url" v-on:click="loadDatas" class="btn btn-sm btn-block btn-primary margin-top">Load more</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -101,7 +105,8 @@ window.app = new Vue({
 
     processData : function (){
         var self = this;
-        self.raw_data.forEach(self.datelogger)  
+        self.raw_data.forEach(self.datelogger);
+        $(".widget-scrolling-large-list > .widget-body, .widget-scrolling-list > .widget-body").getNiceScroll().resize();  
         //console.log(self.processed_data);
         // console.log(self.dates);
 

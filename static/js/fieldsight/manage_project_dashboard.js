@@ -408,7 +408,11 @@ window.app = new Vue({
                       </li>
                     </ul>
                   </div>
-                  <button v-if="load_next_url" v-on:click="loadDatas" href="#" class=" btn btn-sm btn-xs btn-primary">Load more</button>
+                  <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                      <button v-if="load_next_url" v-on:click="loadDatas" class="btn btn-sm btn-block btn-primary margin-top">Load more</button>
+                    </div>
+                  </div>
 
                 </div>
               </div>
@@ -470,7 +474,7 @@ window.app = new Vue({
       date_str = datetime.date;
       
       if (!self.dates.includes(date_str)){
-          console.log("new entry");
+          
           self.dates.push(date_str);
           var index = self.dates.indexOf(date_str);
           self.processed_data.splice(index, 0, {'date':item.datetime.date, 'logs':[item]});
@@ -489,7 +493,8 @@ window.app = new Vue({
 
     processData : function (){
         var self = this;
-        self.raw_data.forEach(self.datelogger)  
+        self.raw_data.forEach(self.datelogger);
+        $(".widget-scrolling-large-list > .widget-body, .widget-scrolling-list > .widget-body").getNiceScroll().resize();  
         //console.log(self.processed_data);
         // console.log(self.dates);
 
