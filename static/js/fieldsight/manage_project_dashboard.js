@@ -361,7 +361,7 @@ window.app = new Vue({
     function successCallback(response) {
         self.headers = response.body.content.head_cols;
         self.sub_headers = response.body.content.sub_stages;
-        self.rows = rows.concat(response.body.content.rows);
+        self.rows = self.rows.concat(response.body.content.rows);
         self.load_next_url = response.body.next_page;
         self.loading = false;
     }
