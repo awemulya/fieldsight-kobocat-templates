@@ -340,7 +340,7 @@ window.app = new Vue({
         rows :[],
         loading: false,
         project_id: configure_settings.project_id,
-        load_next_url : '/fieldsight/ProjectDashboardStageResponsesStatus/'+self.project_id+'/',
+        load_next_url : '/fieldsight/ProjectDashboardStageResponsesStatus/'+configure_settings.project_id+'/',
         
      },
 
