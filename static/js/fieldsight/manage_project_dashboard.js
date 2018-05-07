@@ -284,7 +284,7 @@ window.app = new Vue({
               <div class="widget-info margin-top bg-white padding">
                 <div class="widget-head">
                   <h4>Tabular Report</h4>
-                  
+                  <a class="btn btn-xs btn-primary" href="/fieldsight/project/report/stage-table/{{ project_id }}/"><i class="la la-plus"></i></a>
                 </div>
                 <div class="widget-body">
                   <template v-if="sub_headers.length > 0 && rows.length > 0 ">
@@ -318,13 +318,7 @@ window.app = new Vue({
                         
                         </tbody>
                       </table>
-                      <div class="container-fluid">
-                        <div class="row justify-content-center">
-                          <div class="col-md-6 col-lg-4">
-                            <button v-if="load_next_url" v-on:click="loadDatas" class="btn btn-sm btn-block btn-primary margin-top">Load more</button>
-                          </div>
-                        </div>
-                      </div>
+                     
                   </div>
                   </template>
                   <template v-else>
