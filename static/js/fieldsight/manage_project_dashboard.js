@@ -408,12 +408,13 @@ window.app = new Vue({
                       </li>
                     </ul>
                   </div>
+                  <div class="container-fluid">
                   <div class="row justify-content-center">
                     <div class="col-md-6 col-lg-4">
                       <button v-if="load_next_url" v-on:click="loadDatas" class="btn btn-sm btn-block btn-primary margin-top">Load more</button>
                     </div>
                   </div>
-
+                  </div>
                 </div>
               </div>
             </div>
