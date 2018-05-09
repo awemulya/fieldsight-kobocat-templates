@@ -138,6 +138,7 @@ function StageViewModel(url1, url2) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url1, true);
       App.showProcessing();
+      $('#exportModal').modal('hide');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('X-CSRFToken', csrf_token);
       xhr.responseType = 'blob';
