@@ -137,12 +137,15 @@ function StageViewModel(url1, url2) {
 
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url1, true);
+      App.showProcessing();
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('X-CSRFToken', csrf_token);
       xhr.responseType = 'blob';
       xhr.send(JSON.stringify(self.data())); 
       xhr.onload = function(e) {
         if (this.status == 200) {
+            App.hideProcessing();
+            alert("PDF is Ready, downloading now.");
             // Create a new Blob object using the response data of the onload object
             var blob = new Blob([this.response], {type: 'image/pdf'});
             //Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
