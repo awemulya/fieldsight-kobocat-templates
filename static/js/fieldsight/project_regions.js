@@ -29,11 +29,11 @@ function RegionViewModel(project) {
             // async: true,
             success: function (response) {
                 App.hideProcessing();
-               var mappedData = ko.utils.arrayMap(response, function(item) {
-                        datas = new Region(item, project);
-                        console.log(datas);
-                        return datas;
-                    });
+                response = response.filter(r => !r.parent);
+                var mappedData = ko.utils.arrayMap(response, function(item) {
+                    datas = new Region(item, project);
+                    return datas;
+                });
                 self.allRegions(mappedData);
                 self.regions(mappedData);
 
