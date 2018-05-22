@@ -31,9 +31,13 @@
         26 : type26,
         27 : type27,
         28 : type28,
+        29 : type29,
+        30 : type30,
         412: type412,
         421: type421,
         422: type422,
+        423: type423,
+        424: type424,
     }
 // index starting from 4 are error notifications of equvalent notifications
 
@@ -199,6 +203,16 @@
                 return content;
 
     }
+    function type29(data){
+          content = 'Project Sites import from <a href="' +  data.get_extraobj_url + '"><b>' + data.get_extraobj_name + '</a></b> has <span style="color:green;"><b>completed successfully</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+                return content;
+
+    }
+    function type30(data){
+          content = data.extra_message + '<a href="' +  data.get_extraobj_url + '"><b>' + data.get_extraobj_name + '</a></b> has <span style="color:green;"><b>completed successfully</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.'; 
+                return content;
+
+    }
 
 
 
@@ -236,6 +250,16 @@
 
     function type422(data){
           content = data.extra_message + ' has <span style="color:maroon;"><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          return content;
+        }
+
+    function type423(data){
+          content = 'Project Sites import from <a href="' +  data.get_extraobj_url + '"><b>' + data.get_extraobj_name + '</a></b> has <span style="color:maroon;"><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
+          return content;
+        }
+
+    function type424(data){
+          content = data.extra_message + '<a href="' +  data.get_extraobj_url + '"><b>' + data.get_extraobj_name + '</a></b> has <span style="color:maroon;"><b>failed</b></span> in project <a href="' +  data.get_event_url + '"><b>' + data.get_event_name + '</a></b>.';
           return content;
         }
 

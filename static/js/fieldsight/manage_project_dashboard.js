@@ -513,3 +513,229 @@ window.app = new Vue({
   },
 
 })
+
+//<input v-for="(meta, index) in project.site_meta_attributes" type="checkbox" v-bind:id="meta" v-bind:value="meta" v-model="checkedNames">
+                //  <label v-bind:for="meta">{{ meta }}</label>
+                
+window.app = new Vue({
+  el: '#exportSitesToProject',
+  template: `
+          <div>
+          <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Import Sites</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body widget-info bg-white padding">
+             
+                
+                <div class="widget-head">
+                  <h4>Select a Project</h4>
+                </div>
+                <div id="logbody" class="widget-body">
+                  <select v-model = "selected_project" v-on:change="loadProjectDetail">
+                    <option v-for="(option, index) in projects" v-bind:value="index">
+                      {{ option.name }}
+                    </option>
+                  </select>
+                  <div>
+                  <br>
+
+                  <template v-if="project.hasOwnProperty('site_meta_attributes') && project.site_meta_attributes.length > 0 ">
+                      <div class="widget-head">
+                        <h4>Select Attributes you want to import</h4>
+                      </div>
+                      
+                      <li>
+                       <input type="checkbox" id="all_regions_metas" value="all_metas_selected" v-model="all_selected" v-on:change="selectAllMetas">
+                        <label for="all_regions_metas">All</label>
+                      </li>
+                      <br>
+                      <li v-for="(meta, index) in project.site_meta_attributes">
+                      <input type="checkbox" v-bind:id="meta.question_name" v-bind:value="meta.question_name" v-model="selected_meta_attribs">
+                        <label v-bind:for="meta.question_name">{{ meta.question_name }}</label>
+                      </li>
+                  </template>
+                  <template v-else>
+                    
+
+                  </template>
+                  <br>
+                  <br>    
+                  <template v-if="regions.length > 0 ">   
+
+                      
+                    <div class="widget-head">
+                       <input type="checkbox" id="ignore_site_cluster" value="true" v-model="ignore_site_cluster">
+                        <label for="ignore_site_cluster">Discard Regional Clustering</label>
+                     <br>
+                    </div>
+                    
+                 
+                    <div class="widget-head">
+                      <h4>Select Regions you want to import</h4>
+                      
+                    </div>
+                    <li><input type="checkbox" id="all_regions_selected" value="all_regions_selected" v-model="all_selected" v-on:change="selectAllRegions">
+                      <label for="all_regions_selected">All</label>
+                    </li>
+                    <br>
+                    
+                    <input type="checkbox" id="Region0" value="0" v-model="selected_region_ids">
+                      <label for="Region0">UnRegioned Sites</label>
+                    </li>
+                    <li v-for="region in regions">
+                    <input type="checkbox" v-bind:id="'Region'+region.id" v-bind:value="region.id" v-model="selected_region_ids">
+                      <label v-bind:for="'Region'+region.id">{{ region.identifier }}</label>
+                    </li>
+                  </template>
+                  <template v-else>
+                   
+                  </template>
+                    
+              
+              </div>
+              
+            </div>
+          
+                        </div>
+              
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" v-on:click="importSites">Import</button>
+              </div>
+              </div>`,
+
+  data: {
+        all_selected: [],
+        selected_project: -1,
+        projects:[],
+        project:{},
+        selected_meta_attribs:[],
+        regions:[],
+        selected_region_ids:[],
+        project_id: configure_settings.project_id,
+        load_all_projects_url:'/fieldsight/api/my_projects/'+configure_settings.project_id+'/',
+        ignore_site_cluster: [],
+        csrf: configure_settings.csrf_token,
+     },
+
+  methods:{
+    loadDatas : function (){
+    var self = this;
+
+    self.loading = true;
+    if(self.search_key){
+        var options = {'name':self.search_key};
+
+    }else{
+
+        var options = {};
+
+    }
+
+    function successCallback(response) {
+        self.projects = response.body;
+        console.log(self.projects);
+        self.loading = false;
+    }
+
+    function errorCallback() {
+        self.loading = false;
+        console.log('failed');
+    }
+
+    
+
+    self.$http.get(self.load_all_projects_url, {
+        params: options
+    }).then(successCallback, errorCallback);
+
+
+    },
+
+    selectAllMetas: function(){
+      var self= this;
+      self.selected_meta_attribs = []
+      if (self.all_selected.indexOf("all_metas_selected") >= 0){
+      self.project.site_meta_attributes.forEach(function(obj) {
+        self.selected_meta_attribs.push(obj.question_name);
+      });
+      }
+    },
+
+    selectAllRegions: function(){
+      var self= this;
+      self.selected_region_ids = []
+      if (self.all_selected.indexOf("all_regions_selected") >= 0){
+      self.regions.forEach(function(obj) {
+        self.selected_region_ids.push(obj.id);
+      });
+      self.selected_region_ids.push(0);
+      }
+    },
+
+    importSites: function(){
+      var self = this;
+      if (!self.project.hasOwnProperty('id')){
+        alert("Select a project.");
+        return false;
+      }
+      
+      if (self.project.cluster_sites === true && self.selected_region_ids.length < 1){
+        alert("Select atleast 1 Region to import sites from.");
+        return false;
+      }
+      
+      function successCallback(response) {
+          alert(response.body);
+          self.loading = false;
+      }
+      function errorCallback() {
+          self.loading = false;
+          console.log('failed');
+      }
+      options = {headers: {'X-CSRFToken':self.csrf}};
+      body = {'regions': self.selected_region_ids, 'meta_attributes': self.selected_meta_attribs, 'ignore_region': self.ignore_site_cluster }
+      self.$http.post('/fieldsight/export/clone/project/from/'+ self.project.id +'/to/'+ self.project_id +'/', body, options).then(successCallback, errorCallback);     
+
+    },
+
+    loadRegions: function(id){
+    var self= this;
+
+    function successCallback(response) {
+        self.regions = response.body;
+        self.loading = false;
+    }
+    function errorCallback() {
+        self.loading = false;
+        console.log('failed');
+    }
+
+    self.$http.get('/fieldsight/api/project/'+ id +'/regions/').then(successCallback, errorCallback);
+
+    },
+    
+
+    loadProjectDetail: function(){
+    var self= this;
+    self.all_selected= [];
+    self.project={};
+    self.selected_meta_attribs=[];
+    self.regions=[];
+    self.selected_region_ids=[];
+    self.project = self.projects[self.selected_project];
+    if (self.project.cluster_sites === true){
+      self.loadRegions(self.project.id);
+      }
+    },
+    
+   },
+  created(){
+    var self= this;
+    self.loadDatas();
+  },
+
+})
