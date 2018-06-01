@@ -123,3 +123,49 @@ window.app = new Vue({
   },
 
 })
+
+
+
+window.app = new Vue({
+  el: '#allmetas',
+
+  template: ` <div class="row">
+                <div v-for="item in all_metas" class="col-md-6">
+                  <div class="meta-item">
+                    <p><strong>{{ item['question_name'] }} :</strong> <br><span v-html="item['answer']"></span>  </p>
+                  </div>
+                </div>
+              </div>`,
+
+  data: {
+        loading : false,
+        all_metas: [],
+        load_all_attribs:'/fieldsight/api/siteallmetas/'+configure_settings.site_id+'/',
+     },
+
+  methods:{
+    loadDatas : function (){
+    var self = this;
+    self.loading = true;
+
+    function successCallback(response) {
+        self.all_metas=response.body;
+        self.loading = false;
+    }
+
+    function errorCallback() {
+        self.loading = false;
+        console.log('failed');
+    }
+    self.$http.get(self.load_all_attribs).then(successCallback, errorCallback);
+
+
+    }
+    
+   },
+  created(){
+    var self= this;
+    self.loadDatas();
+  },
+
+})
