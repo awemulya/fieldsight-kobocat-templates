@@ -100,6 +100,8 @@ window.app = new Vue({
   methods:{
     saveForm: function(){
          var self = this;
+         var asset_url = self.kpi_url + 'assets/';
+         console.log(asset_url);
         let csrf = $('[name = "csrfmiddlewaretoken"]').val();
         let options = {headers: {'X-CSRFToken':csrf ,'Content-Type':'application/json', 'Authorization':'Token '+self.token_key}};
 
@@ -109,7 +111,7 @@ window.app = new Vue({
               title: 'Form Saved',
               text: 'New Form Saved'
             });
-             window.location = self.kpi_url + response.body.uid + '/edit';
+             window.location = self.kpi_url + '#/forms/' + response.body.uid + '/edit';
 
         }
 
@@ -122,7 +124,7 @@ window.app = new Vue({
         });
         }
 
-   self.$http.post('http://192.168.1.111:8000/assets/', self.kobo_form, options)
+   self.$http.post(asset_url, self.kobo_form, options)
     .then(successCallback, errorCallback);
     },
 
